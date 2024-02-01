@@ -19,7 +19,7 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 import { LoginStack } from './NavigationStack';
-import { TabNavigator } from './NavigationStack';
+import { InnerStack } from './NavigationStack';
 
 
 const App = () => {
@@ -38,7 +38,7 @@ const App = () => {
           {!isLoggedIn ? (
           <LoginStack />
           ) : (
-            <TabNavigator />
+            <InnerStack />
           )}
         </NavigationContainer>
      </View>
