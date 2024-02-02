@@ -8,6 +8,8 @@ import ProfileScreen from './screen/ProfileScreen';
 import SettingScreen from './screen/SettingScreen';
 import PartAScreen from './screen/PartAScreen';
 import PartBScreen from './screen/PartBScreen';
+import VoterListScreen from './screen/VoterListScreen';
+import UpdateVoterScreen from './screen/UpdateVoterScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -43,6 +45,16 @@ export function InnerStack() {
          <Stack.Screen
             name="PartBScreen"
             component={PartBScreen}
+            options={{headerTitle: '', headerTransparent: true, headerTintColor:'#FFFFFF'}}
+        />
+        <Stack.Screen
+            name="VoterListScreen"
+            component={VoterListScreen}
+            options={{headerTitle: '', headerTransparent: true, headerTintColor:'#FFFFFF'}}
+        />
+         <Stack.Screen
+            name="UpdateVoterScreen"
+            component={UpdateVoterScreen}
             options={{headerTitle: '', headerTransparent: true, headerTintColor:'#FFFFFF'}}
         />
     </Stack.Navigator>

@@ -44,15 +44,27 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                 <Animated.View
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
-                    <Image
-                      style={{width: 60, height: 60}}
-                      source={require('../assets/images/caste.png')}
-                    />
-                    <Text
-                      style={{fontSize: 18, fontWeight: '600', marginTop: 12}}>
-                      Caste Wise List
-                    </Text>
-                    
+                    <TouchableOpacity
+                      style={{alignItems:'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterListScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Caste Wise List',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/caste.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                        }}>
+                        Caste Wise List
+                      </Text>
+                    </TouchableOpacity>
                   </Card>
                 </Animated.View>
               </View>
@@ -60,50 +72,27 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                 <Animated.View
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
-                    <Image
-                      style={{width: 60, height: 60}}
-                      source={require('../assets/images/labelvalue.png')}
-                    />
-                    <Text
-                      style={{fontSize: 18, fontWeight: '600', marginTop: 12}}>
-                      Label Value Filter
-                    </Text>
-                    
-                  </Card>
-                </Animated.View>
-              </View>
-            </View>
-            <View
-              style={{display: 'flex', flexDirection: 'row', marginTop: 10}}>
-              <View style={{flex: 1}}>
-                <Animated.View
-                  entering={FadeInUp.delay(400).duration(1000).springify()}>
-                  <Card style={styles.card}>
-                    <Image
-                      style={{width: 60, height: 60}}
-                      source={require('../assets/images/areawise.png')}
-                    />
-                    <Text
-                      style={{fontSize: 18, fontWeight: '600', marginTop: 12}}>
-                      Area Wise List
-                    </Text>
-                    
-                  </Card>
-                </Animated.View>
-              </View>
-              <View style={{flex: 1}}>
-                <Animated.View
-                  entering={FadeInUp.delay(400).duration(1000).springify()}>
-                  <Card style={styles.card}>
-                    <Image
-                      style={{width: 60, height: 60}}
-                      source={require('../assets/images/partywise.png')}
-                    />
-                    <Text
-                      style={{fontSize: 18, fontWeight: '600', marginTop: 12}}>
-                      Party Wise List
-                    </Text>
-                    
+                    <TouchableOpacity
+                      style={{alignItems:'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterListScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Label Value Filter',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/labelvalue.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                        }}>
+                        Label Value Filter
+                      </Text>
+                    </TouchableOpacity>
                   </Card>
                 </Animated.View>
               </View>
@@ -114,15 +103,27 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                 <Animated.View
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
-                    <Image
-                      style={{width: 60, height: 60}}
-                      source={require('../assets/images/deadlist.jpg')}
-                    />
-                    <Text
-                      style={{fontSize: 18, fontWeight: '600', marginTop: 12}}>
-                      Dead List
-                    </Text>
-                    
+                    <TouchableOpacity
+                      style={{alignItems:'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterListScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Area Wise List',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/areawise.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                        }}>
+                        Area Wise List
+                      </Text>
+                    </TouchableOpacity>
                   </Card>
                 </Animated.View>
               </View>
@@ -130,15 +131,86 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                 <Animated.View
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
-                    <Image
-                      style={{width: 60, height: 60}}
-                      source={require('../assets/images/birthday.png')}
-                    />
-                    <Text
-                      style={{fontSize: 18, fontWeight: '600', marginTop: 12}}>
-                      Birthday List
-                    </Text>
-                    
+                    <TouchableOpacity
+                      style={{alignItems:'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterListScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Party Wise List',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/partywise.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                        }}>
+                        Party Wise List
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+            </View>
+            <View
+              style={{display: 'flex', flexDirection: 'row', marginTop: 10}}>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems:'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterListScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Dead List',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/deadlist.jpg')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                        }}>
+                        Dead List
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems:'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterListScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Birthday List',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/birthday.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                        }}>
+                        Birthday List
+                      </Text>
+                    </TouchableOpacity>
                   </Card>
                 </Animated.View>
               </View>
