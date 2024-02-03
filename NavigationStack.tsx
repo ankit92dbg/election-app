@@ -10,6 +10,8 @@ import PartAScreen from './screen/PartAScreen';
 import PartBScreen from './screen/PartBScreen';
 import VoterListScreen from './screen/VoterListScreen';
 import UpdateVoterScreen from './screen/UpdateVoterScreen';
+import VoterFilterScreen from './screen/VoterFilterScreen';
+import ViewVoterScreen from './screen/ViewVoterScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -31,7 +33,12 @@ export function LoginStack() {
 
 export function InnerStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="LoginScreen">
+         <Stack.Screen
+                name="LoginScreen"
+                component={LoginScreen}
+                options={{headerShown:false}}
+            />
         <Stack.Screen
             name="Home"
             component={TabNavigator}
@@ -40,23 +47,34 @@ export function InnerStack() {
         <Stack.Screen
             name="PartAScreen"
             component={PartAScreen}
-            options={{headerTitle: '', headerTransparent: true, headerTintColor:'#FFFFFF'}}
+            options={{headerTitle: 'Home > Part A', headerTitleStyle:{fontSize:14}, headerTransparent: true, headerTintColor:'#FFFFFF'}}
         />
          <Stack.Screen
             name="PartBScreen"
             component={PartBScreen}
-            options={{headerTitle: '', headerTransparent: true, headerTintColor:'#FFFFFF'}}
+            options={{headerTitle: 'Home > Part B',headerTitleStyle:{fontSize:14}, headerTransparent: true, headerTintColor:'#FFFFFF'}}
+        />
+         <Stack.Screen
+            name="VoterFilterScreen"
+            component={VoterFilterScreen}
+            options={{headerTitle: 'Home > Voter List',headerTitleStyle:{fontSize:14}, headerTransparent: true, headerTintColor:'#FFFFFF'}}
+        />
+        <Stack.Screen
+            name="ViewVoterScreen"
+            component={ViewVoterScreen}
+            options={{headerTitle: 'Home > Voter Details',headerTitleStyle:{fontSize:14}, headerTransparent: true, headerTintColor:'#FFFFFF'}}
         />
         <Stack.Screen
             name="VoterListScreen"
             component={VoterListScreen}
-            options={{headerTitle: '', headerTransparent: true, headerTintColor:'#FFFFFF'}}
+            options={{headerTitle: 'Home > Voter List',headerTitleStyle:{fontSize:14}, headerTransparent: true, headerTintColor:'#FFFFFF'}}
         />
          <Stack.Screen
             name="UpdateVoterScreen"
             component={UpdateVoterScreen}
-            options={{headerTitle: '', headerTransparent: true, headerTintColor:'#FFFFFF'}}
+            options={{headerTitle: 'Home > Update Voter',headerTitleStyle:{fontSize:14}, headerTransparent: true, headerTintColor:'#FFFFFF'}}
         />
+       
     </Stack.Navigator>
 )
 }

@@ -34,12 +34,15 @@ const App = () => {
         translucent={true}
       />
      <View style={{flex:1}}>
-        <NavigationContainer>
+        {/* <NavigationContainer>
           {!isLoggedIn ? (
           <LoginStack />
           ) : (
             <InnerStack />
           )}
+        </NavigationContainer> */}
+        <NavigationContainer>
+          <InnerStack />
         </NavigationContainer>
      </View>
     </SafeAreaView>

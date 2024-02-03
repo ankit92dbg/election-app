@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import Animated, {FadeIn, FadeInDown, FadeInUp} from 'react-native-reanimated';
 import Card from '../components/Card';
@@ -15,22 +16,21 @@ import HyperLink from '../components/HyperLink';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const PartAScreen = ({navigation}: {navigation: any}) => {
+  const DEVICE_HEIGHT = Dimensions.get('window').height
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
         <View style={styles.parent}>
           <View style={styles.child}>
-            <View style={{marginTop: 40, paddingLeft: '12%'}}>
-              <Text style={{color: '#FFFFFF'}}>{`Home > Report 1`}</Text>
-            </View>
           </View>
         </View>
       </View>
       <View
         style={{
-          top: '10%',
+          top: '13%',
           width: '100%',
-          height: 700,
+          height: 650,
           position: 'absolute',
           zIndex: 9999,
           paddingLeft: 15,
@@ -45,8 +45,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Search',
                         });
@@ -60,6 +61,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Search
                       </Text>
@@ -72,8 +74,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Alphabetical List',
                         });
@@ -87,6 +90,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Alphabetical List
                       </Text>
@@ -102,8 +106,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Agewise List',
                         });
@@ -117,6 +122,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Agewise List
                       </Text>
@@ -129,8 +135,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Family Report',
                         });
@@ -144,6 +151,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Family Report
                       </Text>
@@ -159,8 +167,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Family Head Report',
                         });
@@ -174,6 +183,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Family Head Report
                       </Text>
@@ -186,8 +196,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Double Name List',
                         });
@@ -201,6 +212,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Double Name List
                       </Text>
@@ -216,8 +228,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Married Woman Report',
                         });
@@ -231,6 +244,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Married Woman Report
                       </Text>
@@ -243,8 +257,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Single Voter List',
                         });
@@ -258,6 +273,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Single Voter List
                       </Text>
@@ -273,8 +289,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Address Wise List',
                         });
@@ -288,6 +305,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Address Wise List
                       </Text>
@@ -300,8 +318,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Surname Report',
                         });
@@ -315,6 +334,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Surname Report
                       </Text>
@@ -330,8 +350,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'Family Labels',
                         });
@@ -345,6 +366,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Family Labels
                       </Text>
@@ -357,8 +379,9 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
+                      style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part A',
                           filterName: 'SMS',
                         });
@@ -372,6 +395,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         SMS
                       </Text>
@@ -443,6 +467,7 @@ const styles = StyleSheet.create({
     padding: 12,
     justifyContent: 'center', //Centered vertically
     alignItems: 'center', // Centered horizontally
+    alignContent:'center'
   },
   part: {
     width: '100%',

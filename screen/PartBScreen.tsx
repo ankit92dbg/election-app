@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import Animated, {FadeIn, FadeInDown, FadeInUp} from 'react-native-reanimated';
 import Card from '../components/Card';
@@ -15,20 +16,19 @@ import HyperLink from '../components/HyperLink';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const PartBScreen = ({navigation}: {navigation: any}) => {
+  const DEVICE_HEIGHT = Dimensions.get('window').height
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
         <View style={styles.parent}>
           <View style={styles.child}>
-            <View style={{marginTop: 40, paddingLeft: '12%'}}>
-              <Text style={{color: '#FFFFFF'}}>{`Home > Report 2`}</Text>
-            </View>
           </View>
         </View>
       </View>
       <View
         style={{
-          top: '10%',
+          top: '13%',
           width: '100%',
           height: 700,
           position: 'absolute',
@@ -47,7 +47,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                     <TouchableOpacity
                       style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
                           filterName: 'Caste Wise List',
                         });
@@ -61,6 +61,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Caste Wise List
                       </Text>
@@ -75,7 +76,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                     <TouchableOpacity
                       style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
                           filterName: 'Label Value Filter',
                         });
@@ -89,6 +90,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Label Value Filter
                       </Text>
@@ -106,7 +108,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                     <TouchableOpacity
                       style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
                           filterName: 'Area Wise List',
                         });
@@ -120,6 +122,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Area Wise List
                       </Text>
@@ -134,7 +137,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                     <TouchableOpacity
                       style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
                           filterName: 'Party Wise List',
                         });
@@ -148,6 +151,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Party Wise List
                       </Text>
@@ -165,7 +169,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                     <TouchableOpacity
                       style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
                           filterName: 'Dead List',
                         });
@@ -179,6 +183,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Dead List
                       </Text>
@@ -193,7 +198,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                     <TouchableOpacity
                       style={{alignItems:'center'}}
                       onPress={() => {
-                        navigation.navigate('VoterListScreen', {
+                        navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
                           filterName: 'Birthday List',
                         });
@@ -207,6 +212,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
+                          color:'#4e4f4f'
                         }}>
                         Birthday List
                       </Text>

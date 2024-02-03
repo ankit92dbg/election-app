@@ -34,7 +34,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                       source={require('../assets/images/user.png')} // enter your avatar image path
                     />
                   </View>
-                  <View style={{flex: 6}}>
+                  <View style={{flex: 6, marginLeft: 5}}>
                     <Text style={styles.infoText}>Praveen Kumar</Text>
                     <View
                       style={{
@@ -92,22 +92,69 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
         }}>
         <Animated.View
           entering={FadeInDown.delay(200).duration(1000).springify()}>
-          <Card style={styles.card}>
-            <Image
-              style={{width: 60, height: 60}}
-              source={require('../assets/images/male.png')}
-            />
-            <Text style={{fontSize: 22, fontWeight: '600', marginTop: 12}}>
-              2,226
-            </Text>
-            <Text style={{fontSize: 14}}>Male Voters</Text>
-          </Card>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('VoterFilterScreen', {
+                routeFrom: 'Part A',
+                filterName: 'Search List',
+              });
+            }}>
+            <Card style={styles.card}>
+              <Image
+                style={{width: 60, height: 60}}
+                source={require('../assets/images/search.png')}
+              />
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: '600',
+                  marginTop: 12,
+                  color: '#4e4f4f',
+                }}>
+                12,226
+              </Text>
+              <Text style={{fontSize: 14, color: '#4e4f4f'}}>Total Voters</Text>
+              <HyperLink>
+                <Text style={{fontSize: 14, color: '#4e4f4f'}}>View</Text>
+              </HyperLink>
+            </Card>
+          </TouchableOpacity>
         </Animated.View>
       </View>
 
       <View
         style={{
-          top: '18%',
+          top: '33%',
+          right: '0%',
+          paddingRight: 15,
+          width: '44%',
+          position: 'absolute',
+          zIndex: 9999,
+          flex: 1,
+        }}>
+        <Animated.View
+          entering={FadeInDown.delay(200).duration(1000).springify()}>
+          <Card style={styles.card}>
+            <Image
+              style={{width: 60, height: 60}}
+              source={require('../assets/images/male.png')}
+            />
+            <Text
+              style={{
+                fontSize: 22,
+                fontWeight: '600',
+                marginTop: 12,
+                color: '#4e4f4f',
+              }}>
+              3,026
+            </Text>
+            <Text style={{fontSize: 14, color: '#4e4f4f'}}>Male Voters</Text>
+          </Card>
+        </Animated.View>
+      </View>
+      <View
+        style={{
+          top: '58%',
           right: '0%',
           paddingRight: 15,
           width: '44%',
@@ -122,18 +169,25 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
               style={{width: 60, height: 60}}
               source={require('../assets/images/female.png')}
             />
-            <Text style={{fontSize: 22, fontWeight: '600', marginTop: 12}}>
+            <Text
+              style={{
+                fontSize: 22,
+                fontWeight: '600',
+                marginTop: 12,
+                color: '#4e4f4f',
+              }}>
               3,026
             </Text>
-            <Text style={{fontSize: 14}}>Male Voters</Text>
+            <Text style={{fontSize: 14, color: '#4e4f4f'}}>Female Voters</Text>
           </Card>
         </Animated.View>
       </View>
 
       <View
         style={{
-          top: '45%',
-          right: '25%',
+          top: '43%',
+          // right: '25%',
+          marginLeft: 25,
           paddingRight: 15,
           width: '44%',
           position: 'absolute',
@@ -142,27 +196,34 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
         }}>
         <Animated.View
           entering={FadeInUp.delay(400).duration(1000).springify()}>
-          <Card style={styles.card}>
-            <Image
-              style={{width: 60, height: 60}}
-              source={require('../assets/images/part1.png')}
-            />
-            <Text style={{fontSize: 22, fontWeight: '600', marginTop: 12}}>
-              REPORT 1
-            </Text>
-            <TouchableOpacity onPress={()=> navigation.navigate('PartAScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('PartAScreen')}>
+            <Card style={styles.card}>
+              <Image
+                style={{width: 60, height: 60}}
+                source={require('../assets/images/part1.png')}
+              />
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: '600',
+                  marginTop: 12,
+                  color: '#4e4f4f',
+                }}>
+                Report 1
+              </Text>
               <HyperLink>
-                <Text style={{fontSize: 14}}>View</Text>
+                <Text style={{fontSize: 14, color: '#4e4f4f'}}>View</Text>
               </HyperLink>
-            </TouchableOpacity>
-          </Card>
+            </Card>
+          </TouchableOpacity>
         </Animated.View>
       </View>
 
       <View
         style={{
-          top: '70%',
-          right: '25%',
+          top: '68%',
+          // right: '25%',
+          marginLeft: 25,
           paddingRight: 15,
           width: '44%',
           position: 'absolute',
@@ -171,20 +232,27 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
         }}>
         <Animated.View
           entering={FadeInUp.delay(400).duration(1000).springify()}>
-          <Card style={styles.card}>
-            <Image
-              style={{width: 60, height: 60}}
-              source={require('../assets/images/part2.png')}
-            />
-            <Text style={{fontSize: 22, fontWeight: '600', marginTop: 12}}>
-              REPORT 2
-            </Text>
-            <TouchableOpacity onPress={()=> navigation.navigate('PartBScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('PartBScreen')}>
+            <Card style={styles.card}>
+              <Image
+                style={{width: 60, height: 60}}
+                source={require('../assets/images/part2.png')}
+              />
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: '600',
+                  marginTop: 12,
+                  color: '#4e4f4f',
+                }}>
+                Report 2
+              </Text>
+
               <HyperLink>
-                <Text style={{fontSize: 14}}>View</Text>
+                <Text style={{fontSize: 14, color: '#4e4f4f'}}>View</Text>
               </HyperLink>
-            </TouchableOpacity>
-          </Card>
+            </Card>
+          </TouchableOpacity>
         </Animated.View>
       </View>
     </View>

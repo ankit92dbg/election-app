@@ -42,11 +42,15 @@ const SettingScreen = ({navigation}: {navigation: any}) => {
           <Card style={styles.card}>
             <ScrollView>
                 <View style={{marginTop:22}}>
-                    <Text style={{fontSize:16,fontWeight:'600'}}>SMS API</Text>
+                    <Text style={{fontSize:16,fontWeight:'600',
+                          color:'#4e4f4f'
+                  }}>SMS API</Text>
                 </View>
                 <View style={{marginTop:15}}>
                     <View>
-                        <Text>API KEY</Text>
+                        <Text style={{
+                          color:'#4e4f4f'
+                        }}>API KEY</Text>
                         <TextInput
                         placeholder="API KEY"
                         placeholderTextColor={"gray"}
@@ -55,7 +59,9 @@ const SettingScreen = ({navigation}: {navigation: any}) => {
                         />
                     </View>
                     <View style={{marginTop:10}}>
-                        <Text>Phone Number</Text>
+                        <Text style={{
+                          color:'#4e4f4f'
+                        }}>Phone Number</Text>
                         <TextInput
                         placeholder="Phone Number"
                         placeholderTextColor={"gray"}
@@ -65,11 +71,15 @@ const SettingScreen = ({navigation}: {navigation: any}) => {
                     </View>
                 </View>
                 <View style={{marginTop:40}}>
-                    <Text style={{fontSize:16,fontWeight:'600'}}>WHATSAPP API</Text>
+                    <Text style={{fontSize:16,fontWeight:'600',
+                          color:'#4e4f4f'
+                  }}>WHATSAPP API</Text>
                 </View>
                 <View style={{marginTop:15}}>
                     <View>
-                        <Text>API KEY</Text>
+                        <Text style={{
+                          color:'#4e4f4f'
+                        }}>API KEY</Text>
                         <TextInput
                         placeholder="API KEY"
                         placeholderTextColor={"gray"}
@@ -158,7 +168,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 16,
     backgroundColor: "#288BC6",
-    width: 340,
+    width: '100%',
   },
   btnText: { color: "#FFFFFF", textAlign: "center", fontSize: 18 },
 });

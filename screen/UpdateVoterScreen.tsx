@@ -25,30 +25,20 @@ const UpdateVoterScreen = ({
   route: any;
   navigation: any;
 }) => {
+  const DEVICE_HEIGHT = Dimensions.get('window').height
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
         <View style={styles.parent}>
           <View style={styles.child}>
-            <View style={{marginTop: 40, paddingLeft: '12%'}}>
-              <View style={{flex: 4}}>
-                <Text style={{fontSize: 16, fontWeight: '600'}}>
-                  Update Voter
-                </Text>
-              </View>
-              <Text
-                style={{
-                  color: '#FFFFFF',
-                }}>{`Home > ${route?.params?.routeFrom} > ${route?.params?.filterName} > Update > ${route?.params?.voterName}`}</Text>
-            </View>
           </View>
         </View>
       </View>
       <View
         style={{
-          top: '10%',
+          top: '13%',
           width: '100%',
-          height: 600,
+          height: 580,
           //   maxHeight: 700,
           position: 'absolute',
           zIndex: 9999,
@@ -67,12 +57,12 @@ const UpdateVoterScreen = ({
                   <FlatListItem style={styles.card}>
                     <ScrollView>
                       <View>
-                        <Text style={{fontSize: 16, fontWeight: '600'}}>
+                        <Text style={{fontSize: 16, fontWeight: '600',color:'#4e4f4f'}}>
                           Update Voter
                         </Text>
                       </View>
                       <View style={{marginTop: 10}}>
-                        <Text style={{fontSize: 14, fontWeight: '400'}}>
+                        <Text style={{fontSize: 14, fontWeight: '400',color:'#4e4f4f'}}>
                           AC NO
                         </Text>
                         <TextInput
@@ -82,7 +72,7 @@ const UpdateVoterScreen = ({
                         />
                       </View>
                       <View style={{marginTop: 10}}>
-                        <Text style={{fontSize: 14, fontWeight: '400'}}>
+                        <Text style={{fontSize: 14, fontWeight: '400',color:'#4e4f4f'}}>
                           AC NO
                         </Text>
                         <TextInput
@@ -92,7 +82,7 @@ const UpdateVoterScreen = ({
                         />
                       </View>
                       <View style={{marginTop: 10}}>
-                        <Text style={{fontSize: 14, fontWeight: '400'}}>
+                        <Text style={{fontSize: 14, fontWeight: '400',color:'#4e4f4f'}}>
                           AC NO
                         </Text>
                         <TextInput
@@ -102,7 +92,7 @@ const UpdateVoterScreen = ({
                         />
                       </View>
                       <View style={{marginTop: 10}}>
-                        <Text style={{fontSize: 14, fontWeight: '400'}}>
+                        <Text style={{fontSize: 14, fontWeight: '400',color:'#4e4f4f'}}>
                           AC NO
                         </Text>
                         <TextInput
@@ -112,7 +102,7 @@ const UpdateVoterScreen = ({
                         />
                       </View>
                       <View style={{marginTop: 10}}>
-                        <Text style={{fontSize: 14, fontWeight: '400'}}>
+                        <Text style={{fontSize: 14, fontWeight: '400',color:'#4e4f4f'}}>
                           AC NO
                         </Text>
                         <TextInput
@@ -122,7 +112,7 @@ const UpdateVoterScreen = ({
                         />
                       </View>
                       <View style={{marginTop: 10}}>
-                        <Text style={{fontSize: 14, fontWeight: '400'}}>
+                        <Text style={{fontSize: 14, fontWeight: '400',color:'#4e4f4f'}}>
                           AC NO
                         </Text>
                         <TextInput
@@ -132,7 +122,7 @@ const UpdateVoterScreen = ({
                         />
                       </View>
                       <View style={{marginTop: 10}}>
-                        <Text style={{fontSize: 14, fontWeight: '400'}}>
+                        <Text style={{fontSize: 14, fontWeight: '400',color:'#4e4f4f'}}>
                           AC NO
                         </Text>
                         <TextInput
@@ -142,7 +132,7 @@ const UpdateVoterScreen = ({
                         />
                       </View>
                       <View style={{marginTop: 10}}>
-                        <Text style={{fontSize: 14, fontWeight: '400'}}>
+                        <Text style={{fontSize: 14, fontWeight: '400',color:'#4e4f4f'}}>
                           AC NO
                         </Text>
                         <TextInput
@@ -152,7 +142,7 @@ const UpdateVoterScreen = ({
                         />
                       </View>
                       <View style={{marginTop: 10}}>
-                        <Text style={{fontSize: 14, fontWeight: '400'}}>
+                        <Text style={{fontSize: 14, fontWeight: '400',color:'#4e4f4f'}}>
                           AC NO
                         </Text>
                         <TextInput
@@ -162,7 +152,7 @@ const UpdateVoterScreen = ({
                         />
                       </View>
                       <View style={{marginTop: 10}}>
-                        <Text style={{fontSize: 14, fontWeight: '400'}}>
+                        <Text style={{fontSize: 14, fontWeight: '400',color:'#4e4f4f'}}>
                           AC NO
                         </Text>
                         <TextInput
@@ -179,10 +169,12 @@ const UpdateVoterScreen = ({
           </>
         </ScrollView>
       </View>
-      <View style={{position: 'absolute', bottom: 20}}>
-        <View style={{marginRight:15,marginLeft:40,height:50,backgroundColor:'#de8100',borderRadius:9,width:300,justifyContent:'center',alignItems:'center'}}>
-          <Text style={{color:'#FFF',fontSize:18,fontWeight:'600'}}>Save</Text>
-        </View>
+      <View style={{position: 'absolute', bottom: 20,width:'100%'}}>
+        <TouchableOpacity style={{marginRight:15,marginLeft:15}}>
+          <View style={{height:50,backgroundColor:'#de8100',borderRadius:9,width:'100%',justifyContent:'center',alignItems:'center'}}>
+            <Text style={{color:'#FFF',fontSize:18,fontWeight:'600'}}>Save</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

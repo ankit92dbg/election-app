@@ -68,7 +68,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
           <Animated.View
             entering={FadeInDown.delay(400).duration(1000).springify()}
           >
-            <TouchableOpacity style={styles.btn} onPress={()=>{navigation.navigate('DashboardScreen')}}>
+            <TouchableOpacity style={styles.btn} onPress={()=>{navigation.navigate('Home')}}>
               <Text style={styles.btnText}>Login</Text>
             </TouchableOpacity>
           </Animated.View>
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     borderRadius: 9,
-    height: 55,
+    height: 60,
     marginTop: 20,
     padding: 16,
     backgroundColor: "#288BC6",

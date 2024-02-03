@@ -93,13 +93,13 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
           <Card style={styles.card}>
             <ScrollView>
               <View>
-                <Text style={{fontSize: 16, fontWeight: '600'}}>
+                <Text style={{fontSize: 16, fontWeight: '600',color:'#4e4f4f'}}>
                   USER INFORMATION
                 </Text>
               </View>
               <View style={{marginTop: 15}}>
                 <View>
-                  <Text>First Name</Text>
+                  <Text style={{color:'#4e4f4f'}}>First Name</Text>
                   <TextInput
                     placeholder="First Name"
                     placeholderTextColor={'gray'}
@@ -108,7 +108,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                   />
                 </View>
                 <View style={{marginTop: 12}}>
-                  <Text>Last Name</Text>
+                  <Text style={{color:'#4e4f4f'}}>Last Name</Text>
                   <TextInput
                     placeholder="Last Name"
                     placeholderTextColor={'gray'}
@@ -117,7 +117,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                   />
                 </View>
                 <View style={{marginTop: 12}}>
-                  <Text>Age</Text>
+                  <Text style={{color:'#4e4f4f'}}>Age</Text>
                   <TextInput
                     placeholder="Age"
                     placeholderTextColor={'gray'}
@@ -126,7 +126,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                   />
                 </View>
                 <View style={{marginTop: 12}}>
-                  <Text>Designation</Text>
+                  <Text style={{color:'#4e4f4f'}}>Designation</Text>
                   <TextInput
                     placeholder="Designation"
                     placeholderTextColor={'gray'}
@@ -135,7 +135,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                   />
                 </View>
                 <View style={{marginTop: 12}}>
-                  <Text>Password</Text>
+                  <Text style={{color:'#4e4f4f'}}>Password</Text>
                   <TextInput
                     placeholder="Password"
                     placeholderTextColor={'gray'}
@@ -145,13 +145,13 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                 </View>
               </View>
               <View style={{marginTop: 20}}>
-                <Text style={{fontSize: 16, fontWeight: '600'}}>
+                <Text style={{fontSize: 16, fontWeight: '600',color:'#4e4f4f'}}>
                   CONTACT INFORMATION
                 </Text>
               </View>
               <View style={{marginTop: 15}}>
                 <View>
-                  <Text>Phone Number</Text>
+                  <Text style={{color:'#4e4f4f'}}>Phone Number</Text>
                   <TextInput
                     placeholder="Phone Number"
                     placeholderTextColor={'gray'}
@@ -160,7 +160,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                   />
                 </View>
                 <View style={{marginTop: 12}}>
-                  <Text>Email</Text>
+                  <Text style={{color:'#4e4f4f'}}>Email</Text>
                   <TextInput
                     placeholder="Email"
                     placeholderTextColor={'gray'}
@@ -169,7 +169,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                   />
                 </View>
                 <View style={{marginTop: 12}}>
-                  <Text>State</Text>
+                  <Text style={{color:'#4e4f4f'}}>State</Text>
                   <TextInput
                     placeholder="State"
                     placeholderTextColor={'gray'}
@@ -178,7 +178,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                   />
                 </View>
                 <View style={{marginTop: 12}}>
-                  <Text>City</Text>
+                  <Text style={{color:'#4e4f4f'}}>City</Text>
                   <TextInput
                     placeholder="City"
                     placeholderTextColor={'gray'}
@@ -187,7 +187,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                   />
                 </View>
                 <View style={{marginTop: 12}}>
-                  <Text>Address</Text>
+                  <Text style={{color:'#4e4f4f'}}>Address</Text>
                   <TextInput
                     placeholder="Address"
                     placeholderTextColor={'gray'}
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 16,
     backgroundColor: '#288BC6',
-    width: 340,
+    width: '100%',
   },
   btnText: {color: '#FFFFFF', textAlign: 'center', fontSize: 18},
 });
