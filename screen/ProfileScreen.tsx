@@ -13,8 +13,57 @@ import Card from '../components/Card';
 import Badge from '../components/Badge';
 import HyperLink from '../components/HyperLink';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const ProfileScreen = ({navigation}: {navigation: any}) => {
+  const changeHomeBanner = async() =>{
+    const options : any = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    await launchImageLibrary(options, (response:any) => {
+      if (response.didCancel) {
+        console.warn('User cancelled camera');
+      } else if (response.error) {
+        console.warn('Camera Error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        console.warn("imageUri->",imageUri);
+      }
+    });
+  }
+
+  const changeProfilePicture = async() =>{
+    const options : any = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchCamera(options, (response:any) => { // Use launchImageLibrary to open image gallery
+      console.log('Response = ', response);
+    
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri };
+    
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+    
+        console.log(source)
+      }
+    });
+  }
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
@@ -29,7 +78,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                 paddingRight: 15,
                 paddingLeft: 15,
                 width: '100%',
-                height: 170,
+                height: 250,
                 position: 'absolute',
                 zIndex: 1,
                 flex: 1,
@@ -70,6 +119,29 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                         </Text>
                       </Badge>
                     </View>
+                    
+                  </View>
+                  <View style={{marginTop: 15,display:'flex',flexDirection:'row'}}>
+                     <View style={{flex:1}}>
+                      <TouchableOpacity
+                        onPress={()=> changeHomeBanner()}
+                      >
+                          <View style={{height:60,width:'95%',backgroundColor:'#288BC6',alignItems:'center',justifyContent:'center',borderRadius:9}}>
+                            <Icon name="image" color={'#FFFFFF'} size={22} />
+                            <Text style={{color:'#FFFFFF'}}>Home Banner</Text>
+                          </View>
+                        </TouchableOpacity>
+                     </View>
+                     <View style={{flex:1}}>
+                      <TouchableOpacity
+                      onPress={()=> changeProfilePicture()}
+                      >
+                          <View style={{height:60,width:'95%',marginLeft:'5%',backgroundColor:'#288BC6',alignItems:'center',justifyContent:'center',borderRadius:9}}>
+                            <Icon name="camera" color={'#FFFFFF'} size={22} />
+                            <Text style={{color:'#FFFFFF'}}>Profile Image</Text>
+                          </View>
+                        </TouchableOpacity>
+                     </View>
                   </View>
                 </View>
               </Card>
@@ -79,9 +151,9 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
       </View>
       <View
         style={{
-          top: '35%',
+          top: '47%',
           width: '100%',
-          height: 450,
+          height: 400,
           position: 'absolute',
           zIndex: 9999,
           paddingLeft: 15,

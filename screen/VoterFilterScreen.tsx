@@ -43,7 +43,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -55,7 +55,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -67,7 +67,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -79,7 +79,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -91,7 +91,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -103,7 +103,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -115,7 +115,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -127,7 +127,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -139,7 +139,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -151,7 +151,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -163,7 +163,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -175,7 +175,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -187,7 +187,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -199,7 +199,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -211,7 +211,7 @@ const VoterFilterScreen = ({
       mobileNo: 7065317064,
       epicId: 'SJV1243971',
       partNo: 1,
-      surName: "Singh",
+      surName: 'Singh',
       total: 210,
       age: 28,
     },
@@ -483,6 +483,7 @@ const VoterFilterScreen = ({
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
                         iconStyle={styles.iconStyle}
+                        itemTextStyle={{color: '#000000'}}
                         data={genderList}
                         search
                         maxHeight={300}
@@ -514,6 +515,7 @@ const VoterFilterScreen = ({
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
                         iconStyle={styles.iconStyle}
+                        itemTextStyle={{color: '#000000'}}
                         data={sortList}
                         search
                         maxHeight={300}
@@ -837,6 +839,7 @@ const VoterFilterScreen = ({
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
                         iconStyle={styles.iconStyle}
+                        itemTextStyle={{color: '#000000'}}
                         data={sortList}
                         search
                         maxHeight={300}
@@ -984,6 +987,7 @@ const VoterFilterScreen = ({
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
                         iconStyle={styles.iconStyle}
+                        itemTextStyle={{color: '#000000'}}
                         data={genderList}
                         search
                         maxHeight={300}
@@ -2139,6 +2143,7 @@ const VoterFilterScreen = ({
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
                 data={casteList}
                 search
                 maxHeight={300}
@@ -2165,6 +2170,7 @@ const VoterFilterScreen = ({
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
                 data={labelValueList}
                 search
                 maxHeight={300}
@@ -2191,6 +2197,7 @@ const VoterFilterScreen = ({
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
                 data={areaList}
                 search
                 maxHeight={300}
@@ -2217,6 +2224,7 @@ const VoterFilterScreen = ({
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
                 data={partyList}
                 search
                 maxHeight={300}
@@ -2243,6 +2251,7 @@ const VoterFilterScreen = ({
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
                 data={deadList}
                 search
                 maxHeight={300}
@@ -2291,7 +2300,7 @@ const VoterFilterScreen = ({
                 }}
               />
             </View>
-            <View style={{flex: 1, width: '90%',marginLeft:'3%'}}>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
               <TouchableOpacity onPress={() => setDateToOpen(true)}>
                 <TextInput
                   placeholder="Date To"
@@ -2836,26 +2845,26 @@ const VoterFilterScreen = ({
       case 'Surname Report':
         return (
           <>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Part</DataTable.Title>
-              <DataTable.Title>Surname</DataTable.Title>
-              <DataTable.Title>Total</DataTable.Title>
-            </DataTable.Header>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title>Part</DataTable.Title>
+                <DataTable.Title>Surname</DataTable.Title>
+                <DataTable.Title>Total</DataTable.Title>
+              </DataTable.Header>
 
-            {items.slice(from, to).map(item => (
-              <DataTable.Row key={item.key}>
-                <DataTable.Cell>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      flexWrap: 'wrap',
-                      color: '#9a9c9a',
-                    }}>
-                    {item.partNo}
-                  </Text>
-                </DataTable.Cell>
-                <DataTable.Cell>
+              {items.slice(from, to).map(item => (
+                <DataTable.Row key={item.key}>
+                  <DataTable.Cell>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        flexWrap: 'wrap',
+                        color: '#9a9c9a',
+                      }}>
+                      {item.partNo}
+                    </Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell>
                     <Text
                       style={{
                         fontSize: 14,
@@ -2864,21 +2873,21 @@ const VoterFilterScreen = ({
                       }}>
                       {item?.surName}
                     </Text>
-                </DataTable.Cell>
-                <DataTable.Cell>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      flexWrap: 'wrap',
-                      color: '#9a9c9a',
-                    }}>
-                    {item?.total}
-                  </Text>
-                </DataTable.Cell>
-              </DataTable.Row>
-            ))}
-          </DataTable>
-        </>
+                  </DataTable.Cell>
+                  <DataTable.Cell>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        flexWrap: 'wrap',
+                        color: '#9a9c9a',
+                      }}>
+                      {item?.total}
+                    </Text>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
         );
       case 'Family Labels':
         return (
@@ -2939,58 +2948,58 @@ const VoterFilterScreen = ({
       case 'SMS':
         return (
           <>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Part</DataTable.Title>
-              <DataTable.Title>Name</DataTable.Title>
-              <DataTable.Title>Father</DataTable.Title>
-            </DataTable.Header>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title>Part</DataTable.Title>
+                <DataTable.Title>Name</DataTable.Title>
+                <DataTable.Title>Father</DataTable.Title>
+              </DataTable.Header>
 
-            {items.slice(from, to).map(item => (
-              <DataTable.Row key={item.key}>
-                <DataTable.Cell>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      flexWrap: 'wrap',
-                      color: '#9a9c9a',
-                    }}>
-                    {item.partNo}
-                  </Text>
-                </DataTable.Cell>
-                <DataTable.Cell>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('ViewVoterScreen', {
-                        routeFrom: 'Part A',
-                        filterName: 'Search List',
-                      });
-                    }}>
+              {items.slice(from, to).map(item => (
+                <DataTable.Row key={item.key}>
+                  <DataTable.Cell>
                     <Text
                       style={{
                         fontSize: 14,
                         flexWrap: 'wrap',
-                        color: '#0590fa',
-                        textDecorationLine: 'underline',
+                        color: '#9a9c9a',
                       }}>
-                      {item?.name}(A-{item?.age})
+                      {item.partNo}
                     </Text>
-                  </TouchableOpacity>
-                </DataTable.Cell>
-                <DataTable.Cell>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      flexWrap: 'wrap',
-                      color: '#9a9c9a',
-                    }}>
-                    {item?.fatherName}
-                  </Text>
-                </DataTable.Cell>
-              </DataTable.Row>
-            ))}
-          </DataTable>
-        </>
+                  </DataTable.Cell>
+                  <DataTable.Cell>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('ViewVoterScreen', {
+                          routeFrom: 'Part A',
+                          filterName: 'Search List',
+                        });
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          flexWrap: 'wrap',
+                          color: '#0590fa',
+                          textDecorationLine: 'underline',
+                        }}>
+                        {item?.name}(A-{item?.age})
+                      </Text>
+                    </TouchableOpacity>
+                  </DataTable.Cell>
+                  <DataTable.Cell>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        flexWrap: 'wrap',
+                        color: '#9a9c9a',
+                      }}>
+                      {item?.fatherName}
+                    </Text>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
         );
       case 'Caste Wise List':
         return (
@@ -3107,114 +3116,114 @@ const VoterFilterScreen = ({
       case 'Area Wise List':
         return (
           <>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Part</DataTable.Title>
-              <DataTable.Title>Name</DataTable.Title>
-              <DataTable.Title>Father</DataTable.Title>
-            </DataTable.Header>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title>Part</DataTable.Title>
+                <DataTable.Title>Name</DataTable.Title>
+                <DataTable.Title>Father</DataTable.Title>
+              </DataTable.Header>
 
-            {items.slice(from, to).map(item => (
-              <DataTable.Row key={item.key}>
-                <DataTable.Cell>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      flexWrap: 'wrap',
-                      color: '#9a9c9a',
-                    }}>
-                    {item.partNo}
-                  </Text>
-                </DataTable.Cell>
-                <DataTable.Cell>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('ViewVoterScreen', {
-                        routeFrom: 'Part A',
-                        filterName: 'Search List',
-                      });
-                    }}>
+              {items.slice(from, to).map(item => (
+                <DataTable.Row key={item.key}>
+                  <DataTable.Cell>
                     <Text
                       style={{
                         fontSize: 14,
                         flexWrap: 'wrap',
-                        color: '#0590fa',
-                        textDecorationLine: 'underline',
+                        color: '#9a9c9a',
                       }}>
-                      {item?.name}(A-{item?.age})
+                      {item.partNo}
                     </Text>
-                  </TouchableOpacity>
-                </DataTable.Cell>
-                <DataTable.Cell>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      flexWrap: 'wrap',
-                      color: '#9a9c9a',
-                    }}>
-                    {item?.fatherName}
-                  </Text>
-                </DataTable.Cell>
-              </DataTable.Row>
-            ))}
-          </DataTable>
-        </>
+                  </DataTable.Cell>
+                  <DataTable.Cell>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('ViewVoterScreen', {
+                          routeFrom: 'Part A',
+                          filterName: 'Search List',
+                        });
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          flexWrap: 'wrap',
+                          color: '#0590fa',
+                          textDecorationLine: 'underline',
+                        }}>
+                        {item?.name}(A-{item?.age})
+                      </Text>
+                    </TouchableOpacity>
+                  </DataTable.Cell>
+                  <DataTable.Cell>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        flexWrap: 'wrap',
+                        color: '#9a9c9a',
+                      }}>
+                      {item?.fatherName}
+                    </Text>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
         );
       case 'Party Wise List':
         return (
           <>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Part</DataTable.Title>
-              <DataTable.Title>Name</DataTable.Title>
-              <DataTable.Title>Father</DataTable.Title>
-            </DataTable.Header>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title>Part</DataTable.Title>
+                <DataTable.Title>Name</DataTable.Title>
+                <DataTable.Title>Father</DataTable.Title>
+              </DataTable.Header>
 
-            {items.slice(from, to).map(item => (
-              <DataTable.Row key={item.key}>
-                <DataTable.Cell>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      flexWrap: 'wrap',
-                      color: '#9a9c9a',
-                    }}>
-                    {item.partNo}
-                  </Text>
-                </DataTable.Cell>
-                <DataTable.Cell>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('ViewVoterScreen', {
-                        routeFrom: 'Part A',
-                        filterName: 'Search List',
-                      });
-                    }}>
+              {items.slice(from, to).map(item => (
+                <DataTable.Row key={item.key}>
+                  <DataTable.Cell>
                     <Text
                       style={{
                         fontSize: 14,
                         flexWrap: 'wrap',
-                        color: '#0590fa',
-                        textDecorationLine: 'underline',
+                        color: '#9a9c9a',
                       }}>
-                      {item?.name}(A-{item?.age})
+                      {item.partNo}
                     </Text>
-                  </TouchableOpacity>
-                </DataTable.Cell>
-                <DataTable.Cell>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      flexWrap: 'wrap',
-                      color: '#9a9c9a',
-                    }}>
-                    {item?.fatherName}
-                  </Text>
-                </DataTable.Cell>
-              </DataTable.Row>
-            ))}
-          </DataTable>
-        </>
+                  </DataTable.Cell>
+                  <DataTable.Cell>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('ViewVoterScreen', {
+                          routeFrom: 'Part A',
+                          filterName: 'Search List',
+                        });
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          flexWrap: 'wrap',
+                          color: '#0590fa',
+                          textDecorationLine: 'underline',
+                        }}>
+                        {item?.name}(A-{item?.age})
+                      </Text>
+                    </TouchableOpacity>
+                  </DataTable.Cell>
+                  <DataTable.Cell>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        flexWrap: 'wrap',
+                        color: '#9a9c9a',
+                      }}>
+                      {item?.fatherName}
+                    </Text>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
         );
       case 'Dead List':
         return (
@@ -3333,6 +3342,205 @@ const VoterFilterScreen = ({
     }
   };
 
+  const getSearchBtn = () => {
+    switch (route?.params?.filterName) {
+      case 'Search':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Agewise List':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Family Report':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Family Head Report':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Married Woman Report':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Single Voter List':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Address Wise List':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Surname Report':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Family Labels':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'SMS':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Caste Wise List':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Label Value Filter':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Area Wise List':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Party Wise List':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Dead List':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'Birthday List':
+        return (
+          <>
+            <View style={{flex: 1}}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.filterBtn}>
+                  <Icon name="filter" color={'#FFFFFF'} size={22} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      default:
+        return false;
+    }
+  };
+
   return (
     <View style={styles.mainContainer}>
       <View>
@@ -3352,14 +3560,7 @@ const VoterFilterScreen = ({
                 <Animated.View entering={FadeInDown.duration(1000).springify()}>
                   <View style={{display: 'flex', flexDirection: 'row'}}>
                     {getSearchUI()}
-                    <View style={{flex: 1}}>
-                      <TouchableOpacity
-                        onPress={() => setModalVisible(!modalVisible)}>
-                        <View style={styles.filterBtn}>
-                          <Icon name="filter" color={'#FFFFFF'} size={22} />
-                        </View>
-                      </TouchableOpacity>
-                    </View>
+                    {getSearchBtn()}
                   </View>
                 </Animated.View>
               </View>
@@ -3373,9 +3574,7 @@ const VoterFilterScreen = ({
           paddingRight: 15,
         }}>
         <FlatListItem style={styles.card}>
-          <ScrollView>
-            {getDataTable()}
-          </ScrollView>
+          <ScrollView>{getDataTable()}</ScrollView>
         </FlatListItem>
         <DataTable.Pagination
           page={page}
@@ -3526,9 +3725,11 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
+    color: '#000000',
   },
   selectedTextStyle: {
     fontSize: 16,
+    color: '#000000',
   },
   iconStyle: {
     width: 20,
