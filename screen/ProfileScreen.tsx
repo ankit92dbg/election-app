@@ -153,7 +153,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
         style={{
           top: '47%',
           width: '100%',
-          height: 400,
+          height: 380,
           position: 'absolute',
           zIndex: 9999,
           paddingLeft: 15,

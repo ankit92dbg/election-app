@@ -16,21 +16,20 @@ import HyperLink from '../components/HyperLink';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const PartBScreen = ({navigation}: {navigation: any}) => {
-  const DEVICE_HEIGHT = Dimensions.get('window').height
+  const DEVICE_HEIGHT = Dimensions.get('window').height;
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
         <View style={styles.parent}>
-          <View style={styles.child}>
-          </View>
+          <View style={styles.child}></View>
         </View>
       </View>
       <View
         style={{
           top: '13%',
           width: '100%',
-          height: 700,
+          height: 670,
           position: 'absolute',
           zIndex: 9999,
           paddingLeft: 15,
@@ -45,7 +44,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
-                      style={{alignItems:'center'}}
+                      style={{alignItems: 'center'}}
                       onPress={() => {
                         navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
@@ -61,7 +60,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
-                          color:'#4e4f4f'
+                          color: '#4e4f4f',
                         }}>
                         Caste Wise List
                       </Text>
@@ -74,7 +73,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
-                      style={{alignItems:'center'}}
+                      style={{alignItems: 'center'}}
                       onPress={() => {
                         navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
@@ -90,7 +89,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
-                          color:'#4e4f4f'
+                          color: '#4e4f4f',
                         }}>
                         Label Value Filter
                       </Text>
@@ -106,7 +105,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
-                      style={{alignItems:'center'}}
+                      style={{alignItems: 'center'}}
                       onPress={() => {
                         navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
@@ -122,7 +121,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
-                          color:'#4e4f4f'
+                          color: '#4e4f4f',
                         }}>
                         Area Wise List
                       </Text>
@@ -135,7 +134,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
-                      style={{alignItems:'center'}}
+                      style={{alignItems: 'center'}}
                       onPress={() => {
                         navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
@@ -151,7 +150,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
-                          color:'#4e4f4f'
+                          color: '#4e4f4f',
                         }}>
                         Party Wise List
                       </Text>
@@ -167,7 +166,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
-                      style={{alignItems:'center'}}
+                      style={{alignItems: 'center'}}
                       onPress={() => {
                         navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
@@ -183,7 +182,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
-                          color:'#4e4f4f'
+                          color: '#4e4f4f',
                         }}>
                         Dead List
                       </Text>
@@ -196,7 +195,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                   entering={FadeInUp.delay(400).duration(1000).springify()}>
                   <Card style={styles.card}>
                     <TouchableOpacity
-                      style={{alignItems:'center'}}
+                      style={{alignItems: 'center'}}
                       onPress={() => {
                         navigation.navigate('VoterFilterScreen', {
                           routeFrom: 'Part B',
@@ -212,7 +211,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                           fontSize: 18,
                           fontWeight: '600',
                           marginTop: 12,
-                          color:'#4e4f4f'
+                          color: '#4e4f4f',
                         }}>
                         Birthday List
                       </Text>
@@ -220,6 +219,406 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                   </Card>
                 </Animated.View>
               </View>
+            </View>
+            <View
+              style={{display: 'flex', flexDirection: 'row', marginTop: '2%'}}>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Education Report',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/education.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Education Report
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Shifted Report',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/shift.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Shifted Report
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+            </View>
+            <View
+              style={{display: 'flex', flexDirection: 'row', marginTop: 10}}>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'New Voter List',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/new-voter.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        New Voter List
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Profession Wise List',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/profession.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Profession Wise List
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+            </View>
+            <View
+              style={{display: 'flex', flexDirection: 'row', marginTop: 10}}>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Outside Location List',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/outside-location.webp')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Outside Location List
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Labharthi By Center Govt',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/center-govt.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Labharthi By Center Govt
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+            </View>
+
+            <View
+              style={{display: 'flex', flexDirection: 'row', marginTop: '2%'}}>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Labharthi By State Govt',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/state-govt.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Labharthi By State Govt
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Labharthi By Candidate',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/l-candidate.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Labharthi By Candidate
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+            </View>
+            <View
+              style={{display: 'flex', flexDirection: 'row', marginTop: 10}}>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Approached Qty',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/approach.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Approached Qty
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Campaign Abhiyan',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/campaign.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Campaign Abhiyan
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+            </View>
+            <View
+              style={{display: 'flex', flexDirection: 'row', marginTop: 10}}>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Social Media',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/social-media.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Social Media
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Voter Survey',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/voter-survey.jpeg')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Voter Survey
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+            </View>
+            <View
+              style={{display: 'flex', flexDirection: 'row', marginTop: 10}}>
+              <View style={{flex: 1}}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <Card style={styles.card}>
+                    <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={() => {
+                        navigation.navigate('VoterFilterScreen', {
+                          routeFrom: 'Part B',
+                          filterName: 'Religion',
+                        });
+                      }}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/religion.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Religion
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+                </Animated.View>
+              </View>
+              <View style={{flex: 1}}></View>
             </View>
           </>
         </ScrollView>

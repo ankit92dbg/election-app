@@ -175,9 +175,149 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                 </Animated.View>
               </View>
             </View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                paddingLeft: 15,
+                paddingRight: 15,
+                marginTop: 10,
+              }}>
+              <View
+                style={{
+                  top: '13%',
+                  flex: 1,
+                }}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('CreateBM', {
+                        category: '0',
+                      });
+                    }}>
+                    <Card style={styles.card}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/zila.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Zila/AC
+                      </Text>
+                    </Card>
+                  </TouchableOpacity>
+                </Animated.View>
+              </View>
+              <View
+                style={{
+                  top: '13%',
+                  flex: 1,
+                  width: '90%',
+                  marginLeft: '3%',
+                }}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('CreateBM', {
+                        category: '1',
+                      });
+                    }}>
+                    <Card style={styles.card}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/zone.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Zone
+                      </Text>
+                    </Card>
+                  </TouchableOpacity>
+                </Animated.View>
+              </View>
+              <View
+                style={{
+                  top: '13%',
+                  flex: 1,
+                  marginLeft: '3%',
+                  width: '90%',
+                }}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('CreateBM', {
+                        category: '2',
+                      });
+                    }}>
+                    <Card style={styles.card}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/center.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Center
+                      </Text>
+                    </Card>
+                  </TouchableOpacity>
+                </Animated.View>
+              </View>
+              <View
+                style={{
+                  top: '13%',
+                  flex: 1,
+                  marginLeft: '3%',
+                  width: '90%',
+                }}>
+                <Animated.View
+                  entering={FadeInUp.delay(400).duration(1000).springify()}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('CreateBM', {
+                        category: '3',
+                      });
+                    }}>
+                    <Card style={styles.card}>
+                      <Image
+                        style={{width: 60, height: 60}}
+                        source={require('../assets/images/booth.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: '600',
+                          marginTop: 12,
+                          color: '#4e4f4f',
+                        }}>
+                        Booth
+                      </Text>
+                    </Card>
+                  </TouchableOpacity>
+                </Animated.View>
+              </View>
+            </View>
           </View>
         </View>
-        <View style={{flex: 1,paddingLeft:15,paddingRight:15,marginTop:20}}>
+        <View
+          style={{flex: 1, paddingLeft: 15, paddingRight: 15, marginTop: 20}}>
           <Card style={styles.imageCard}>
             <Image
               style={{width: '100%'}}
@@ -201,7 +341,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   parent: {
-    height: '70%',
+    height: '76%',
     width: '100%',
     transform: [{scaleX: 2}],
     borderBottomStartRadius: 200,
@@ -233,7 +373,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   card: {
-    height: 170,
+    height: 120,
     width: '100%',
     backgroundColor: '#FFFFFF',
     justifyContent: 'center', //Centered vertically

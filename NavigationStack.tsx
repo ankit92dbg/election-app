@@ -12,6 +12,8 @@ import VoterListScreen from './screen/VoterListScreen';
 import UpdateVoterScreen from './screen/UpdateVoterScreen';
 import VoterFilterScreen from './screen/VoterFilterScreen';
 import ViewVoterScreen from './screen/ViewVoterScreen';
+import CreateBM from './screen/CreateBM';
+import BMList from './screen/BMList';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -74,6 +76,12 @@ export function InnerStack() {
             component={UpdateVoterScreen}
             options={{headerTitle: 'Home > Update Voter',headerTitleStyle:{fontSize:14}, headerTransparent: true, headerTintColor:'#FFFFFF'}}
         />
+
+        <Stack.Screen
+            name="CreateBM"
+            component={CreateBM}
+            options={{headerTitle: 'Home > Create BM',headerTitleStyle:{fontSize:14}, headerTransparent: true, headerTintColor:'#FFFFFF'}}
+        />
        
     </Stack.Navigator>
 )
@@ -112,6 +120,18 @@ export const TabNavigator = () => {
           }}
         />
          <Tab.Screen 
+        name="BMList" 
+        component={BMList}
+        options={{
+            headerShown:false,
+            tabBarLabel: 'BM List',
+            tabBarIcon: ({ color, size }) => (
+                <Icon name="list" color={color} size={size} />
+              ),
+           
+          }}
+        />
+           <Tab.Screen 
         name="SettingScreen" 
         component={SettingScreen}
         options={{
