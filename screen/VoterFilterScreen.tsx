@@ -2842,8 +2842,8 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item : any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
                     <Text style={{color: '#000000'}}>{item.partNo}</Text>
                   </DataTable.Cell>
