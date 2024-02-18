@@ -6,7 +6,7 @@
  */
 
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -20,12 +20,14 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { LoginStack } from './NavigationStack';
 import { InnerStack } from './NavigationStack';
+import EncryptedStorage from "react-native-encrypted-storage";
 
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
-
+  if (__DEV__) {
+    import("./ReactotronConfig").then(() => {});
+  }
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <StatusBar

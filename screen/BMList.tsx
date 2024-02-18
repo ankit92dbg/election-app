@@ -14,6 +14,7 @@ import Card from '../components/Card';
 import Badge from '../components/Badge';
 import HyperLink from '../components/HyperLink';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useSelector } from 'react-redux';
 
 const BMList = ({navigation}: {navigation: any}) => {
   const DATA = [
@@ -178,6 +179,8 @@ const BMList = ({navigation}: {navigation: any}) => {
         houseNo: "22"
       },
   ];
+  const {data} = useSelector((state: any) => state?.BMData);
+  console.warn('data--->',data)
   const Item = ({item} : any) => (
     <ScrollView>
       <View style={{display: 'flex', flexDirection: 'row',paddingTop:10,}}>
@@ -192,7 +195,7 @@ const BMList = ({navigation}: {navigation: any}) => {
                     zIndex: 1111,
                     fontWeight: '600',
                   }}>
-                  Zila
+                  {item?.assembly_name ? item?.assembly_name : 'N/A'}
                 </Text>
               </Badge>
             </View>
@@ -211,7 +214,7 @@ const BMList = ({navigation}: {navigation: any}) => {
                   fontWeight: '600',
                   color: '#424242',
                 }}>
-                {item?.name}
+                {item?.f_name} {item?.l_name}
               </Text>
             </View>
             <View style={{flex: 4}}>
@@ -263,7 +266,7 @@ const BMList = ({navigation}: {navigation: any}) => {
                     fontWeight: '600',
                     color: '#424242',
                   }}>
-                  {item?.mobileNo}
+                  {item?.phone}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -325,7 +328,7 @@ const BMList = ({navigation}: {navigation: any}) => {
               <View>
                 <View style={{marginTop: 20,height:'95%'}}>
                   <FlatList
-                    data={DATA}
+                    data={data}
                     renderItem={({item}) => <Item item={item} />}
                     keyExtractor={(item:any) => item.key}
                   />

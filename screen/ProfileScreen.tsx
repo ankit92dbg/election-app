@@ -14,8 +14,14 @@ import Badge from '../components/Badge';
 import HyperLink from '../components/HyperLink';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { retrieveUserSession } from '../utils';
+import { IMAGE_BASE_URL } from '../config';
 
 const ProfileScreen = ({navigation}: {navigation: any}) => {
+  const [userData, setUserData] = React.useState<any>(null);
+  React.useEffect(() => {
+    getUserSession();
+  }, []);
   const changeHomeBanner = async() =>{
     const options : any = {
       mediaType: 'photo',
@@ -59,9 +65,20 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
     
-        console.log(source)
+        console.warn(source)
       }
     });
+  }
+
+  async function getUserSession() {
+    try {
+      const session: any = await retrieveUserSession();
+      if (session !== undefined) {
+        setUserData(session);
+      }
+    } catch (error) {
+      // There was an error on the native side
+    }
   }
 
   return (
@@ -87,13 +104,20 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
                   <Animated.View
                     entering={FadeInUp.delay(400).duration(1000).springify()}>
-                    <Image
-                      style={{width: 80, height: 80}}
-                      source={require('../assets/images/user.png')}
-                    />
+                      {userData?.profile_image ? (
+                        <Image
+                          style={{width: 80, height: 80, borderRadius: 80}} 
+                          source={{uri: IMAGE_BASE_URL + userData?.profile_image}}
+                        />
+                      ) : (
+                        <Image
+                          style={{width: 80, height: 80}}
+                          source={require('../assets/images/user.png')}
+                        />
+                      )}
                   </Animated.View>
-                  <View>
-                    <Text style={styles.infoText}>Praveen Kumar</Text>
+                  <View style={{alignItems:'center'}}>
+                    <Text style={styles.infoText}>{userData?.f_name} {userData?.l_name}</Text>
                     <View
                       style={{
                         display: 'flex',
@@ -104,7 +128,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                         <Icon name="briefcase" color={'#d4d2d2'} size={12} />
                       </View>
                       <View style={{marginTop: 3}}>
-                        <Text style={styles.desgText}>Karyakarta</Text>
+                        <Text style={styles.desgText}>{userData?.designation}</Text>
                       </View>
                     </View>
                     <View style={{paddingLeft: 10, marginTop: 5}}>
@@ -115,7 +139,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                             color: '#ffffff',
                             fontWeight: '600',
                           }}>
-                          Part : 02
+                         Assembly Name : {userData?.assembly_name ? userData?.assembly_name : 'N/A'}
                         </Text>
                       </Badge>
                     </View>
@@ -176,7 +200,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                     placeholder="First Name"
                     placeholderTextColor={'gray'}
                     style={styles.input}
-                    secureTextEntry
+                    value={userData?.f_name}
                   />
                 </View>
                 <View style={{marginTop: 12}}>
@@ -185,7 +209,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                     placeholder="Last Name"
                     placeholderTextColor={'gray'}
                     style={styles.input}
-                    secureTextEntry
+                    value={userData?.l_name}
                   />
                 </View>
                 <View style={{marginTop: 12}}>
@@ -194,7 +218,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                     placeholder="Age"
                     placeholderTextColor={'gray'}
                     style={styles.input}
-                    secureTextEntry
+                    value={userData?.age}
                   />
                 </View>
                 <View style={{marginTop: 12}}>
@@ -203,7 +227,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                     placeholder="Designation"
                     placeholderTextColor={'gray'}
                     style={styles.input}
-                    secureTextEntry
+                    value={userData?.designation}
                   />
                 </View>
                 <View style={{marginTop: 12}}>
@@ -228,7 +252,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                     placeholder="Phone Number"
                     placeholderTextColor={'gray'}
                     style={styles.input}
-                    secureTextEntry
+                    value={userData?.phone}
                   />
                 </View>
                 <View style={{marginTop: 12}}>
@@ -237,7 +261,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                     placeholder="Email"
                     placeholderTextColor={'gray'}
                     style={styles.input}
-                    secureTextEntry
+                    value={userData?.email}
                   />
                 </View>
                 <View style={{marginTop: 12}}>
@@ -246,7 +270,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                     placeholder="State"
                     placeholderTextColor={'gray'}
                     style={styles.input}
-                    secureTextEntry
+                    value={userData?.designation}
                   />
                 </View>
                 <View style={{marginTop: 12}}>
@@ -255,7 +279,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                     placeholder="City"
                     placeholderTextColor={'gray'}
                     style={styles.input}
-                    secureTextEntry
+                    value={userData?.designation}
                   />
                 </View>
                 <View style={{marginTop: 12}}>
@@ -264,7 +288,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                     placeholder="Address"
                     placeholderTextColor={'gray'}
                     style={styles.input}
-                    secureTextEntry
+                    value={userData?.designation}
                   />
                 </View>
                 <View style={{marginTop: 12}}>

@@ -9,6 +9,7 @@ import {
   ScrollView,
   Dimensions,
   Modal,
+  Alert,
 } from 'react-native';
 import Animated, {FadeInDown} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,6 +19,9 @@ import {DataTable} from 'react-native-paper';
 import {Dropdown} from 'react-native-element-dropdown';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { getTotalRowCount, retrieveVoterData } from '../utils';
+import { getTotalRowNo } from '../utils/db';
 
 const VoterFilterScreen = ({
   route,
@@ -29,238 +33,252 @@ const VoterFilterScreen = ({
   const [modalVisible, setModalVisible] = useState(false);
 
   const [page, setPage] = React.useState<number>(0);
-  const [numberOfItemsPerPageList] = React.useState([10]);
+  const [numberOfItemsPerPageList] = React.useState([50]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0],
   );
+  const [items, setItems] = React.useState([])
+  React.useEffect(()=>{
+    listVotersData()
+  },[])
 
-  const [items] = React.useState([
-    {
-      key: 1,
-      name: 'Praveen Singh',
-      fatherName: 'Raj Kumar',
-      address: 'Govt. Adarsh Sr. Sec. School Paota',
-      mobileNo: 7065317064,
-      epicId: 'SJV1243971',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 2,
-      name: 'Priya Kumari',
-      fatherName: 'Bablu Sahay',
-      address: 'Laxminagar New Delhi',
-      mobileNo: 9965317055,
-      epicId: 'SJV1243971',
-      partNo: 2,
-      surName: 'Singh',
-      total: 210,
-      age: 33,
-      gender: 'F',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 3,
-      name: 'Ram Kumar',
-      fatherName: 'Ritesh Jha',
-      address: 'karol bagh New Delhi',
-      mobileNo: 7895317077,
-      epicId: 'SJV1243971',
-      partNo: 3,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 4,
-      name: 'Sandeep Kumar',
-      fatherName: 'Sanjay Kumar',
-      address: 'Sarita Vihar New Delhi',
-      mobileNo: 9865317222,
-      epicId: 'SJV12439721',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 5,
-      name: 'Vishnu',
-      fatherName: 'Rajesh Singh',
-      address: 'Badarpur New Delhi',
-      mobileNo: 8865317000,
-      epicId: 'SJV1243921',
-      partNo: 6,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 6,
-      name: 'Aarti Kumari',
-      fatherName: 'Raj Kumar',
-      address: 'Ashok Nagar New Delhi',
-      mobileNo: 9965317024,
-      epicId: 'SJV1243932',
-      partNo: 4,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 7,
-      name: 'Pankaj Sahay',
-      fatherName: 'Raj Kumar',
-      address: 'Mayur Vihar New Delhi',
-      mobileNo: 9865317064,
-      epicId: 'SJV12439766',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 8,
-      name: 'Rahul Shetty',
-      fatherName: 'Krishana Shetty',
-      address: 'Badarpur, New Delhi',
-      mobileNo: 7065317090,
-      epicId: 'SJV1243971',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 9,
-      name: 'Ranjan Kumar',
-      fatherName: 'Sajjan Kumar',
-      address: 'Surajkund, New Delhi',
-      mobileNo: 98447378822,
-      epicId: 'SJV1243911',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 10,
-      name: 'Shakti Srivastav',
-      fatherName: 'Prateek Srivastav',
-      address: 'Jasola Vihar, New Delhi',
-      mobileNo: 71115317064,
-      epicId: 'SJV1243998',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 11,
-      name: 'Praveen Singh',
-      fatherName: 'Raj Kumar',
-      address: 'Govt. Adarsh Sr. Sec. School Paota R. No. 12',
-      mobileNo: 7065317064,
-      epicId: 'SJV1243971',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 12,
-      name: 'Praveen Singh',
-      fatherName: 'Raj Kumar',
-      address: 'Govt. Adarsh Sr. Sec. School Paota R. No. 12',
-      mobileNo: 7065317064,
-      epicId: 'SJV1243971',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 13,
-      name: 'Praveen Singh',
-      fatherName: 'Raj Kumar',
-      address: 'Govt. Adarsh Sr. Sec. School Paota R. No. 12',
-      mobileNo: 7065317064,
-      epicId: 'SJV1243971',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 14,
-      name: 'Praveen Singh',
-      fatherName: 'Raj Kumar',
-      address: 'Govt. Adarsh Sr. Sec. School Paota R. No. 12',
-      mobileNo: 7065317064,
-      epicId: 'SJV1243971',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-    {
-      key: 15,
-      name: 'Praveen Singh',
-      fatherName: 'Raj Kumar',
-      address: 'Govt. Adarsh Sr. Sec. School Paota R. No. 12',
-      mobileNo: 7065317064,
-      epicId: 'SJV1243971',
-      partNo: 1,
-      surName: 'Singh',
-      total: 210,
-      age: 28,
-      gender: 'M',
-      voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-      houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    },
-  ]);
+  const listVotersData = async()=>{
+    const data:any = await retrieveVoterData()
+    const totalData = await getTotalRowCount()
+    setItems(data?.data)
+     console.warn('data-show--->',totalData,data?.data)
+ 
+   }
+
+  // const [items] = React.useState(
+  //   [
+  //   {
+  //     key: 1,
+  //     name: 'Praveen Singh',
+  //     fatherName: 'Raj Kumar',
+  //     address: 'Govt. Adarsh Sr. Sec. School Paota',
+  //     mobileNo: 7065317064,
+  //     epicId: 'SJV1243971',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 2,
+  //     name: 'Priya Kumari',
+  //     fatherName: 'Bablu Sahay',
+  //     address: 'Laxminagar New Delhi',
+  //     mobileNo: 9965317055,
+  //     epicId: 'SJV1243971',
+  //     partNo: 2,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 33,
+  //     gender: 'F',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 3,
+  //     name: 'Ram Kumar',
+  //     fatherName: 'Ritesh Jha',
+  //     address: 'karol bagh New Delhi',
+  //     mobileNo: 7895317077,
+  //     epicId: 'SJV1243971',
+  //     partNo: 3,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 4,
+  //     name: 'Sandeep Kumar',
+  //     fatherName: 'Sanjay Kumar',
+  //     address: 'Sarita Vihar New Delhi',
+  //     mobileNo: 9865317222,
+  //     epicId: 'SJV12439721',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 5,
+  //     name: 'Vishnu',
+  //     fatherName: 'Rajesh Singh',
+  //     address: 'Badarpur New Delhi',
+  //     mobileNo: 8865317000,
+  //     epicId: 'SJV1243921',
+  //     partNo: 6,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 6,
+  //     name: 'Aarti Kumari',
+  //     fatherName: 'Raj Kumar',
+  //     address: 'Ashok Nagar New Delhi',
+  //     mobileNo: 9965317024,
+  //     epicId: 'SJV1243932',
+  //     partNo: 4,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 7,
+  //     name: 'Pankaj Sahay',
+  //     fatherName: 'Raj Kumar',
+  //     address: 'Mayur Vihar New Delhi',
+  //     mobileNo: 9865317064,
+  //     epicId: 'SJV12439766',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 8,
+  //     name: 'Rahul Shetty',
+  //     fatherName: 'Krishana Shetty',
+  //     address: 'Badarpur, New Delhi',
+  //     mobileNo: 7065317090,
+  //     epicId: 'SJV1243971',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 9,
+  //     name: 'Ranjan Kumar',
+  //     fatherName: 'Sajjan Kumar',
+  //     address: 'Surajkund, New Delhi',
+  //     mobileNo: 98447378822,
+  //     epicId: 'SJV1243911',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 10,
+  //     name: 'Shakti Srivastav',
+  //     fatherName: 'Prateek Srivastav',
+  //     address: 'Jasola Vihar, New Delhi',
+  //     mobileNo: 71115317064,
+  //     epicId: 'SJV1243998',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 11,
+  //     name: 'Praveen Singh',
+  //     fatherName: 'Raj Kumar',
+  //     address: 'Govt. Adarsh Sr. Sec. School Paota R. No. 12',
+  //     mobileNo: 7065317064,
+  //     epicId: 'SJV1243971',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 12,
+  //     name: 'Praveen Singh',
+  //     fatherName: 'Raj Kumar',
+  //     address: 'Govt. Adarsh Sr. Sec. School Paota R. No. 12',
+  //     mobileNo: 7065317064,
+  //     epicId: 'SJV1243971',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 13,
+  //     name: 'Praveen Singh',
+  //     fatherName: 'Raj Kumar',
+  //     address: 'Govt. Adarsh Sr. Sec. School Paota R. No. 12',
+  //     mobileNo: 7065317064,
+  //     epicId: 'SJV1243971',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 14,
+  //     name: 'Praveen Singh',
+  //     fatherName: 'Raj Kumar',
+  //     address: 'Govt. Adarsh Sr. Sec. School Paota R. No. 12',
+  //     mobileNo: 7065317064,
+  //     epicId: 'SJV1243971',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  //   {
+  //     key: 15,
+  //     name: 'Praveen Singh',
+  //     fatherName: 'Raj Kumar',
+  //     address: 'Govt. Adarsh Sr. Sec. School Paota R. No. 12',
+  //     mobileNo: 7065317064,
+  //     epicId: 'SJV1243971',
+  //     partNo: 1,
+  //     surName: 'Singh',
+  //     total: 210,
+  //     age: 28,
+  //     gender: 'M',
+  //     voterSlNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //     houseNo: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+  //   },
+  // ]
+  // );
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, items.length);
@@ -2718,14 +2736,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items && items.slice(from, to).map((item : any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -2744,7 +2762,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000'
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -2754,7 +2772,7 @@ const VoterFilterScreen = ({
                           fontWeight: '400',
                           color: '#000000'
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -2766,7 +2784,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.epicId}
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -2778,7 +2796,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -2790,7 +2808,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.address}
+                        {item?.SECTION_NAME_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -5638,8 +5656,19 @@ const VoterFilterScreen = ({
           paddingRight: 15,
         }}>
         <FlatListItem style={styles.card}>
-          <ScrollView horizontal={true}>{getDataTable()}</ScrollView>
+          <ScrollView>
+            <ScrollView horizontal={true}>{getDataTable()}</ScrollView>
+          </ScrollView>
         </FlatListItem>
+        <View style={{display:'flex',flexDirection:'row'}}>
+          <View style={{flex:1}}>
+            <View style={{display:'flex',flexDirection:'row'}}>
+                <View style={{flex:1}}>
+
+                </View>
+            </View>  
+          </View>
+        </View>
         {/* <DataTable.Pagination
           page={page}
           numberOfPages={Math.ceil(items.length / itemsPerPage)}
@@ -5672,7 +5701,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   child: {
-    height: 200,
+    height: 180,
     transform: [{scaleX: 0.5}],
     backgroundColor: '#288BC6',
   },
@@ -5719,7 +5748,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   card: {
-    height: '83%',
+    height: '80%',
     width: '100%',
     backgroundColor: '#FFFFFF',
     marginTop: 10,
