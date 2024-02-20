@@ -46,7 +46,7 @@ const VoterFilterScreen = ({
     const data:any = await retrieveVoterData()
     const totalData = await getTotalRowCount()
     setItems(data?.data)
-     console.warn('data-show--->',totalData,data?.data)
+    //  console.warn('data-show--->',totalData,data?.data)
  
    }
 
@@ -2739,11 +2739,11 @@ const VoterFilterScreen = ({
               {items && items.slice(from, to).map((item : any) => (
                 <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -2762,7 +2762,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000'
                           }}>
-                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN} 
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -5748,7 +5748,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   card: {
-    height: '80%',
+    height: '85%',
     width: '100%',
     backgroundColor: '#FFFFFF',
     marginTop: 10,

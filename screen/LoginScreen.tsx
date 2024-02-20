@@ -157,6 +157,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
               style={styles.btn}
               onPress={() => {
                 handleLogin();
+                // navigation.navigate('Home');
               }}>
               <Text style={styles.btnText}>Login</Text>
             </TouchableOpacity>

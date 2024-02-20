@@ -179,7 +179,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                   </View>
                   <View style={{flex: 6, marginLeft: 20}}>
                     <Text style={styles.infoText}>
-                      {userData?.f_name} {userData?.l_name}
+                      {/* {userData?.f_name} {userData?.l_name} */}
+                      Praveen Kumar
                     </Text>
                     <View
                       style={{
@@ -192,7 +193,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                       </View>
                       <View style={{marginTop: 3}}>
                         <Text style={styles.desgText}>
-                          {userData?.designation}
+                          {/* {userData?.designation} */}
+                          Karyakarta
                         </Text>
                       </View>
                     </View>
@@ -207,7 +209,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                           }}>
                           Assemble Name : {userData?.assembly_name
                             ? userData?.assembly_name
-                            : 'N/A'}
+                            : 'Badarpur'}
                         </Text>
                       </Badge>
                     </View>
