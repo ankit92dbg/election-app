@@ -11,7 +11,8 @@
     "run:android": "npx react-native run-android ",
     "android:bundle": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
     "android:build": "cd android && ./gradlew assembleRelease && cd ..",
-    "run:reactotron": "adb reverse tcp:9090 tcp:9090"
+    "run:reactotron": "adb reverse tcp:9090 tcp:9090",
+    "adb:reverse": "adb reverse tcp:8081 tcp:8081"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.5.11",

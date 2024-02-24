@@ -17,6 +17,7 @@ import { deleteVoterTable, logutUser, retrieveUserSession, retrieveVoterData, st
 import Loader from '../components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllBM } from '../redux/action/BMData';
+import { getMasterData } from '../redux/action/MasterData';
 import { getAllVoters } from '../redux/action/VoterData';
 import { postRequest } from '../networkInterface';
 import Snackbar from 'react-native-snackbar';
@@ -27,6 +28,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
   // const {isLoading} = useSelector((state: any) => state?.VoterData);
   const [userData, setUserData] = React.useState<any>(null);
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [syncModalVisible, setSyncModalVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [currentPage, setCurrentPage] = React.useState(0);
   const [nextPage, setNextPage] = React.useState(1);
@@ -60,9 +62,9 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
           leader_id = session?.leader_id
         }
         getDashBoardData(leader_id)
-        deleteVoterTable()
-        getVotersData(leader_id)
-        // setLoading(false)
+        // deleteVoterTable()
+        // getVotersData(leader_id)
+        setLoading(false)
       }
     } catch (error) {
       // There was an error on the native side
@@ -71,6 +73,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
 
   const getDashBoardData = async(user_id:any)=>{
     dispatch(await getAllBM({ leader_id: user_id }))
+    dispatch(await getMasterData({leader_id: user_id }))
   }
 
 
@@ -112,7 +115,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
     }
   }
 
-  const cancelModal = () => {
+  const logOutModal = () => {
     return (
         <Modal
           animationType="slide"
@@ -148,6 +151,64 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
     );
   };
 
+  const handleSyncData = async() => {
+    try {
+      setSyncModalVisible(!syncModalVisible)
+      setLoading(true)
+      const session: any = await retrieveUserSession();
+      if (session !== undefined) {
+        setUserData(session);
+        let leader_id = ""
+        if(session?.user_type==1){
+          leader_id = session?.id
+        }
+        if(session?.user_type==2){
+          leader_id = session?.leader_id
+        }
+        deleteVoterTable()
+        getVotersData(leader_id)
+      }
+    } catch (error) {
+      // There was an error on the native side
+    }
+  }
+
+  const syncModal = () => {
+    return (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={syncModalVisible}
+          statusBarTranslucent={true}
+          onRequestClose={() => {
+            setSyncModalVisible(!syncModalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Do you want to sync data?</Text>
+              <View style={{display:'flex',flexDirection:'row',marginVertical:0,marginTop:'25%'}}>
+              <View style={{flex:1,paddingRight:10}}>
+                <Pressable
+                  style={[styles.button, styles.buttonOpen]}
+                  onPress={() => setSyncModalVisible(!syncModalVisible)}>
+                  <Text style={styles.textStyleCancel}>Cancel</Text>
+                </Pressable> 
+              </View>
+              <View style={{flex:1}}>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => handleSyncData()}>
+                  <Text style={styles.textStyle}>Confirm</Text>
+                </Pressable> 
+              </View>
+            </View>
+            </View>
+            
+          </View>
+        </Modal>
+    );
+  };
+
   return (
     <>
     <LoaderWithData loading={loading} text={"Loading Data..."} totalDownloadedPercent={totalDownloadedPercent} />
@@ -162,7 +223,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                 marginLeft: 24,
                 marginTop: 35,
               }}>
-              <View style={{flex: 2}}>
+              <View style={{flex: 4}}>
                 <View style={{display: 'flex', flexDirection: 'row'}}>
                   <View style={{flex: 1}}>
                     { userData?.profile_image ?  (
@@ -179,8 +240,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                   </View>
                   <View style={{flex: 6, marginLeft: 20}}>
                     <Text style={styles.infoText}>
-                      {/* {userData?.f_name} {userData?.l_name} */}
-                      Praveen Kumar
+                      {userData?.f_name} {userData?.l_name}
+                      {/* Praveen Kumar */}
                     </Text>
                     <View
                       style={{
@@ -193,8 +254,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                       </View>
                       <View style={{marginTop: 3}}>
                         <Text style={styles.desgText}>
-                          {/* {userData?.designation} */}
-                          Karyakarta
+                          {userData?.designation}
+                          {/* Karyakarta */}
                         </Text>
                       </View>
                     </View>
@@ -215,6 +276,17 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                     </View>
                   </View>
                 </View>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  alignContent: 'flex-end',
+                  alignItems: 'flex-end',
+                  paddingRight: 15,
+                }}>
+                <TouchableOpacity onPress={() => setSyncModalVisible(true)}>
+                  <Icon name="refresh" color={'#FFFFFF'} size={22} />
+                </TouchableOpacity>
               </View>
               <View
                 style={{
@@ -486,7 +558,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
           </Card>
         </View>
       </View>
-      {cancelModal()}
+      {logOutModal()}
+      {syncModal()}
     </View>
     </>
   );

@@ -61,21 +61,12 @@ export const storeUserSession = async(data: any) => {
   }
 
 
-  export const retrieveVoterData = async() => {
+  export const retrieveVoterData = async(page:any,total:any) => {
     try {   
       const db = await getDBConnection();
-      const data = await getTodoItems(db);
-      return {message:"success",data}
-    } catch (error) {
-        // There was an error on the native side
-    }
-  }
-
-  export const getTotalRowCount = async() => {
-    try {   
-      const db = await getDBConnection();
-      const data = await getTotalRowNo(db);
-      return {message:"success",data}
+      const data = await getTodoItems(db,page,total);
+      const totalData = await getTotalRowNo(db);
+      return {message:"success",totalData:totalData,data}
     } catch (error) {
         // There was an error on the native side
     }

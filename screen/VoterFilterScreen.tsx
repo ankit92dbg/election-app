@@ -19,9 +19,16 @@ import {DataTable} from 'react-native-paper';
 import {Dropdown} from 'react-native-element-dropdown';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { getTotalRowCount, retrieveVoterData } from '../utils';
-import { getTotalRowNo } from '../utils/db';
+import {useSelector} from 'react-redux';
+import { retrieveVoterData} from '../utils';
+import {getTotalRowNo} from '../utils/db';
+import Loader from '../components/Loader';
+
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}:any) => {
+  const paddingToBottom = 20;
+  return layoutMeasurement.height + contentOffset.y >=
+    contentSize.height - paddingToBottom;
+};
 
 const VoterFilterScreen = ({
   route,
@@ -31,24 +38,40 @@ const VoterFilterScreen = ({
   navigation: any;
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [loading, setLoading] = React.useState(true);
   const [page, setPage] = React.useState<number>(0);
+  const [totalPage, setTotalPage] = React.useState<number>(1);
   const [numberOfItemsPerPageList] = React.useState([50]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0],
   );
-  const [items, setItems] = React.useState([])
-  React.useEffect(()=>{
-    listVotersData()
-  },[])
+  const [items, setItems] = React.useState<any>([]);
+  const {data} = useSelector((state: any) => state?.MasterData);
+  React.useEffect(() => {
+    listVotersData(1,50);
+  }, []);
 
-  const listVotersData = async()=>{
-    const data:any = await retrieveVoterData()
-    const totalData = await getTotalRowCount()
-    setItems(data?.data)
-    //  console.warn('data-show--->',totalData,data?.data)
- 
-   }
+  const listVotersData = async (pageNo :any,total:any) => {
+    setPage(pageNo)
+    const data: any = await retrieveVoterData(pageNo,total);
+    setItems(data?.data);
+    setTotalPage(data?.totalData)
+    setLoading(false);
+  };
+
+  const fetchMore = async () => {
+    setLoading(true);
+    setPage(Number(page)+1)
+    if(Number(page)+1<=Number(totalPage)){
+      const data: any = await retrieveVoterData(Number(page)+1,50);
+      const combinedArray = [...items, ...data?.data];
+      setItems(combinedArray);
+    }
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  };
+
 
   // const [items] = React.useState(
   //   [
@@ -291,9 +314,22 @@ const VoterFilterScreen = ({
   const [sortBy, setSortBy] = useState('');
   const [caste, setCaste] = useState('');
   const [labelValue, setLabelValue] = useState('');
+  const [labelValueList, setLabelValueList] = useState([]);
   const [area, setArea] = useState('');
+  const [areaList, setareaList] = useState([]);
   const [party, setParty] = useState('');
+  const [partyList, setPartyList] = useState([]);
   const [dead, setDead] = useState('');
+  const [education, setEducation] = useState('');
+  const [isHomeShifted, setIsHomeShifted] = useState('');
+  const [profession, setProfession] = useState('');
+  const [isOutsideLocation, setIsOutsideLocation] = useState('');
+  const [lalBhartiCenter, setLalBhartiCenter] = useState([]);
+  const [lalBhartiState, setLalBhartiState] = useState([]);
+  const [lalBhartiCandidate, setLalBhartiCandidate] = useState([]);
+  const [selectedLBCenter, setSelectedLBCenter] = useState("");
+  const [selectedLBState, setSelectedLBState] = useState("");
+  const [selectedLBCandidate, setSelectedLBCandidate] = useState("");
   const [dateFrom, setDateFrom] = useState(Object);
   const [dateFromOpen, setDateFromOpen] = useState(false);
   const [dateTo, setDateTo] = useState(Object);
@@ -332,26 +368,6 @@ const VoterFilterScreen = ({
     },
   ];
 
-  const labelValueList = [
-    {
-      label: 'Test Label',
-      value: 'Test Label',
-    },
-  ];
-
-  const areaList = [
-    {
-      label: 'Area Name',
-      value: 'Area Name',
-    },
-  ];
-
-  const partyList = [
-    {
-      label: 'BJP',
-      value: 'BJP',
-    },
-  ];
 
   const deadList = [
     {
@@ -364,11 +380,219 @@ const VoterFilterScreen = ({
     },
   ];
 
+  const educationList = [
+    {
+      label: 'Uneducated',
+      value: '0',
+    },
+    {
+      label: '10th',
+      value: '1',
+    },
+    {
+      label: '12th',
+      value: '2',
+    },
+    {
+      label: 'Undergraduate',
+      value: '3',
+    },
+    {
+      label: 'Graduate',
+      value: '4',
+    },
+    {
+      label: 'Post Graduate',
+      value: '5',
+    },
+    {
+      label: 'PHD',
+      value: '6',
+    },
+    {
+      label: 'Other',
+      value: '7',
+    },
+  ];
+
+  const homeShiftedList = [
+    {
+      label: 'Yes',
+      value: '1',
+    },
+    {
+      label: 'No',
+      value: '0',
+    },
+  ];
+
+  const professionList = [
+    {
+      label: 'Student',
+      value: '0',
+    },
+    {
+      label: 'Unemployed',
+      value: '1',
+    },
+    {
+      label: 'Self Employed',
+      value: '2',
+    },
+    {
+      label: 'Farmer',
+      value: '3',
+    },
+    {
+      label: 'Teacher',
+      value: '4',
+    },
+    {
+      label: 'Govt Forces',
+      value: '5',
+    },
+    {
+      label: 'Job Pvt Sector',
+      value: '6',
+    },
+    {
+      label: 'Job Govt Sector',
+      value: '7',
+    },
+    {
+      label: 'Police officer',
+      value: '8',
+    },
+    {
+      label: 'Dentist',
+      value: '9',
+    },
+    {
+      label: 'Doctor',
+      value: '10',
+    },
+    {
+      label: 'Journalist',
+      value: '11',
+    },
+    {
+      label: 'CA / Account',
+      value: '12',
+    },
+    {
+      label: 'Advocates',
+      value: '13',
+    },
+    {
+      label: 'Engineer',
+      value: '14',
+    },
+    {
+      label: 'Local Market Business',
+      value: '15',
+    },
+    {
+      label: 'Corporate Business',
+      value: '16',
+    },
+    {
+      label: 'School Owner',
+      value: '17',
+    },
+    {
+      label: 'Hospital Owner',
+      value: '18',
+    },
+    {
+      label: 'Multiple Business',
+      value: '19',
+    },
+    {
+      label: 'Barber Salon',
+      value: '20',
+    },
+    {
+      label: 'Driving Work Business',
+      value: '21',
+    },
+    {
+      label: 'GIG WORKER',
+      value: '22',
+    },
+    {
+      label: 'Daily Mazdoor',
+      value: '23',
+    },
+    {
+      label: 'Local Market Worker',
+      value: '24',
+    },
+    {
+      label: 'Other',
+      value: '25',
+    },
+  ];
+
+  const outsideLocationList = [
+    {
+      label: 'Yes',
+      value: '1',
+    },
+    {
+      label: 'No',
+      value: '0',
+    },
+  ];
+
   /* setting form values */
 
   React.useEffect(() => {
     setPage(0);
   }, [itemsPerPage]);
+
+  React.useEffect(()=>{
+    const lBhartiCenter = data?.labharthi_scheme.filter( (dt:any) => dt?.scheme_type.includes("0"))
+    setLalBhartiCenter(lBhartiCenter ? formatLBDropdown(lBhartiCenter) : [])
+    const lBhartiState = data?.labharthi_scheme.filter( (dt:any) => dt?.scheme_type.includes("1"))
+    setLalBhartiState(lBhartiState ? formatLBDropdown(lBhartiState) : [])
+    const lBhartiCandidate = data?.labharthi_scheme.filter( (dt:any) => dt?.scheme_type.includes("2"))
+    setLalBhartiCandidate(lBhartiCandidate ? formatLBDropdown(lBhartiCandidate) : [])
+    setPartyList(data?.political_party ? formatPoliticalDropdown(data?.political_party) : [])
+    setareaList(data?.area ? formatAreaListDropdown(data?.area) : [])
+    setLabelValueList(data?.label_value ? formatLabelValueListDropdown(data?.label_value) : [])
+  },[])
+
+  const formatLBDropdown = (data:any) => {
+    const result = data.map((o:any) => ({
+      label: `${o.scheme_name}`,
+      value: `${o.id}`,
+    }));
+    return result
+  }
+
+  const formatPoliticalDropdown = (data:any) => {
+    const result = data.map((o:any) => ({
+      label: `${o.name}`,
+      value: `${o.id}`,
+    }));
+    return result
+  }
+
+  const formatAreaListDropdown = (data:any) => {
+    const result = data.map((o:any) => ({
+      label: `${o.AC_NAME_EN}`,
+      value: `${o.AC_NAME_EN}`,
+    }));
+    return result
+  }
+
+  const formatLabelValueListDropdown = (data:any) => {
+    const result = data.map((o:any) => ({
+      label: `${o.label}-${o.value}`,
+      value: `${o.id}`,
+    }));
+    return result
+  }
 
   const CustomModal = () => {
     return getModalData();
@@ -557,7 +781,7 @@ const VoterFilterScreen = ({
                         value={gender}
                         // onFocus={() => setIsFocus(true)}
                         // onBlur={() => setIsFocus(false)}
-                        onChange={item => {
+                        onChange={(item: any) => {
                           setGender(item.value);
                           setIsFocus(false);
                         }}
@@ -589,7 +813,7 @@ const VoterFilterScreen = ({
                         value={sortBy}
                         // onFocus={() => setIsFocus(true)}
                         // onBlur={() => setIsFocus(false)}
-                        onChange={item => {
+                        onChange={(item: any) => {
                           setSortBy(item.value);
                           setIsFocus(false);
                         }}
@@ -913,7 +1137,7 @@ const VoterFilterScreen = ({
                         value={sortBy}
                         // onFocus={() => setIsFocus(true)}
                         // onBlur={() => setIsFocus(false)}
-                        onChange={item => {
+                        onChange={(item: any) => {
                           setSortBy(item.value);
                           setIsFocus(false);
                         }}
@@ -1061,7 +1285,7 @@ const VoterFilterScreen = ({
                         value={sortBy}
                         // onFocus={() => setIsFocus(true)}
                         // onBlur={() => setIsFocus(false)}
-                        onChange={item => {
+                        onChange={(item: any) => {
                           setGender(item.value);
                           setIsFocus(false);
                         }}
@@ -2293,6 +2517,239 @@ const VoterFilterScreen = ({
             </View>
           </>
         );
+      case 'Education Report':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Shifted Report':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'New Voter List':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Profession Wise List':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Outside Location List':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Labharthi By Center Govt':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Labharthi By State Govt':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Labharthi By Candidate':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Approached Qty':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Campaign Abhiyan':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Search by Title"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Social Media':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Search by Title"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Voter Survey':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Religion':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Part From"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Part To"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
       default:
         return false;
     }
@@ -2525,7 +2982,7 @@ const VoterFilterScreen = ({
                 placeholder={!isFocus ? 'Select Caste' : '...'}
                 searchPlaceholder="Search..."
                 value={caste}
-                onChange={item => {
+                onChange={(item: any) => {
                   setCaste(item.value);
                   setIsFocus(false);
                 }}
@@ -2552,7 +3009,7 @@ const VoterFilterScreen = ({
                 placeholder={!isFocus ? 'Select Label Value' : '...'}
                 searchPlaceholder="Search..."
                 value={labelValue}
-                onChange={item => {
+                onChange={(item: any) => {
                   setLabelValue(item.value);
                   setIsFocus(false);
                 }}
@@ -2579,7 +3036,7 @@ const VoterFilterScreen = ({
                 placeholder={!isFocus ? 'Select Area' : '...'}
                 searchPlaceholder="Search..."
                 value={area}
-                onChange={item => {
+                onChange={(item: any) => {
                   setArea(item.value);
                   setIsFocus(false);
                 }}
@@ -2606,7 +3063,7 @@ const VoterFilterScreen = ({
                 placeholder={!isFocus ? 'Select Party' : '...'}
                 searchPlaceholder="Search..."
                 value={party}
-                onChange={item => {
+                onChange={(item: any) => {
                   setParty(item.value);
                   setIsFocus(false);
                 }}
@@ -2633,7 +3090,7 @@ const VoterFilterScreen = ({
                 placeholder={!isFocus ? 'Select Dead/Alive' : '...'}
                 searchPlaceholder="Search..."
                 value={dead}
-                onChange={item => {
+                onChange={(item: any) => {
                   setDead(item.value);
                   setIsFocus(false);
                 }}
@@ -2704,6 +3161,276 @@ const VoterFilterScreen = ({
             </View>
           </>
         );
+      case 'Education Report':
+        return (
+          <>
+            <View style={{flex: 3, width: '90%'}}>
+              <Dropdown
+                style={[styles.topSearchDropdown, {marginTop: 8}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
+                data={educationList}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select Education' : '...'}
+                searchPlaceholder="Search..."
+                value={dead}
+                onChange={(item: any) => {
+                  setEducation(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+          </>
+        );
+      case 'Shifted Report':
+        return (
+          <>
+            <View style={{flex: 3, width: '90%'}}>
+              <Dropdown
+                style={[styles.topSearchDropdown, {marginTop: 8}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
+                data={homeShiftedList}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select Home Shifted' : '...'}
+                searchPlaceholder="Search..."
+                value={dead}
+                onChange={(item: any) => {
+                  setIsHomeShifted(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+          </>
+        );
+      case 'Profession Wise List':
+        return (
+          <>
+            <View style={{flex: 3, width: '90%'}}>
+              <Dropdown
+                style={[styles.topSearchDropdown, {marginTop: 8}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
+                data={professionList}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select Profession' : '...'}
+                searchPlaceholder="Search..."
+                value={dead}
+                onChange={(item: any) => {
+                  setProfession(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+          </>
+        );
+      case 'Outside Location List':
+        return (
+          <>
+            <View style={{flex: 3, width: '90%'}}>
+              <Dropdown
+                style={[styles.topSearchDropdown, {marginTop: 8}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
+                data={outsideLocationList}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select Outside Location' : '...'}
+                searchPlaceholder="Search..."
+                value={dead}
+                onChange={(item: any) => {
+                  setIsOutsideLocation(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+          </>
+        );
+      case 'Labharthi By Center Govt':
+        return (
+          <>
+            <View style={{flex: 3, width: '90%'}}>
+              <Dropdown
+                style={[styles.topSearchDropdown, {marginTop: 8}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
+                data={lalBhartiCenter}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select Scheme(center)' : '...'}
+                searchPlaceholder="Search..."
+                value={dead}
+                onChange={(item: any) => {
+                  setSelectedLBCenter(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+          </>
+        );
+      case 'Labharthi By State Govt':
+        return (
+          <>
+            <View style={{flex: 3, width: '90%'}}>
+              <Dropdown
+                style={[styles.topSearchDropdown, {marginTop: 8}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
+                data={lalBhartiState}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select Scheme(state)' : '...'}
+                searchPlaceholder="Search..."
+                value={dead}
+                onChange={(item: any) => {
+                  setSelectedLBState(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+          </>
+        );
+      case 'Labharthi By Candidate':
+        return (
+          <>
+            <View style={{flex: 3, width: '90%'}}>
+              <Dropdown
+                style={[styles.topSearchDropdown, {marginTop: 8}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
+                data={lalBhartiCandidate}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select Scheme(candidate)' : '...'}
+                searchPlaceholder="Search..."
+                value={dead}
+                onChange={(item: any) => {
+                  setSelectedLBCandidate(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+          </>
+        );
+      case 'Approached Qty':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Approach Qty"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <TextInput
+                placeholder="Approach Reason"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+          </>
+        );
+      case 'Voter Survey':
+        return (
+          <>
+            <View style={{flex: 1, width: '90%'}}>
+              <TextInput
+                placeholder="Candidate Name"
+                style={styles.searchInput}
+                placeholderTextColor={'gray'}
+              />
+            </View>
+            <View style={{flex: 1, width: '90%', marginLeft: '3%'}}>
+              <Dropdown
+                style={[styles.topSearchDropdown, {marginTop: 8}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
+                data={deadList}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select Dead/Alive' : '...'}
+                searchPlaceholder="Search..."
+                value={dead}
+                onChange={(item: any) => {
+                  setDead(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+          </>
+        );
+      case 'Religion':
+        return (
+          <>
+            <View style={{flex: 1, width: '100%'}}>
+              <Dropdown
+                style={[styles.topSearchDropdown, {marginTop: 8}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={{color: '#000000'}}
+                data={deadList}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select Dead/Alive' : '...'}
+                searchPlaceholder="Search..."
+                value={dead}
+                onChange={(item: any) => {
+                  setDead(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+          </>
+        );
+
       default:
         return false;
     }
@@ -2736,14 +3463,123 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items && items.slice(from, to).map((item : any) => (
+              {items &&
+                items.map((item: any) => (
+                  <DataTable.Row key={item?.id}>
+                    <DataTable.Cell style={{width: 60}}>
+                      <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{alignSelf: 'center'}}>
+                        <Text style={{color: '#000000'}}>
+                          {item?.SLNOINPART}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 140}}>
+                      <View style={{width: '100%'}}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            navigation.navigate('ViewVoterScreen', {
+                              routeFrom: 'Part A',
+                              filterName: 'Search List',
+                            });
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              flexWrap: 'wrap',
+                              fontWeight: '600',
+                              color: '#000000',
+                            }}>
+                            {item?.FM_NAME_EN} {item?.LASTNAME_EN}
+                          </Text>
+                        </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '400',
+                            color: '#000000',
+                          }}>
+                          {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.EPIC_NO}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 60}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.GENDER}-{item?.AGE}y
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 300}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.SECTION_NAME_EN}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+            </DataTable>
+          </>
+        );
+      case 'Alphabetical List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items.slice(from, to).map((item: any) => (
                 <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -2760,17 +3596,16 @@ const VoterFilterScreen = ({
                             fontSize: 12,
                             flexWrap: 'wrap',
                             fontWeight: '600',
-                            color: '#000000'
+                            color: '#000000',
                           }}>
-                          {item?.FM_NAME_EN} {item?.LASTNAME_EN} 
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
                         style={{
                           fontSize: 12,
                           flexWrap: 'wrap',
-                          fontWeight: '400',
-                          color: '#000000'
+                          color: '#000000',
                         }}>
                         {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
@@ -2817,111 +3652,6 @@ const VoterFilterScreen = ({
             </DataTable>
           </>
         );
-      case 'Alphabetical List':
-        return (
-          <>
-            <DataTable>
-              <DataTable.Header>
-                <DataTable.Title style={{width: 60}}>
-                  <Text style={{fontWeight: '600'}}>Part No.</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 80}}>
-                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 140}}>
-                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 80}}>
-                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 60}}>
-                  <Text style={{fontWeight: '600'}}>Age</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 300}}>
-                  <Text style={{fontWeight: '600'}}>Address</Text>
-                </DataTable.Title>
-              </DataTable.Header>
-
-              {items.slice(from, to).map((item : any) => (
-                <DataTable.Row key={item?.id}>
-                  <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 80}}>
-                    <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
-                    </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 140}}>
-                    <View style={{width: '100%'}}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          navigation.navigate('ViewVoterScreen', {
-                            routeFrom: 'Part A',
-                            filterName: 'Search List',
-                          });
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
-                            fontWeight: '600',
-                            color: '#000000',
-                          }}>
-                          {item?.name}
-                        </Text>
-                      </TouchableOpacity>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          flexWrap: 'wrap',
-                          color: '#000000',
-                        }}>
-                        {item?.fatherName}
-                      </Text>
-                    </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 80}}>
-                    <View style={{width: '100%'}}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          flexWrap: 'wrap',
-                          color: '#000000',
-                        }}>
-                        {item?.epicId}
-                      </Text>
-                    </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 60}}>
-                    <View style={{width: '100%'}}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          flexWrap: 'wrap',
-                          color: '#000000',
-                        }}>
-                        {item?.gender}-{item?.age}y
-                      </Text>
-                    </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 300}}>
-                    <View style={{width: '100%'}}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          flexWrap: 'wrap',
-                          color: '#000000',
-                        }}>
-                        {item?.address}
-                      </Text>
-                    </View>
-                  </DataTable.Cell>
-                </DataTable.Row>
-              ))}
-            </DataTable>
-          </>
-        );
       case 'Agewise List':
         return (
           <>
@@ -2947,14 +3677,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -2973,7 +3703,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -2982,7 +3712,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -2994,7 +3724,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.epicId}
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3006,7 +3736,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3018,7 +3748,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.address}
+                        {item?.SECTION_NAME_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3051,14 +3781,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -3077,7 +3807,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -3086,7 +3816,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                       <Text
                         style={{
@@ -3094,7 +3824,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        H/No. - {item?.houseNo}
+                        H/No. - {item?.C_HOUSE_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3107,7 +3837,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.epicId}
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3119,7 +3849,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3155,14 +3885,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -3181,7 +3911,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -3190,7 +3920,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3203,7 +3933,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.epicId}
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3216,7 +3946,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3228,7 +3958,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.address}
+                        {item?.SECTION_NAME_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3264,14 +3994,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -3290,7 +4020,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -3299,7 +4029,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3312,7 +4042,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.epicId}
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3325,7 +4055,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3337,7 +4067,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.address}
+                        {item?.SECTION_NAME_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3373,14 +4103,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -3399,7 +4129,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -3408,7 +4138,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3421,7 +4151,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.epicId}
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3434,7 +4164,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3446,7 +4176,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.address}
+                        {item?.SECTION_NAME_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3479,14 +4209,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -3505,7 +4235,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -3514,7 +4244,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                       <Text
                         style={{
@@ -3522,7 +4252,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        H/No. - {item?.houseNo}
+                        H/No. - {item?.C_HOUSE_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3535,7 +4265,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.epicId}
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3547,7 +4277,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3580,14 +4310,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -3606,7 +4336,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -3615,7 +4345,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                       <Text
                         style={{
@@ -3623,7 +4353,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        H/No. - {item?.houseNo}
+                        H/No. - {item?.C_HOUSE_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3636,7 +4366,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.epicId}
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3648,7 +4378,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3676,14 +4406,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -3731,8 +4461,8 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 150}}>
                     <View style={{alignSelf: 'center'}}>
                       <Text style={{color: '#000000'}}>Test</Text>
@@ -3792,14 +4522,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -3818,7 +4548,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -3827,7 +4557,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3864,7 +4594,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -3889,8 +4619,8 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 100}}>
                     <View style={{alignSelf: 'center'}}>
                       <Text style={{color: '#000000'}}>1</Text>
@@ -3941,8 +4671,8 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 100}}>
                     <View style={{alignSelf: 'center'}}>
                       <Text style={{color: '#000000'}}>Test</Text>
@@ -4002,8 +4732,8 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 100}}>
                     <View style={{alignSelf: 'center'}}>
                       <Text style={{color: '#000000'}}>1</Text>
@@ -4096,8 +4826,8 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 100}}>
                     <View style={{alignSelf: 'center'}}>
                       <Text style={{color: '#000000'}}>1</Text>
@@ -4183,14 +4913,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -4209,7 +4939,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -4218,7 +4948,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4231,7 +4961,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.epicId}
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4244,7 +4974,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4256,7 +4986,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.address}
+                        {item?.SECTION_NAME_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4292,14 +5022,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -4318,7 +5048,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -4327,7 +5057,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4353,7 +5083,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.gender}-{item?.age}y
+                        {item?.GENDER}-{item?.AGE}y
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4365,7 +5095,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.address}
+                        {item?.SECTION_NAME_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4382,45 +5112,60 @@ const VoterFilterScreen = ({
                 <DataTable.Title style={{width: 60}}>
                   <Text style={{fontWeight: '600'}}>Part No.</Text>
                 </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
                 <DataTable.Title style={{width: 140}}>
                   <Text style={{fontWeight: '600'}}>Edu Q</Text>
                 </DataTable.Title>
-                <DataTable.Title style={{width: 80}}>
-                  <Text style={{fontWeight: '600'}}>Total</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 60}}>
-                  <Text style={{fontWeight: '600'}}>Male</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 60}}>
-                  <Text style={{fontWeight: '600'}}>Female</Text>
-                </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
-                  <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 140}}>
-                    <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>Graduate</Text>
-                    </View>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                   <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
                     <View style={{width: '100%'}}>
-                    <Text
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                          });
+                        }}>
+                        <Text
                           style={{
                             fontSize: 12,
                             flexWrap: 'wrap',
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                         100
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
+                      </Text>
                     </View>
                   </DataTable.Cell>
-
-                  <DataTable.Cell style={{width: 60}}>
+                  <DataTable.Cell style={{width: 80}}>
                     <View style={{width: '100%'}}>
                       <Text
                         style={{
@@ -4428,21 +5173,13 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                       22
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
-
-                  <DataTable.Cell style={{width: 60}}>
-                    <View style={{width: '100%'}}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          flexWrap: 'wrap',
-                          color: '#000000',
-                        }}>
-                        23
-                      </Text>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>Graduate</Text>
                     </View>
                   </DataTable.Cell>
                 </DataTable.Row>
@@ -4465,22 +5202,22 @@ const VoterFilterScreen = ({
                   <Text style={{fontWeight: '600'}}>Voter Name</Text>
                 </DataTable.Title>
                 <DataTable.Title style={{width: 180}}>
-                  <Text style={{fontWeight: '600'}}>Shifted To</Text>
+                  <Text style={{fontWeight: '600'}}>Adress</Text>
                 </DataTable.Title>
 
                 <DataTable.Title style={{width: 180}}>
-                  <Text style={{fontWeight: '600'}}>Shifted From</Text>
+                  <Text style={{fontWeight: '600'}}>Home Shifted</Text>
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -4499,7 +5236,7 @@ const VoterFilterScreen = ({
                             fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -4508,7 +5245,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4520,7 +5257,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.address}
+                        {item?.SECTION_NAME_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4532,7 +5269,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.address}
+                        Yes
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4566,14 +5303,120 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
-                  <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+              {items &&
+                items.slice(from, to).map((item: any) => (
+                  <DataTable.Row key={item?.id}>
+                    <DataTable.Cell style={{width: 60}}>
+                      <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{alignSelf: 'center'}}>
+                        <Text style={{color: '#000000'}}>
+                          {item?.SLNOINPART}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 140}}>
+                      <View style={{width: '100%'}}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            navigation.navigate('ViewVoterScreen', {
+                              routeFrom: 'Part A',
+                              filterName: 'Search List',
+                            });
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              flexWrap: 'wrap',
+                              fontWeight: '600',
+                              color: '#000000',
+                            }}>
+                            {item?.FM_NAME_EN} {item?.LASTNAME_EN}
+                          </Text>
+                        </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '400',
+                            color: '#000000',
+                          }}>
+                          {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.EPIC_NO}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 60}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.GENDER}-{item?.AGE}y
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 300}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.SECTION_NAME_EN}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+            </DataTable>
+          </>
+        );
+      case 'Profession Wise List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Profession</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                   <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -4590,19 +5433,18 @@ const VoterFilterScreen = ({
                             fontSize: 12,
                             flexWrap: 'wrap',
                             fontWeight: '600',
-                            color: '#000000'
+                            color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
                         style={{
                           fontSize: 12,
                           flexWrap: 'wrap',
-                          fontWeight: '400',
-                          color: '#000000'
+                          color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4614,98 +5456,13 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.epicId}
+                        {item?.EPIC_NO}
                       </Text>
                     </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 60}}>
-                    <View style={{width: '100%'}}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          flexWrap: 'wrap',
-                          color: '#000000',
-                        }}>
-                        {item?.gender}-{item?.age}y
-                      </Text>
-                    </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 300}}>
-                    <View style={{width: '100%'}}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          flexWrap: 'wrap',
-                          color: '#000000',
-                        }}>
-                        {item?.address}
-                      </Text>
-                    </View>
-                  </DataTable.Cell>
-                </DataTable.Row>
-              ))}
-            </DataTable>
-          </>
-        );
-      case 'Profession Wise List':
-        return (
-          <>
-            <DataTable>
-              <DataTable.Header>
-                <DataTable.Title style={{width: 60}}>
-                  <Text style={{fontWeight: '600'}}>Part No.</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 140}}>
-                  <Text style={{fontWeight: '600'}}>Profession Name</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 80}}>
-                  <Text style={{fontWeight: '600'}}>Total</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 80}}>
-                  <Text style={{fontWeight: '600'}}>Male</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 80}}>
-                  <Text style={{fontWeight: '600'}}>Female</Text>
-                </DataTable.Title>
-              </DataTable.Header>
-
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
-                  <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>Test</Text>
-                    </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 80}}>
-                    <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>100</Text>
-                    </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 80}}>
-                    <View style={{width: '100%'}}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          flexWrap: 'wrap',
-                          color: '#000000',
-                        }}>
-                       50
-                      </Text>
-                    </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 80}}>
-                    <View style={{width: '100%'}}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          flexWrap: 'wrap',
-                          color: '#000000',
-                        }}>
-                        50
-                      </Text>
+                      <Text style={{color: '#000000'}}>Doctor</Text>
                     </View>
                   </DataTable.Cell>
                 </DataTable.Row>
@@ -4721,48 +5478,61 @@ const VoterFilterScreen = ({
                 <DataTable.Title style={{width: 60}}>
                   <Text style={{fontWeight: '600'}}>Part No.</Text>
                 </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
                 <DataTable.Title style={{width: 140}}>
-                  <Text style={{fontWeight: '600'}}>Location To</Text>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
                 </DataTable.Title>
-                <DataTable.Title style={{width: 80}}>
-                  <Text style={{fontWeight: '600'}}>Total</Text>
+                <DataTable.Title style={{width: 180}}>
+                  <Text style={{fontWeight: '600'}}>Adress</Text>
                 </DataTable.Title>
-                <DataTable.Title style={{width: 80}}>
-                  <Text style={{fontWeight: '600'}}>Male</Text>
-                </DataTable.Title>
-                <DataTable.Title style={{width: 80}}>
-                  <Text style={{fontWeight: '600'}}>Female</Text>
+
+                <DataTable.Title style={{width: 180}}>
+                  <Text style={{fontWeight: '600'}}>Staying Outside</Text>
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
-                    <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>Test</Text>
-                    </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 80}}>
-                    <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>100</Text>
-                    </View>
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{width: 80}}>
                     <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
+                        </Text>
+                      </TouchableOpacity>
                       <Text
                         style={{
                           fontSize: 12,
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                       50
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
-                  <DataTable.Cell style={{width: 80}}>
+                  <DataTable.Cell style={{width: 180}}>
                     <View style={{width: '100%'}}>
                       <Text
                         style={{
@@ -4770,7 +5540,19 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        50
+                        {item?.SECTION_NAME_EN}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 180}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        Yes
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4793,7 +5575,7 @@ const VoterFilterScreen = ({
                 <DataTable.Title style={{width: 140}}>
                   <Text style={{fontWeight: '600'}}>Voter Name</Text>
                 </DataTable.Title>
-                <DataTable.Title style={{width: 80}}>
+                <DataTable.Title style={{width: 120}}>
                   <Text style={{fontWeight: '600'}}>Phone No</Text>
                 </DataTable.Title>
                 <DataTable.Title style={{width: 160}}>
@@ -4801,14 +5583,14 @@ const VoterFilterScreen = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {items.slice(from, to).map(item => (
-                <DataTable.Row key={item.key}>
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
-                    <Text style={{color: '#000000'}}>{item.partNo}</Text>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 80}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 140}}>
@@ -4825,9 +5607,9 @@ const VoterFilterScreen = ({
                             fontSize: 12,
                             flexWrap: 'wrap',
                             fontWeight: '600',
-                            color: '#000000'
+                            color: '#000000',
                           }}>
-                          {item?.name}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
                       </TouchableOpacity>
                       <Text
@@ -4835,13 +5617,13 @@ const VoterFilterScreen = ({
                           fontSize: 12,
                           flexWrap: 'wrap',
                           fontWeight: '400',
-                          color: '#000000'
+                          color: '#000000',
                         }}>
-                        {item?.fatherName}
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
                       </Text>
                     </View>
                   </DataTable.Cell>
-                  <DataTable.Cell style={{width: 80}}>
+                  <DataTable.Cell style={{width: 120}}>
                     <View style={{width: '100%'}}>
                       <Text
                         style={{
@@ -4849,7 +5631,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                        {item?.mobileNo}
+                        {item?.MOBILE_NO}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4861,7 +5643,7 @@ const VoterFilterScreen = ({
                           flexWrap: 'wrap',
                           color: '#000000',
                         }}>
-                       Test
+                        Test
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -4871,551 +5653,506 @@ const VoterFilterScreen = ({
           </>
         );
       case 'Labharthi By State Govt':
-          return (
-            <>
-              <DataTable>
-                <DataTable.Header>
-                  <DataTable.Title style={{width: 60}}>
-                    <Text style={{fontWeight: '600'}}>Part No.</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 80}}>
-                    <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 140}}>
-                    <Text style={{fontWeight: '600'}}>Voter Name</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 80}}>
-                    <Text style={{fontWeight: '600'}}>Phone No</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 160}}>
-                    <Text style={{fontWeight: '600'}}>Scheme Name</Text>
-                  </DataTable.Title>
-                </DataTable.Header>
-  
-                {items.slice(from, to).map(item => (
-                  <DataTable.Row key={item.key}>
-                    <DataTable.Cell style={{width: 60}}>
-                      <Text style={{color: '#000000'}}>{item.partNo}</Text>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 80}}>
-                      <View style={{alignSelf: 'center'}}>
-                        <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
-                      </View>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 140}}>
-                      <View style={{width: '100%'}}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            navigation.navigate('ViewVoterScreen', {
-                              routeFrom: 'Part A',
-                              filterName: 'Search List',
-                            });
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              flexWrap: 'wrap',
-                              fontWeight: '600',
-                              color: '#000000'
-                            }}>
-                            {item?.name}
-                          </Text>
-                        </TouchableOpacity>
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 120}}>
+                  <Text style={{fontWeight: '600'}}>Phone No</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Scheme Name</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                          });
+                        }}>
                         <Text
                           style={{
                             fontSize: 12,
                             flexWrap: 'wrap',
-                            fontWeight: '400',
-                            color: '#000000'
-                          }}>
-                          {item?.fatherName}
-                        </Text>
-                      </View>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 80}}>
-                      <View style={{width: '100%'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
+                            fontWeight: '600',
                             color: '#000000',
                           }}>
-                          {item?.mobileNo}
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
-                      </View>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 160}}>
-                      <View style={{width: '100%'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
-                            color: '#000000',
-                          }}>
-                         Test
-                        </Text>
-                      </View>
-                    </DataTable.Cell>
-                  </DataTable.Row>
-                ))}
-              </DataTable>
-            </>
-          );
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          fontWeight: '400',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 120}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.MOBILE_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        Test
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
       case 'Labharthi By Candidate':
-            return (
-              <>
-                <DataTable>
-                  <DataTable.Header>
-                    <DataTable.Title style={{width: 60}}>
-                      <Text style={{fontWeight: '600'}}>Part No.</Text>
-                    </DataTable.Title>
-                    <DataTable.Title style={{width: 80}}>
-                      <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
-                    </DataTable.Title>
-                    <DataTable.Title style={{width: 140}}>
-                      <Text style={{fontWeight: '600'}}>Voter Name</Text>
-                    </DataTable.Title>
-                    <DataTable.Title style={{width: 80}}>
-                      <Text style={{fontWeight: '600'}}>Phone No</Text>
-                    </DataTable.Title>
-                    <DataTable.Title style={{width: 160}}>
-                      <Text style={{fontWeight: '600'}}>Scheme Name</Text>
-                    </DataTable.Title>
-                  </DataTable.Header>
-    
-                  {items.slice(from, to).map(item => (
-                    <DataTable.Row key={item.key}>
-                      <DataTable.Cell style={{width: 60}}>
-                        <Text style={{color: '#000000'}}>{item.partNo}</Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={{width: 80}}>
-                        <View style={{alignSelf: 'center'}}>
-                          <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
-                        </View>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={{width: 140}}>
-                        <View style={{width: '100%'}}>
-                          <TouchableOpacity
-                            onPress={() => {
-                              navigation.navigate('ViewVoterScreen', {
-                                routeFrom: 'Part A',
-                                filterName: 'Search List',
-                              });
-                            }}>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                flexWrap: 'wrap',
-                                fontWeight: '600',
-                                color: '#000000'
-                              }}>
-                              {item?.name}
-                            </Text>
-                          </TouchableOpacity>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              flexWrap: 'wrap',
-                              fontWeight: '400',
-                              color: '#000000'
-                            }}>
-                            {item?.fatherName}
-                          </Text>
-                        </View>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={{width: 80}}>
-                        <View style={{width: '100%'}}>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              flexWrap: 'wrap',
-                              color: '#000000',
-                            }}>
-                            {item?.mobileNo}
-                          </Text>
-                        </View>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={{width: 160}}>
-                        <View style={{width: '100%'}}>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              flexWrap: 'wrap',
-                              color: '#000000',
-                            }}>
-                           Test
-                          </Text>
-                        </View>
-                      </DataTable.Cell>
-                    </DataTable.Row>
-                  ))}
-                </DataTable>
-              </>
-            );
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 120}}>
+                  <Text style={{fontWeight: '600'}}>Phone No</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Scheme Name</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          fontWeight: '400',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 120}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.MOBILE_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        Test
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
       case 'Approached Qty':
-            return (
-              <>
-                <DataTable>
-                  <DataTable.Header>
-                    <DataTable.Title style={{width: 60}}>
-                      <Text style={{fontWeight: '600'}}>Part No.</Text>
-                    </DataTable.Title>
-                    <DataTable.Title style={{width: 80}}>
-                      <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
-                    </DataTable.Title>
-                    <DataTable.Title style={{width: 140}}>
-                      <Text style={{fontWeight: '600'}}>Voter Name</Text>
-                    </DataTable.Title>
-                    <DataTable.Title style={{width: 120}}>
-                      <Text style={{fontWeight: '600'}}>Approached No</Text>
-                    </DataTable.Title>
-                    <DataTable.Title style={{width: 160}}>
-                      <Text style={{fontWeight: '600'}}>Approached Record</Text>
-                    </DataTable.Title>
-                  </DataTable.Header>
-    
-                  {items.slice(from, to).map(item => (
-                    <DataTable.Row key={item.key}>
-                      <DataTable.Cell style={{width: 60}}>
-                        <Text style={{color: '#000000'}}>{item.partNo}</Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={{width: 80}}>
-                        <View style={{alignSelf: 'center'}}>
-                          <Text style={{color: '#000000'}}>{item?.voterSlNo}</Text>
-                        </View>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={{width: 140}}>
-                        <View style={{width: '100%'}}>
-                          <TouchableOpacity
-                            onPress={() => {
-                              navigation.navigate('ViewVoterScreen', {
-                                routeFrom: 'Part A',
-                                filterName: 'Search List',
-                              });
-                            }}>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                flexWrap: 'wrap',
-                                fontWeight: '600',
-                                color: '#000000'
-                              }}>
-                              {item?.name}
-                            </Text>
-                          </TouchableOpacity>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              flexWrap: 'wrap',
-                              fontWeight: '400',
-                              color: '#000000'
-                            }}>
-                            {item?.fatherName}
-                          </Text>
-                        </View>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={{width: 120}}>
-                        <View style={{width: '100%'}}>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              flexWrap: 'wrap',
-                              color: '#000000',
-                            }}>
-                            36
-                          </Text>
-                        </View>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={{width: 160}}>
-                        <View style={{width: '100%'}}>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              flexWrap: 'wrap',
-                              color: '#000000',
-                            }}>
-                           Test
-                          </Text>
-                        </View>
-                      </DataTable.Cell>
-                    </DataTable.Row>
-                  ))}
-                </DataTable>
-              </>
-            );
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 120}}>
+                  <Text style={{fontWeight: '600'}}>Approached Qty</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Approached Reason</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          fontWeight: '400',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 120}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        36
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        Test
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
       case 'Campaign Abhiyan':
-            return (
-              <>
-                <DataTable>
-                  <DataTable.Header>
-                    <DataTable.Title style={{width: 60}}>
-                      <Text style={{fontWeight: '600'}}>Part No.</Text>
-                    </DataTable.Title>
-                    <DataTable.Title style={{width: 160}}>
-                      <Text style={{fontWeight: '600'}}>Campaign Name</Text>
-                    </DataTable.Title>
-                    <DataTable.Title style={{width: 110}}>
-                      <Text style={{fontWeight: '600'}}>Apply</Text>
-                    </DataTable.Title>
-                  </DataTable.Header>
-    
-                  {items.slice(from, to).map(item => (
-                    <DataTable.Row key={item.key}>
-                      <DataTable.Cell style={{width: 60}}>
-                        <Text style={{color: '#000000'}}>{item.partNo}</Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={{width: 160}}>
-                        <View style={{alignSelf: 'center'}}>
-                          <Text style={{color: '#000000'}}>Test</Text>
-                        </View>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={{width: 110}}>
-                        <View style={{alignSelf: 'center'}}>
-                          <Text style={{color: '#000000'}}>20</Text>
-                        </View>
-                      </DataTable.Cell>
-                    </DataTable.Row>
-                  ))}
-                </DataTable>
-              </>
-            );
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Campaign Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 110}}>
+                  <Text style={{fontWeight: '600'}}>Description</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>Test</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 110}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>Test</Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
       case 'Social Media':
-          return (
-            <>
-              <DataTable>
-                <DataTable.Header>
-                  <DataTable.Title style={{width: 60}}>
-                    <Text style={{fontWeight: '600'}}>Part No.</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 140}}>
-                    <Text style={{fontWeight: '600'}}>Voter Name</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 100}}>
-                    <Text style={{fontWeight: '600'}}>Phone No</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 300}}>
-                    <Text style={{fontWeight: '600'}}>Address</Text>
-                  </DataTable.Title>
-                </DataTable.Header>
-  
-                {items.slice(from, to).map(item => (
-                  <DataTable.Row key={item.key}>
-                    <DataTable.Cell style={{width: 60}}>
-                      <Text style={{color: '#000000'}}>{item.partNo}</Text>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 140}}>
-                      <View style={{width: '100%'}}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            navigation.navigate('ViewVoterScreen', {
-                              routeFrom: 'Part A',
-                              filterName: 'Search List',
-                            });
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              flexWrap: 'wrap',
-                              fontWeight: '600',
-                              color: '#000000'
-                            }}>
-                            {item?.name}
-                          </Text>
-                        </TouchableOpacity>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
-                            fontWeight: '400',
-                            color: '#000000'
-                          }}>
-                          {item?.fatherName}
-                        </Text>
-                      </View>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 100}}>
-                      <View style={{width: '100%'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
-                            color: '#000000',
-                          }}>
-                          {item?.mobileNo}
-                        </Text>
-                      </View>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 300}}>
-                      <View style={{width: '100%'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
-                            color: '#000000',
-                          }}>
-                          {item?.address}
-                        </Text>
-                      </View>
-                    </DataTable.Cell>
-                  </DataTable.Row>
-                ))}
-              </DataTable>
-            </>
-          );
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Title</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Image</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 110}}>
+                  <Text style={{fontWeight: '600'}}>Description</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>Test</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>Test</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 110}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>Test</Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
       case 'Voter Survey':
-          return (
-            <>
-              <DataTable>
-                <DataTable.Header>
-                  <DataTable.Title style={{width: 60}}>
-                    <Text style={{fontWeight: '600'}}>Part No.</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 140}}>
-                    <Text style={{fontWeight: '600'}}>Voter Name</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 160}}>
-                    <Text style={{fontWeight: '600'}}>Party Like</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 160}}>
-                    <Text style={{fontWeight: '600'}}>Candidate Like</Text>
-                  </DataTable.Title>
-                </DataTable.Header>
-  
-                {items.slice(from, to).map(item => (
-                  <DataTable.Row key={item.key}>
-                    <DataTable.Cell style={{width: 60}}>
-                      <Text style={{color: '#000000'}}>{item.partNo}</Text>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 140}}>
-                      <View style={{width: '100%'}}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            navigation.navigate('ViewVoterScreen', {
-                              routeFrom: 'Part A',
-                              filterName: 'Search List',
-                            });
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              flexWrap: 'wrap',
-                              fontWeight: '600',
-                              color: '#000000'
-                            }}>
-                            {item?.name}
-                          </Text>
-                        </TouchableOpacity>
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Party Like</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Candidate Like</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                          });
+                        }}>
                         <Text
                           style={{
                             fontSize: 12,
                             flexWrap: 'wrap',
-                            fontWeight: '400',
-                            color: '#000000'
-                          }}>
-                          {item?.fatherName}
-                        </Text>
-                      </View>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 160}}>
-                      <View style={{width: '100%'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
+                            fontWeight: '600',
                             color: '#000000',
                           }}>
-                          Test
+                          {item?.FM_NAME_EN} {item?.LASTNAME_EN}
                         </Text>
-                      </View>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 160}}>
-                      <View style={{width: '100%'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
-                            color: '#000000',
-                          }}>
-                          Test
-                        </Text>
-                      </View>
-                    </DataTable.Cell>
-                  </DataTable.Row>
-                ))}
-              </DataTable>
-            </>
-          );
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          fontWeight: '400',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        Test
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        Test
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
       case 'Religion':
-          return (
-            <>
-              <DataTable>
-                <DataTable.Header>
-                  <DataTable.Title style={{width: 60}}>
-                    <Text style={{fontWeight: '600'}}>Part No.</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 140}}>
-                    <Text style={{fontWeight: '600'}}>Religion Name</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 80}}>
-                    <Text style={{fontWeight: '600'}}>Total</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 80}}>
-                    <Text style={{fontWeight: '600'}}>Male</Text>
-                  </DataTable.Title>
-                  <DataTable.Title style={{width: 80}}>
-                    <Text style={{fontWeight: '600'}}>Female</Text>
-                  </DataTable.Title>
-                </DataTable.Header>
-  
-                {items.slice(from, to).map(item => (
-                  <DataTable.Row key={item.key}>
-                    <DataTable.Cell style={{width: 60}}>
-                      <Text style={{color: '#000000'}}>{item.partNo}</Text>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 140}}>
-                      <Text style={{color: '#000000'}}>Hindu</Text>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 80}}>
-                      <View style={{width: '100%'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
-                            color: '#000000',
-                          }}>
-                          100
-                        </Text>
-                      </View>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 80}}>
-                      <View style={{width: '100%'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
-                            color: '#000000',
-                          }}>
-                          50
-                        </Text>
-                      </View>
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{width: 80}}>
-                      <View style={{width: '100%'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            flexWrap: 'wrap',
-                            color: '#000000',
-                          }}>
-                          50
-                        </Text>
-                      </View>
-                    </DataTable.Cell>
-                  </DataTable.Row>
-                ))}
-              </DataTable>
-            </>
-          );
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Religion Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Total</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Male</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Female</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items.slice(from, to).map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <Text style={{color: '#000000'}}>Hindu</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        100
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        50
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        50
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
       default:
         return false;
     }
@@ -5621,68 +6358,63 @@ const VoterFilterScreen = ({
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <View>
-        <View style={styles.innerContainer}>
-          <View style={styles.parent}>
-            <View style={styles.child}>
-              <View style={{marginTop: '17%', marginLeft: 15, marginRight: 15}}>
-                <Text
-                  style={{
-                    color: '#FFFFFF',
-                    fontSize: 15,
-                    fontWeight: '600',
-                    marginTop: 10,
-                  }}>
-                  {route?.params?.filterName}
-                </Text>
-                <Animated.View entering={FadeInDown.duration(1000).springify()}>
-                  <View style={{display: 'flex', flexDirection: 'row'}}>
-                    {getTopSearchUI()}
-                  </View>
-                  <View style={{display: 'flex', flexDirection: 'row'}}>
-                    {getSearchUI()}
-                    {getSearchBtn()}
-                  </View>
-                </Animated.View>
+    <>
+      <View style={styles.mainContainer}>
+        <Loader loading={loading} />
+        <View>
+          <View style={styles.innerContainer}>
+            <View style={styles.parent}>
+              <View style={styles.child}>
+                <View
+                  style={{marginTop: '17%', marginLeft: 15, marginRight: 15}}>
+                  <Text
+                    style={{
+                      color: '#FFFFFF',
+                      fontSize: 15,
+                      fontWeight: '600',
+                      marginTop: 10,
+                    }}>
+                    {route?.params?.filterName}
+                  </Text>
+                  <Animated.View
+                    entering={FadeInDown.duration(1000).springify()}>
+                    <View style={{display: 'flex', flexDirection: 'row'}}>
+                      {getTopSearchUI()}
+                    </View>
+                    <View style={{display: 'flex', flexDirection: 'row'}}>
+                      {getSearchUI()}
+                      {getSearchBtn()}
+                    </View>
+                  </Animated.View>
+                </View>
               </View>
             </View>
           </View>
         </View>
-      </View>
-      <View
-        style={{
-          paddingLeft: 15,
-          paddingRight: 15,
-        }}>
-        <FlatListItem style={styles.card}>
-          <ScrollView>
-            <ScrollView horizontal={true}>{getDataTable()}</ScrollView>
-          </ScrollView>
-        </FlatListItem>
-        <View style={{display:'flex',flexDirection:'row'}}>
-          <View style={{flex:1}}>
-            <View style={{display:'flex',flexDirection:'row'}}>
-                <View style={{flex:1}}>
-
-                </View>
-            </View>  
+        {!loading && (
+          <View
+          style={{
+            paddingLeft: 15,
+            paddingRight: 15,
+          }}>
+          <View style={styles.card}>
+              <ScrollView
+                onScroll={({nativeEvent})=>{
+                  if(isCloseToBottom(nativeEvent)){
+                    fetchMore()
+                  }
+                  }}
+              >
+                <ScrollView horizontal={true}>
+                 {getDataTable()}
+                </ScrollView>
+              </ScrollView>
           </View>
         </View>
-        {/* <DataTable.Pagination
-          page={page}
-          numberOfPages={Math.ceil(items.length / itemsPerPage)}
-          onPageChange={page => setPage(page)}
-          label={`${from + 1}-${to} of ${items.length}`}
-          numberOfItemsPerPageList={numberOfItemsPerPageList}
-          numberOfItemsPerPage={itemsPerPage}
-          // onItemsPerPageChange={onItemsPerPageChange}
-          showFastPaginationControls
-          // selectPageDropdownLabel={'Rows per page'}
-        /> */}
+        )}
+        <CustomModal />
       </View>
-      <CustomModal />
-    </View>
+    </>
   );
 };
 
@@ -5701,7 +6433,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   child: {
-    height: 180,
+    height: 200,
     transform: [{scaleX: 0.5}],
     backgroundColor: '#288BC6',
   },
@@ -5751,7 +6483,7 @@ const styles = StyleSheet.create({
     height: '85%',
     width: '100%',
     backgroundColor: '#FFFFFF',
-    marginTop: 10,
+    marginTop: 14,
   },
   part: {
     width: '100%',

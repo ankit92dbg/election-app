@@ -84,10 +84,11 @@ export const createTable = async (db: SQLiteDatabase) => {
   await db.executeSql(query);
 };
 
-export const getTodoItems = async (db: SQLiteDatabase): Promise<ToDoVoterItem[]> => {
+export const getTodoItems = async (db: SQLiteDatabase, startFrom:Number, Total:Number): Promise<ToDoVoterItem[]> => {
   try {
+    // console.warn('startFrom--->',startFrom,Total)
     const todoItems: ToDoVoterItem[] = [];
-    const results = await db.executeSql(`SELECT * FROM ${tableName} ORDER BY id ASC LIMIT 50`);
+    const results = await db.executeSql(`SELECT * FROM ${tableName} ORDER BY id DESC LIMIT ${startFrom}, ${Total}`);
     results.forEach((result : any) => {
       for (let index = 0; index < result.rows.length; index++) {
         todoItems.push(result.rows.item(index))
@@ -100,10 +101,12 @@ export const getTodoItems = async (db: SQLiteDatabase): Promise<ToDoVoterItem[]>
   }
 };
 
+
+
 export const getTotalRowNo = async (db: SQLiteDatabase)=> {
   try {
-    const results = await db.executeSql(`SELECT * FROM ${tableName} ORDER BY id ASC`);
-   return results.length
+    const results:any = await db.executeSql(`SELECT * FROM ${tableName} ORDER BY id ASC`);
+   return Math.ceil(Number(results[0]?.rows?.length)/50)
   } catch (error) {
     console.error(error);
     throw Error('Failed to get todoItems !!!');
