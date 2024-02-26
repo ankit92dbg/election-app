@@ -29,7 +29,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
         style={{
           top: '13%',
           width: '100%',
-          height: 670,
+          height: '85%',
           position: 'absolute',
           zIndex: 9999,
           paddingLeft: 15,
@@ -587,7 +587,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                 </Animated.View>
               </View>
             </View>
-            <View
+            {/* <View
               style={{display: 'flex', flexDirection: 'row', marginTop: 10}}>
               <View style={{flex: 1}}>
                 <Animated.View
@@ -619,7 +619,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                 </Animated.View>
               </View>
               <View style={{flex: 1}}></View>
-            </View>
+            </View> */}
           </>
         </ScrollView>
       </View>

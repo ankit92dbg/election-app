@@ -13,7 +13,7 @@ import Card from '../components/Card';
 import Badge from '../components/Badge';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {BASE_URL, IMAGE_BASE_URL} from '../config';
-import { deleteVoterTable, logutUser, retrieveUserSession, retrieveVoterData, storeVoterData } from '../utils';
+import { deleteVoterTable, logutUser, retrieveUserSession, storeVoterData } from '../utils';
 import Loader from '../components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllBM } from '../redux/action/BMData';
@@ -30,7 +30,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [syncModalVisible, setSyncModalVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
-  const [currentPage, setCurrentPage] = React.useState(0);
+    const [currentPage, setCurrentPage] = React.useState(0);
   const [nextPage, setNextPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(1);
   const [totalDownloadedPercent, setDownloadedPercent] = React.useState(0);
@@ -51,6 +51,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
 
   async function getUserSession() {
     try {
+      setLoading(true)
       const session: any = await retrieveUserSession();
       if (session !== undefined) {
         setUserData(session);
@@ -82,7 +83,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
     formData.append('leader_id', leader_id);
     formData.append('page', page);
       const response : any = await postRequest('voter-list.php',formData) 
-    console.warn("response--->",response)
+    // console.warn("response--->",response)
     if(response=='TypeError: Network request failed'){
       setTimeout(() => {
         setLoading(false);
@@ -100,8 +101,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
         if(storeResp?.message =='success'){
           
           if(Number(page)<=Number(response?.total_page)){
-            setCurrentPage(page+1)
-            getVotersData(leader_id,page+1)
+            setCurrentPage(Number(page)+1+1)
+            getVotersData(leader_id,Number(page)+1+1)
           }
         }
       }
@@ -211,8 +212,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
 
   return (
     <>
-    <LoaderWithData loading={loading} text={"Loading Data..."} totalDownloadedPercent={totalDownloadedPercent} />
     <View style={styles.mainContainer}>
+      <LoaderWithData loading={loading} text={"Loading Data..."} totalDownloadedPercent={totalDownloadedPercent} />
       <View style={styles.innerContainer}>
         <View style={styles.parent}>
           <View style={styles.child}>
@@ -550,7 +551,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
             />
           ):(
             <Image
-              style={{width: '100%'}}
+              style={{width: '100%', height: '100%',borderRadius:10}}
               source={require('../assets/images/background-placeholder.png')}
               resizeMode={'contain'}
             />
@@ -560,7 +561,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
       </View>
       {logOutModal()}
       {syncModal()}
-    </View>
+          </View>
     </>
   );
 };

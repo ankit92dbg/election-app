@@ -30,7 +30,7 @@ const PartAScreen = ({navigation}: {navigation: any}) => {
         style={{
           top: '13%',
           width: '100%',
-          height: 650,
+          height: '85%',
           position: 'absolute',
           zIndex: 9999,
           paddingLeft: 15,

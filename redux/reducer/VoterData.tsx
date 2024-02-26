@@ -1,11 +1,9 @@
-import {GET_BM_LIST} from '../../contants';
-import { postRequest } from '../../networkInterface';
-import { retrieveUserSession } from '../../utils';
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {GET_VOTER_LIST} from '../../contants';
+import { createSlice } from "@reduxjs/toolkit";
 
 export const getAllVoters = async(data = [], action: any) => {
   switch(action?.type){
-    case GET_BM_LIST:
+    case GET_VOTER_LIST:
       return [action?.data]
 
       default :

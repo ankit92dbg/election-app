@@ -1,4 +1,3 @@
-import axios from "axios";
 import { BASE_URL } from "./config";
 
 export const postRequest = async(url:any,formData:any) =>{
