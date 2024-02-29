@@ -7,7 +7,7 @@ function* getVoterList(data:any):any{
     const formData = new FormData();
     formData.append('leader_id', data?.data?.leader_id,);
     const response:any = yield postRequest('voter-list.php', formData);
-    console.warn('response--response-->',response)
+    // console.warn('response--response-->',response)
     yield put(setVoterData(response));
 }
 

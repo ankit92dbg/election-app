@@ -12,14 +12,17 @@ import VoterListScreen from './screen/VoterListScreen';
 import UpdateVoterScreen from './screen/UpdateVoterScreen';
 import VoterFilterScreen from './screen/VoterFilterScreen';
 import ViewVoterScreen from './screen/ViewVoterScreen';
+import UpdateScreen from './screen/UpdateScreen';
 import CreateBM from './screen/CreateBM';
 import BMList from './screen/BMList';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { retrieveUserSession } from './utils';
 
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
 
 export function LoginStack() {
     return (
@@ -82,12 +85,32 @@ export function InnerStack() {
             component={CreateBM}
             options={{headerTitle: 'Home > Create BM',headerTitleStyle:{fontSize:14}, headerTransparent: true, headerTintColor:'#FFFFFF'}}
         />
+        <Stack.Screen
+            name="UpdateScreen"
+            component={UpdateScreen}
+            options={{headerShown:false}}
+        />
        
     </Stack.Navigator>
 )
 }
 
 export const TabNavigator = () => {
+    const [userData, setUserData] = React.useState<any>(null);
+    React.useEffect(() => {
+        getUserSession();
+    }, []);
+
+    async function getUserSession() {
+        try {
+        const session: any = await retrieveUserSession();
+        if (session !== undefined) {
+            setUserData(session);
+        }
+        } catch (error) {
+        // There was an error on the native side
+        }
+    }
     return (
       <Tab.Navigator
         screenOptions={{
@@ -119,6 +142,7 @@ export const TabNavigator = () => {
            
           }}
         />
+        {userData?.user_type==1 && (
          <Tab.Screen 
         name="BMList" 
         component={BMList}
@@ -131,6 +155,7 @@ export const TabNavigator = () => {
            
           }}
         />
+        )}
            <Tab.Screen 
         name="SettingScreen" 
         component={SettingScreen}

@@ -15,6 +15,8 @@ import java.util.List;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.rnfs.RNFSPackage;
 import org.pgsqlite.SQLitePluginPackage;
+import com.christopherdro.RNPrint.RNPrintPackage;
+import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

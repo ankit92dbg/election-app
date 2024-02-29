@@ -9,6 +9,7 @@ import {
   ScrollView,
   Dimensions,
   Modal,
+  Linking,
 } from 'react-native';
 import Animated, {FadeIn, FadeInDown, FadeInUp} from 'react-native-reanimated';
 import Card from '../components/Card';
@@ -17,6 +18,12 @@ import HyperLink from '../components/HyperLink';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FlatListItem from '../components/FlatListItem';
 import {useState} from 'react';
+import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { IMAGE_BASE_URL } from '../config';
+import Snackbar from 'react-native-snackbar';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import RNPrint from 'react-native-print'
 
 const ViewVoterScreen = ({
   route,
@@ -26,15 +33,157 @@ const ViewVoterScreen = ({
   navigation: any;
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const DEVICE_HEIGHT = Dimensions.get('window').height
+  const DEVICE_HEIGHT = Dimensions.get('window').height;
+  const voterData = route?.params?.item;
+  const {data} = useSelector((state: any) => state?.MasterData);
+  const [voterLabelList, setVoterLabelList] = React.useState<any>(
+    [],
+  );
+  const [selectedPrinter, setSelectedPrinter] = React.useState<any>(null);
+  const [voterLabel, setVoterLabel] = React.useState<any>("");
 
+  React.useEffect(() => {
+    setVoterLabelList(data?.label_value);
+  }, []);
+
+  const filterVoterLabel = (labelId:any) => {
+    const labelData = voterLabelList.filter((item: any) =>
+        item?.id.includes(labelId),
+      );
+      return labelData?.length > 0 && labelData[0]?.label
+  };
+
+
+  const printPDF = async () => {
+    let html = `<div style="width:260px;word-wrap: break-word;">`;
+    html +=`<p style="font-size:20px">भाग सं. : ${voterData?.PART_NO}</p>`
+    html +=`<p style="font-size:20px">अनु.सं. : ${voterData?.SLNOINPART}</p>`
+    html +=`<p style="font-size:20px">नाम : ${voterData?.FM_NAME_V1} ${voterData?.LASTNAME_V1}</p>`
+    html +=`<p style="font-size:20px">पिता/पति: ${voterData?.RLN_FM_NM_V1} ${voterData?.RLN_L_NM_V1}</p>`
+    html +=`<p style="font-size:20px">मकान संख्या: ${voterData?.C_HOUSE_NO_V1}</p>`
+    html +=`<p style="font-size:20px">कार्ड सं. : ${voterData?.EPIC_NO}</p>`
+    html +=`<p style="font-size:20px">बुथ : ${voterData?.PSBUILDING_NAME_V1}</p>`
+    html +=`</div>`
+    const results : any = await RNHTMLtoPDF.convert({
+      html: html,
+      fileName: 'test',
+      base64: true,
+    });
+    await RNPrint.print({filePath: results?.filePath});
+  };
+
+  const getEducation = (education: any) => {
+    switch (education) {
+      case '0':
+        return 'Uneducated';
+      case '1':
+        return '10th';
+      case '2':
+        return '12th';
+      case '3':
+        return 'Undergraduate';
+      case '4':
+        return 'Graduate';
+      case '5':
+        return 'Post Graduate';
+      case '6':
+        return 'PHD';
+      case '7':
+        return 'Other';
+      default:
+        return 'N/A';
+    }
+  };
+
+  const getProfession = (profession: any) => {
+    switch (profession) {
+      case '0':
+        return 'Student';
+        break;
+      case '1':
+        return 'Unemployed';
+        break;
+      case '2':
+        return 'Self Employed';
+        break;
+      case '3':
+        return 'Farmer';
+        break;
+      case '4':
+        return 'Teacher';
+        break;
+      case '5':
+        return 'Govt Forces';
+        break;
+      case '6':
+        return 'Job Pvt Sector';
+        break;
+      case '7':
+        return 'Job Govt Sector';
+        break;
+      case '8':
+        return 'Police officer';
+        break;
+      case '9':
+        return 'Dentist';
+        break;
+      case '10':
+        return 'Doctor';
+        break;
+      case '11':
+        return 'Journalist';
+        break;
+      case '12':
+        return 'CA / Account';
+        break;
+      case '13':
+        return 'Advocates';
+        break;
+      case '14':
+        return 'Engineer';
+        break;
+      case '15':
+        return 'Local Market Business';
+        break;
+      case '16':
+        return 'Corporate Business';
+        break;
+      case '17':
+        return 'School Owner';
+        break;
+      case '18':
+        return 'Hospital Owner';
+        break;
+      case '19':
+        return 'Multiple Business';
+        break;
+      case '20':
+        return 'Barber Salon';
+        break;
+      case '21':
+        return 'Driving Work Business';
+        break;
+      case '22':
+        return 'GIG WORKER';
+        break;
+      case '23':
+        return 'Daily Mazdoor';
+        break;
+      case '24':
+        return 'Local Market Worker';
+        break;
+      case '25':
+        return 'Other';
+      default:
+        return 'N/A';
+    }
+  };
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
         <View style={styles.parent}>
-          <View style={styles.child}>
-          </View>
+          <View style={styles.child}></View>
         </View>
       </View>
       <View
@@ -70,7 +219,7 @@ const ViewVoterScreen = ({
                                   zIndex: 1111,
                                   fontWeight: '600',
                                 }}>
-                                Part : 02
+                                Part No. : {voterData?.PART_NO}
                               </Text>
                             </Badge>
                           </View>
@@ -83,7 +232,7 @@ const ViewVoterScreen = ({
                                   zIndex: 1111,
                                   fontWeight: '600',
                                 }}>
-                                SJV1247626
+                                SR No. {voterData?.SLNOINPART}
                               </Text>
                             </Badge>
                           </View>
@@ -98,11 +247,20 @@ const ViewVoterScreen = ({
                           <View style={{flex: 2}}>
                             <Text
                               style={{
+                                fontSize: 12,
+                                fontWeight: '400',
+                                color: '#949292',
+                                marginTop: 4,
+                              }}>
+                              VOTER ID : {voterData?.EPIC_NO}
+                            </Text>
+                            <Text
+                              style={{
                                 fontSize: 16,
                                 fontWeight: '600',
                                 color: '#424242',
                               }}>
-                              Praveen Singh
+                              {voterData?.FM_NAME_EN} {voterData?.LASTNAME_EN}
                             </Text>
                           </View>
                         </View>
@@ -114,28 +272,19 @@ const ViewVoterScreen = ({
                             color: '#949292',
                             marginTop: 4,
                           }}>
-                          S/O Raj Kumar Singh
+                          FATHER NAME : {voterData?.RLN_FM_NM_EN}{' '}
+                          {voterData?.RLN_L_NM_EN}
                         </Text>
-                        <View
+                        <Text
                           style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            marginTop: 6,
+                            fontSize: 12,
+                            fontWeight: '400',
+                            color: '#949292',
+                            marginTop: 4,
                           }}>
-                          <View style={{flex: 1}}>
-                            <Icon name="mars" color={'#424242'} size={16} />
-                          </View>
-                          <View style={{flex: 10}}>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                fontWeight: '600',
-                                color: '#424242',
-                              }}>
-                              Male
-                            </Text>
-                          </View>
-                        </View>
+                          HOUSE NO. : {voterData?.C_HOUSE_NO}
+                        </Text>
+
                         <View
                           style={{
                             display: 'flex',
@@ -152,7 +301,9 @@ const ViewVoterScreen = ({
                                 fontWeight: '600',
                                 color: '#424242',
                               }}>
-                              07/12/1998 (DOB)
+                              {voterData?.DOB
+                                ? moment(voterData?.DOB).format('DD/MM/YYYY')
+                                : ''}
                             </Text>
                           </View>
                         </View>
@@ -162,7 +313,47 @@ const ViewVoterScreen = ({
                             flexDirection: 'row',
                             marginTop: 6,
                           }}>
-                          <>
+                          <View style={{flex: 1}}>
+                            <Icon name="mars" color={'#424242'} size={16} />
+                          </View>
+                          <View style={{flex: 10}}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: '600',
+                                color: '#424242',
+                              }}>
+                              {voterData?.GENDER}
+                            </Text>
+                          </View>
+                        </View>
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            marginTop: 6,
+                          }}>
+                          <View style={{flex: 1}}>
+                            <Icon name="home" color={'#424242'} size={16} />
+                          </View>
+                          <View style={{flex: 10}}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: '600',
+                                color: '#424242',
+                              }}>
+                              {voterData?.SECTION_NAME_EN}
+                            </Text>
+                          </View>
+                        </View>
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            marginTop: 6,
+                          }}>
+                          {/* <>
                             <View style={{flex: 1}}>
                               <Icon
                                 name="envelope"
@@ -182,7 +373,7 @@ const ViewVoterScreen = ({
                                 </Text>
                               </TouchableOpacity>
                             </View>
-                          </>
+                          </> */}
                         </View>
                         <View
                           style={{
@@ -191,7 +382,7 @@ const ViewVoterScreen = ({
                             marginTop: 6,
                           }}>
                           <View style={{flex: 1}}>
-                            <Icon name="phone" color={'#424242'} size={16} />
+                            <Icon name="crosshairs" color={'#424242'} size={16} />
                           </View>
                           <View style={{flex: 10}}>
                             <TouchableOpacity>
@@ -201,29 +392,9 @@ const ViewVoterScreen = ({
                                   fontWeight: '600',
                                   color: '#424242',
                                 }}>
-                                +91-7065317064
+                                {voterData?.PSBUILDING_NAME_EN}
                               </Text>
                             </TouchableOpacity>
-                          </View>
-                        </View>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            marginTop: 6,
-                          }}>
-                          <View style={{flex: 1}}>
-                            <Icon name="home" color={'#424242'} size={16} />
-                          </View>
-                          <View style={{flex: 10}}>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                fontWeight: '600',
-                                color: '#424242',
-                              }}>
-                              India Gate, New Delhi, India
-                            </Text>
                           </View>
                         </View>
 
@@ -234,10 +405,14 @@ const ViewVoterScreen = ({
                             marginTop: 26,
                           }}>
                           <View style={{flex: 4}}>
-                            <Text style={{color:'#949292',fontSize:12}}>Age : </Text>
+                            <Text style={{color: '#949292', fontSize: 12}}>
+                              PHONE NO. :{' '}
+                            </Text>
                           </View>
                           <View style={{flex: 8}}>
-                            <Text style={{color:'#949292',fontSize:12}}>26y</Text>
+                            <Text style={{color: '#949292', fontSize: 12}}>
+                            {voterData?.MOBILE_NO!='null' && voterData?.MOBILE_NO!='' ? voterData?.MOBILE_NO : 'N/A'}
+                            </Text>
                           </View>
                         </View>
                         <View
@@ -247,10 +422,16 @@ const ViewVoterScreen = ({
                             marginTop: 2,
                           }}>
                           <View style={{flex: 4}}>
-                            <Text style={{color:'#949292',fontSize:12}}>House No : </Text>
+                            <Text style={{color: '#949292', fontSize: 12}}>
+                              EDUCATION :{' '}
+                            </Text>
                           </View>
                           <View style={{flex: 8}}>
-                            <Text style={{color:'#949292',fontSize:12}}>151</Text>
+                            <Text style={{color: '#949292', fontSize: 12}}>
+                            {voterData?.education == '7'
+                          ? voterData?.other_education
+                          : getEducation(voterData?.education)}
+                            </Text>
                           </View>
                         </View>
                         <View
@@ -260,10 +441,16 @@ const ViewVoterScreen = ({
                             marginTop: 2,
                           }}>
                           <View style={{flex: 4}}>
-                            <Text style={{color:'#949292',fontSize:12}}>Aadhar No :</Text>
+                            <Text style={{color: '#949292', fontSize: 12}}>
+                              CASTE :
+                            </Text>
                           </View>
                           <View style={{flex: 8}}>
-                            <Text style={{color:'#949292',fontSize:12}}>1231234534543</Text>
+                            <Text style={{color: '#949292', fontSize: 12}}>
+                            {voterData?.caste == '0' && 'HINDU' }
+                            {voterData?.caste == '1' && 'MUSLIM' }
+                            {voterData?.caste != '1' && voterData?.caste != '0' && 'N/A' }
+                            </Text>
                           </View>
                         </View>
 
@@ -274,10 +461,16 @@ const ViewVoterScreen = ({
                             marginTop: 2,
                           }}>
                           <View style={{flex: 4}}>
-                            <Text style={{color:'#949292',fontSize:12}}>Color : </Text>
+                            <Text style={{color: '#949292', fontSize: 12}}>
+                              PROFESSION :{' '}
+                            </Text>
                           </View>
                           <View style={{flex: 8}}>
-                            <Text style={{color:'#949292',fontSize:12}}>Opposite</Text>
+                            <Text style={{color: '#949292', fontSize: 12}}>
+                            {voterData?.profession == '25'
+                          ? voterData?.other_profession
+                          : getProfession(voterData?.profession)}
+                            </Text>
                           </View>
                         </View>
 
@@ -288,45 +481,106 @@ const ViewVoterScreen = ({
                             marginTop: 2,
                           }}>
                           <View style={{flex: 4}}>
-                            <Text style={{color:'#949292',fontSize:12}}>Caste : </Text>
+                            <Text style={{color: '#949292', fontSize: 12}}>
+                              CATEGORY :{' '}
+                            </Text>
                           </View>
                           <View style={{flex: 8}}>
-                            <Text style={{color:'#949292',fontSize:12}}>Hindu</Text>
+                            <Text style={{color: '#949292', fontSize: 12}}>
+                              {voterData?.voter_label && voterData?.voter_label!='null' ? filterVoterLabel(voterData?.voter_label) : 'N/A'}
+                            </Text>
                           </View>
                         </View>
                       </View>
                       <View style={{flex: 1}}>
+                      { voterData?.profile_image && voterData?.profile_image!='null'  ?  (
                         <Image
-                          style={{width: 55, height: 55}} // required Dimensions and styling of Image
-                          source={require('../assets/images/user.png')} // enter your avatar image path
+                          style={{width: 70, height: 70, borderRadius: 70}} // required Dimensions and styling of Image
+                          source={{uri: IMAGE_BASE_URL + voterData?.profile_image}} // enter your avatar image path
                         />
+                        ) : (
+                          <Image
+                            style={{width: 55, height: 55}} // required Dimensions and styling of Image
+                            source={require('../assets/images/user.png')} // enter your avatar image path
+                          />
+                        )}
                         <View
                           style={{
                             marginTop: 20,
                             alignItems: 'flex-end',
                             marginRight: 30,
                           }}>
-                          <TouchableOpacity>
+                          <TouchableOpacity
+                           onPress={()=>{
+                            if(voterData?.MOBILE_NO!='null' && voterData?.MOBILE_NO!=''){
+                              const url = `whatsapp://send?phone=${voterData?.MOBILE_NO}&text=${''}`
+                              Linking.openURL(url)
+                            }else{
+                              Snackbar.show({
+                                text: "Phone number not available",
+                                duration: Snackbar.LENGTH_LONG,
+                                backgroundColor: '#e33443',
+                              });
+                            }
+                          }}
+                          >
                             <Icon name="whatsapp" color={'#075e54'} size={24} />
                           </TouchableOpacity>
                         </View>
                         <View
                           style={{
-                            marginTop: 10,
+                            marginTop: 20,
                             alignItems: 'flex-end',
                             marginRight: 30,
                           }}>
-                          <TouchableOpacity>
+                          <TouchableOpacity
+                          onPress={()=>{
+                            if(voterData?.MOBILE_NO!='null' && voterData?.MOBILE_NO!=''){
+                              const url = `sms:${voterData?.MOBILE_NO}body=${''}`
+                              Linking.openURL(url)
+                            }else{
+                              Snackbar.show({
+                                text: "Phone number not available",
+                                duration: Snackbar.LENGTH_LONG,
+                                backgroundColor: '#e33443',
+                              });
+                            }
+                          }}
+                          >
                             <Icon name="send" color={'#f5c542'} size={24} />
                           </TouchableOpacity>
                         </View>
                         <View
                           style={{
-                            marginTop: 10,
+                            marginTop: 20,
                             alignItems: 'flex-end',
                             marginRight: 30,
                           }}>
-                          <TouchableOpacity>
+                          <TouchableOpacity 
+                            onPress={()=>{
+                              if(voterData?.MOBILE_NO!='null' && voterData?.MOBILE_NO!=''){
+                                Linking.openURL(`tel:${voterData?.MOBILE_NO}`)
+                              }else{
+                                Snackbar.show({
+                                  text: "Phone number not available",
+                                  duration: Snackbar.LENGTH_LONG,
+                                  backgroundColor: '#e33443',
+                                });
+                              }
+                            }}
+                          >
+                            <Icon name="phone" color={'#2d75eb'} size={24} />
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginTop: 20,
+                            alignItems: 'flex-end',
+                            marginRight: 30,
+                          }}>
+                          <TouchableOpacity
+                            onPress={()=> printPDF()}
+                          >
                             <Icon name="print" color={'#000'} size={24} />
                           </TouchableOpacity>
                         </View>
@@ -339,15 +593,16 @@ const ViewVoterScreen = ({
           </>
         </ScrollView>
       </View>
-      <View style={{position: 'absolute', bottom: 20,width:'100%'}}>
+      <View style={{position: 'absolute', bottom: 20, width: '100%'}}>
         <TouchableOpacity
-        style={{marginRight:15,marginLeft:15}}
-        onPress={()=> navigation.navigate('UpdateVoterScreen', {
-            routeFrom: "PART A",
-            filterName: "Search List",
-            voterName: 'Praveen Singh',
-          })}
-        >
+          style={{marginRight: 15, marginLeft: 15}}
+          onPress={() =>
+            navigation.navigate('UpdateVoterScreen', {
+              routeFrom: 'PART A',
+              filterName: 'Search List',
+              voterName: 'Praveen Singh',
+            })
+          }>
           <View
             style={{
               // marginRight: 15,

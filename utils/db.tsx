@@ -266,10 +266,10 @@ export const getSearch = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if (name != '') {
       WHERE += ` AND (FM_NAME_EN LIKE '%${name}%' OR  EPIC_NO LIKE '%${name}%')`;
@@ -306,10 +306,10 @@ export const getTotalSearch = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if (name != '') {
       WHERE += ` AND (FM_NAME_EN LIKE '%${name}%' OR  EPIC_NO LIKE '%${name}%')`;
@@ -342,10 +342,10 @@ export const getAlphabetical = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     let results = [];
     results = await db.executeSql(
@@ -374,10 +374,10 @@ export const getTotalAlphabetical = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     let results = [];
     results = await db.executeSql(
@@ -407,10 +407,10 @@ export const getAgewise = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if (ageFrom != '' && ageTo != '') {
@@ -448,10 +448,10 @@ export const getTotalAgewise = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if (ageFrom != '' && ageTo != '') {
       WHERE += ` AND AGE BETWEEN ${Number(ageFrom)} AND ${Number(ageTo)}`;
@@ -487,10 +487,10 @@ export const getFamilyReport = async (
     let HAVING = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if (familySizeFrom != '' && familySizeTo != '') {
       HAVING += ` HAVING COUNT(voters_data.id) BETWEEN ${Number(
@@ -530,10 +530,10 @@ export const getTotalFamilyReport = async (
     let HAVING = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(partTo)}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if (familySizeFrom != '' && familySizeTo != '') {
       HAVING += ` HAVING COUNT(voters_data.id) BETWEEN ${Number(
@@ -570,19 +570,19 @@ export const getFamilyHeadReport = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND v1.PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(v1.PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND v1.PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(v1.PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if (ageFrom != '' && ageTo != '') {
-      WHERE += ` AND v1.AGE BETWEEN ${Number(ageFrom)} AND ${Number(ageTo)}`;
+      WHERE += ` AND CAST(v1.AGE AS INT) BETWEEN ${Number(ageFrom)} AND ${Number(ageTo)}`;
     }
     if (ageFrom != '' && ageTo == '') {
-      WHERE += ` AND v1.AGE=${Number(ageFrom)}`;
+      WHERE += ` AND CAST(v1.AGE AS INT)=${Number(ageFrom)}`;
     }
 
     let results = [];
@@ -614,18 +614,18 @@ export const getTotalFamilyHeadReport = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND v1.PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(v1.PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND v1.PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(v1.PART_NO AS INT)=${Number(partFrom)}`;
     }
     if (ageFrom != '' && ageTo != '') {
-      WHERE += ` AND v1.AGE BETWEEN ${Number(ageFrom)} AND ${Number(ageTo)}`;
+      WHERE += ` AND CAST(v1.AGE AS INT) BETWEEN ${Number(ageFrom)} AND ${Number(ageTo)}`;
     }
     if (ageFrom != '' && ageTo == '') {
-      WHERE += ` AND v1.AGE=${Number(ageFrom)}`;
+      WHERE += ` AND CAST(v1.AGE AS INT)=${Number(ageFrom)}`;
     }
     let results = [];
     results = await db.executeSql(
@@ -652,12 +652,12 @@ export const getDoubleName = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     let results = [];
@@ -687,12 +687,12 @@ export const getTotalDoubleName = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     let results = [];
     results = await db.executeSql(
@@ -721,12 +721,12 @@ export const getMarried = async (
     WHERE += `leader_id=${leader_id}`;
     WHERE += " AND isMarried=1 AND GENDER='F'";
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(marriageAge!=''){
       WHERE += ` AND AGE>=${Number(marriageAge)}`;
@@ -761,15 +761,15 @@ export const getTotalMarried = async (
     WHERE += `leader_id=${leader_id}`;
     WHERE += " AND isMarried=1 AND GENDER='F'";
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(marriageAge!=''){
-      WHERE += ` AND AGE>=${Number(marriageAge)}`;
+      WHERE += ` AND CAST(AGE AS INT)>=${Number(marriageAge)}`;
     }
     let results = [];
     results = await db.executeSql(
@@ -799,20 +799,20 @@ export const getSingleVoter = async (
     WHERE += `leader_id=${leader_id}`;
     WHERE += " AND isMarried=0";
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if (ageFrom != '' && ageTo != '') {
-      WHERE += ` AND AGE BETWEEN ${Number(ageFrom)} AND ${Number(
+      WHERE += ` AND CAST(AGE AS INT) BETWEEN ${Number(ageFrom)} AND ${Number(
         ageTo,
       )}`;
     }
     if (ageFrom != '' && ageTo == '') {
-      WHERE += ` AND AGE=${Number(ageFrom)}`;
+      WHERE += ` AND CAST(AGE AS INT)=${Number(ageFrom)}`;
     }
 
     let results = [];
@@ -845,20 +845,20 @@ export const getTotalSingleVoter = async (
     WHERE += `leader_id=${leader_id}`;
     WHERE += " AND isMarried=0";
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if (ageFrom != '' && ageTo != '') {
-      WHERE += ` AND AGE BETWEEN ${Number(ageFrom)} AND ${Number(
+      WHERE += ` AND CAST(AGE AS INT) BETWEEN ${Number(ageFrom)} AND ${Number(
         ageTo,
       )}`;
     }
     if (ageFrom != '' && ageTo == '') {
-      WHERE += ` AND AGE=${Number(ageFrom)}`;
+      WHERE += ` AND CAST(AGE AS INT)=${Number(ageFrom)}`;
     }
     let results = [];
     results = await db.executeSql(
@@ -886,12 +886,12 @@ export const getAddressWise = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(address!=''){
       WHERE += ` AND PSBUILDING_NAME_EN LIKE '%${address}%'`;           
@@ -927,12 +927,12 @@ export const getTotalAddressWise = async (
     WHERE += `leader_id=${leader_id}`;
     WHERE += " AND isMarried=0";
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(address!=''){
@@ -965,12 +965,12 @@ export const getSurnameReport = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(surname!=''){
       WHERE += ` AND LASTNAME_EN LIKE '%${surname}%'`;           
@@ -1005,12 +1005,12 @@ export const getTotalSurnameReport = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(surname!=''){
@@ -1044,20 +1044,20 @@ export const getFamilyLabel = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if (familySizeFrom != '' && familySizeTo != '') {
-      WHERE += ` AND family_size BETWEEN ${Number(familySizeFrom)} AND ${Number(
+      WHERE += ` AND CAST(family_size AS INT) BETWEEN ${Number(familySizeFrom)} AND ${Number(
         familySizeTo,
       )}`;
     }
     if (familySizeFrom != '' && familySizeTo == '') {
-      WHERE += ` AND family_size=${Number(familySizeFrom)}`;
+      WHERE += ` AND CAST(family_size AS INT)=${Number(familySizeFrom)}`;
     }
 
 
@@ -1090,21 +1090,21 @@ export const getTotalFamilyLabel = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if (familySizeFrom != '' && familySizeTo != '') {
-      WHERE += ` AND family_size BETWEEN ${Number(familySizeFrom)} AND ${Number(
+      WHERE += ` AND CAST(family_size AS INT) BETWEEN ${Number(familySizeFrom)} AND ${Number(
         familySizeTo,
       )}`;
     }
     if (familySizeFrom != '' && familySizeTo == '') {
-      WHERE += ` AND family_size=${Number(familySizeFrom)}`;
+      WHERE += ` AND CAST(family_size AS INT)=${Number(familySizeFrom)}`;
     }
 
     let results = [];
@@ -1134,12 +1134,12 @@ export const getSMSReport = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if (name != '') {
       WHERE += ` AND FM_NAME_EN LIKE '%${name}%'`;
@@ -1178,12 +1178,12 @@ export const getTotalSMSReport = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if (name != '') {
@@ -1219,12 +1219,12 @@ export const getCasteWise = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(caste!=''){
       WHERE += ` AND caste ='${caste}'`;
@@ -1259,12 +1259,12 @@ export const getTotalCasteWise = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(caste!=''){
@@ -1297,12 +1297,12 @@ export const getLabelValue = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(labelValue!=''){
       WHERE += ` AND voter_label ='${labelValue}'`;
@@ -1337,12 +1337,12 @@ export const getTotalLabelValue = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(labelValue!=''){
@@ -1375,12 +1375,12 @@ export const getAreaWise = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(area!=''){
       WHERE += ` AND AC_NAME_EN ='${area}'`;
@@ -1415,12 +1415,12 @@ export const getTotalAreaWise = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(area!=''){
@@ -1453,12 +1453,12 @@ export const getPartyWise = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(party!=''){
       WHERE += ` AND political_party ='${party}'`;
@@ -1493,12 +1493,12 @@ export const getTotalPartyWise = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(party!=''){
@@ -1531,12 +1531,12 @@ export const getDeadList = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(dead!=''){
       WHERE += ` AND isDead ='${dead}'`;
@@ -1569,12 +1569,12 @@ export const getTotalDeadList = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(dead!=''){
@@ -1608,12 +1608,12 @@ export const getBirthday = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }         
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     let dFrom = dateFrom instanceof Date
                       ? moment(dateFrom).format('MM-DD')
@@ -1656,12 +1656,12 @@ export const getTotalBirthday = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     let dFrom = dateFrom instanceof Date
@@ -1703,12 +1703,12 @@ export const getEducationList = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(education!=''){
       WHERE += ` AND education ='${education}'`;
@@ -1741,12 +1741,12 @@ export const getTotalEducationList = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(education!=''){
@@ -1779,12 +1779,12 @@ export const getHomeShifted = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(isHomeShifted!=''){
       WHERE += ` AND isHomeShifted ='${isHomeShifted}'`;
@@ -1817,12 +1817,12 @@ export const getTotalHomeShifted = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(isHomeShifted!=''){
@@ -1854,12 +1854,12 @@ export const getNewVoterList = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     WHERE += " AND strftime('%Y',DATE('now')) - strftime('%Y',DOB) - (strftime('00-%m-%d',DATE('now')) <strftime('00-%m-%d',DOB)) < 24";
@@ -1890,12 +1890,12 @@ export const getTotalNewVoterList = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     WHERE += " AND strftime('%Y',DATE('now')) - strftime('%Y',DOB) - (strftime('00-%m-%d',DATE('now')) <strftime('00-%m-%d',DOB)) < 24";
@@ -1927,12 +1927,12 @@ export const getProfessionList = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(profession!=''){
       WHERE += ` AND profession ='${profession}'`;
@@ -1965,12 +1965,12 @@ export const getTotalProfessionList = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(profession!=''){
@@ -2003,12 +2003,12 @@ export const getOutsideLocation = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(isOutsideLocation!=''){
       WHERE += ` AND isStayingOutside ='${isOutsideLocation}'`;
@@ -2041,12 +2041,12 @@ export const getTotalOutsideLocation = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(isOutsideLocation!=''){
@@ -2079,12 +2079,12 @@ export const getLabharthiCenter = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(selectedLBCenter!=''){
       WHERE += ` AND labharthi_center ='${selectedLBCenter}'`;
@@ -2117,12 +2117,12 @@ export const getTotalLabharthiCenter = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(selectedLBCenter!=''){
@@ -2155,12 +2155,12 @@ export const getLabharthiState = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(selectedLBState!=''){
       WHERE += ` AND labharthi_state ='${selectedLBState}'`;
@@ -2193,12 +2193,12 @@ export const getTotalLabharthiState = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(selectedLBState!=''){
@@ -2231,12 +2231,12 @@ export const getLabharthiCandidate = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(selectedLBCandidate!=''){
       WHERE += ` AND labharthi_candidate ='${selectedLBCandidate}'`;
@@ -2269,12 +2269,12 @@ export const getTotalLabharthiCandidate = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(selectedLBCandidate!=''){
@@ -2308,12 +2308,12 @@ export const getApproachQty = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(approachQty!=''){
       WHERE += ` AND approach_time ='${approachQty}'`;
@@ -2350,12 +2350,12 @@ export const getTotalApproachQty = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(approachQty!=''){
@@ -2392,12 +2392,12 @@ export const getVoterSurvey = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
     if(party!=''){
       WHERE += ` AND political_party ='${party}'`;
@@ -2434,12 +2434,12 @@ export const getTotalVoterSurvey = async (
     let WHERE = ``;
     WHERE += `leader_id=${leader_id}`;
     if (partFrom != '' && partTo != '') {
-      WHERE += ` AND PART_NO BETWEEN ${Number(partFrom)} AND ${Number(
+      WHERE += ` AND CAST(PART_NO AS INT) BETWEEN ${Number(partFrom)} AND ${Number(
         partTo,
       )}`;
     }
     if (partFrom != '' && partTo == '') {
-      WHERE += ` AND PART_NO=${Number(partFrom)}`;
+      WHERE += ` AND CAST(PART_NO AS INT)=${Number(partFrom)}`;
     }
 
     if(party!=''){

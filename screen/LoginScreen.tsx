@@ -65,7 +65,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
             });
           }, 1000);
           setTimeout(() => {
-            navigation.navigate('Home');
+            navigation.navigate('UpdateScreen');
           }, 2000);
     }else if(response?.message=='Invalid email or password!'){
           setTimeout(() => {

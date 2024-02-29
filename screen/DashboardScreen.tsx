@@ -25,29 +25,16 @@ import LoaderWithData from '../components/LoaderWithData';
 
 const DashboardScreen = ({navigation}: {navigation: any}) => {
   const dispatch = useDispatch();
-  // const {isLoading} = useSelector((state: any) => state?.VoterData);
   const [userData, setUserData] = React.useState<any>(null);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [syncModalVisible, setSyncModalVisible] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
-    const [currentPage, setCurrentPage] = React.useState(0);
-  const [nextPage, setNextPage] = React.useState(1);
-  const [totalPage, setTotalPage] = React.useState(1);
-  const [totalDownloadedPercent, setDownloadedPercent] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     getUserSession();
   }, []);
 
-  React.useEffect(() => {
-    let percentComplete  = Math.ceil(Number(((Number(currentPage) / Number(totalPage))*100).toFixed(2)))
-    setDownloadedPercent(percentComplete)
-    if(percentComplete==100){
-      setTimeout(() => {
-        setLoading(false)
-      }, 1000);
-    }
-  },[currentPage])
+
 
   async function getUserSession() {
     try {
@@ -63,8 +50,6 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
           leader_id = session?.leader_id
         }
         getDashBoardData(leader_id)
-        // deleteVoterTable()
-        // getVotersData(leader_id)
         setLoading(false)
       }
     } catch (error) {
@@ -77,36 +62,6 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
     dispatch(await getMasterData({leader_id: user_id }))
   }
 
-
-  const getVotersData = async(leader_id:any,page=1)=>{
-    const formData = new FormData();
-    formData.append('leader_id', leader_id);
-    formData.append('page', page);
-      const response : any = await postRequest('voter-list.php',formData) 
-    // console.warn("response--->",response)
-    if(response=='TypeError: Network request failed'){
-      setTimeout(() => {
-        setLoading(false);
-        Snackbar.show({
-          text: "Network request failed",
-          duration: Snackbar.LENGTH_LONG,
-          backgroundColor: '#e33443',
-        });
-      }, 1000);
-      return false
-    }
-      setTotalPage(response?.total_page)
-      if(response?.message=='success'){
-        const storeResp = await storeVoterData(response)
-        if(storeResp?.message =='success'){
-          
-          if(Number(page)<=Number(response?.total_page)){
-            setCurrentPage(Number(page)+1+1)
-            getVotersData(leader_id,Number(page)+1+1)
-          }
-        }
-      }
-  }
 
 
   const handleLogout = async() =>{
@@ -166,8 +121,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
         if(session?.user_type==2){
           leader_id = session?.leader_id
         }
-        deleteVoterTable()
-        getVotersData(leader_id)
+        navigation.navigate('UpdateScreen');
       }
     } catch (error) {
       // There was an error on the native side
@@ -213,7 +167,6 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
   return (
     <>
     <View style={styles.mainContainer}>
-      <LoaderWithData loading={loading} text={"Loading Data..."} totalDownloadedPercent={totalDownloadedPercent} />
       <View style={styles.innerContainer}>
         <View style={styles.parent}>
           <View style={styles.child}>
@@ -399,6 +352,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                 </Animated.View>
               </View>
             </View>
+            {userData?.user_type==1 && (
             <View
               style={{
                 display: 'flex',
@@ -538,6 +492,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                 </Animated.View>
               </View>
             </View>
+            )}
           </View>
         </View>
         <View
@@ -679,6 +634,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize:16,
     fontWeight:'600',
+    color:'#7a7a7a'
     // textAlign: 'center',
   },
 });
