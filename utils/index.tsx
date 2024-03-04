@@ -1,5 +1,6 @@
 import EncryptedStorage from "react-native-encrypted-storage";
-import { createTable, deleteTable, getAddressWise, getAgewise, getAlphabetical, getApproachQty, getAreaWise, getBirthday, getCasteWise, getDBConnection, getDeadList, getDoubleName, getEducationList, getFamilyHeadReport, getFamilyLabel, getFamilyReport, getHomeShifted, getLabelValue, getLabharthiCenter, getLabharthiState, getMarried, getNewVoterList, getOutsideLocation, getPartyWise, getProfessionList, getSMSReport, getSearch, getSingleVoter, getSurnameReport, getTotalAddressWise, getTotalAgewise, getTotalAlphabetical, getTotalApproachQty, getTotalAreaWise, getTotalBirthday, getTotalCasteWise, getTotalDeadList, getTotalDoubleName, getTotalEducationList, getTotalFamilyHeadReport, getTotalFamilyLabel, getTotalFamilyReport, getTotalHomeShifted, getTotalLabelValue, getTotalLabharthiCenter, getTotalLabharthiState, getTotalMarried, getTotalNewVoterList, getTotalOutsideLocation, getTotalPartyWise, getTotalProfessionList, getTotalSMSReport, getTotalSearch, getTotalSingleVoter, getTotalSurnameReport, getTotalVoterSurvey, getVoterSurvey, saveTodoItems } from "./db";
+import { createTable, deleteTable, getACNo, getAddressWise, getAgewise, getAlphabetical, getApproachQty, getAreaWise, getBirthday, getCasteWise, getDBConnection, getDeadList, getDoubleName, getEducationList, getFamilyHeadReport, getFamilyLabel, getFamilyReport, getHomeShifted, getLabelValue, getLabharthiCenter, getLabharthiState, getMarried, getNewVoterList, getOutsideLocation, getPARTNo, getPartyWise, getProfessionList, getSECTIONNo, getSLNOINPART, getSMSReport, getSearch, getSingleVoter, getSurnameReport, getTotalAddressWise, getTotalAgewise, getTotalAlphabetical, getTotalApproachQty, getTotalAreaWise, getTotalBirthday, getTotalCasteWise, getTotalDeadList, getTotalDoubleName, getTotalEducationList, getTotalFamilyHeadReport, getTotalFamilyLabel, getTotalFamilyReport, getTotalHomeShifted, getTotalLabelValue, getTotalLabharthiCenter, getTotalLabharthiState, getTotalMarried, getTotalNewVoterList, getTotalOutsideLocation, getTotalPartyWise, getTotalProfessionList, getTotalSMSReport, getTotalSearch, getTotalSingleVoter, getTotalSurnameReport, getTotalVoterSurvey, getVoterSurvey, saveTodoItems, updateItems } from "./db";
+import { SQLiteDatabase } from "react-native-sqlite-storage";
 
 export const storeUserSession = async(data: any) => {
     try {
@@ -364,6 +365,56 @@ export const storeUserSession = async(data: any) => {
       const data = await getVoterSurvey(db,page,total,partFrom,partTo,party,candidateName,leader_id);
       const totalData = await getTotalVoterSurvey(db,partFrom,partTo,party,candidateName,leader_id);
       return {message:"success",totalData:totalData,data}
+    } catch (error) {
+        // There was an error on the native side
+    }
+  }
+
+  export const retrieveACNo = async(leader_id:any) => {
+    try {   
+      const db = await getDBConnection();
+      const data = await getACNo(db,leader_id);
+      return {message:"success",data}
+    } catch (error) {
+        // There was an error on the native side
+    }
+  }
+
+  export const retrievePARTNo = async(leader_id:any,AC_NO:any) => {
+    try {   
+      const db = await getDBConnection();
+      const data = await getPARTNo(db,leader_id,AC_NO);
+      return {message:"success",data}
+    } catch (error) {
+        // There was an error on the native side
+    }
+  }
+
+  export const retrieveSECTIONNo = async(leader_id:any,AC_NO:any,PART_NO:any) => {
+    try {   
+      const db = await getDBConnection();
+      const data = await getSECTIONNo(db,leader_id,AC_NO,PART_NO);
+      return {message:"success",data}
+    } catch (error) {
+        // There was an error on the native side
+    }
+  }
+
+  export const retrieveSLNOINPART = async(leader_id:any,AC_NO:any,PART_NO:any,SECTION_NO:any) => {
+    try {   
+      const db = await getDBConnection();
+      const data = await getSLNOINPART(db,leader_id,AC_NO,PART_NO,SECTION_NO);
+      return {message:"success",data}
+    } catch (error) {
+        // There was an error on the native side
+    }
+  }
+
+  export const saveVoterData = async(formData:any) => {
+    try {   
+      const db = await getDBConnection();
+      const data = await updateItems(db,formData);
+      return {message:"success",data}
     } catch (error) {
         // There was an error on the native side
     }

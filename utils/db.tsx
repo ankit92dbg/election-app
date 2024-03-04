@@ -237,6 +237,100 @@ export const saveTodoItems = async (db: SQLiteDatabase, todoItems: any) => {
   }
 };
 
+export const updateItems = async (db: SQLiteDatabase, formData: any) => {
+  try{
+    let data = Object.fromEntries(formData._parts)
+    let query = `UPDATE voters_data SET AC_NO='${data.AC_NO}',PART_NO='${data?.PART_NO}',SECTION_NO='${data?.SECTION_NO}',SLNOINPART='${data?.SLNOINPART}',C_HOUSE_NO='${data?.C_HOUSE_NO}',
+    C_HOUSE_NO_V1='${data?.C_HOUSE_NO_V1}',FM_NAME_EN='${data?.FM_NAME_EN}',LASTNAME_EN='${data?.LASTNAME_EN}',FM_NAME_V1='${data?.FM_NAME_V1}',LASTNAME_V1='${data?.LASTNAME_V1}',RLN_TYPE='${data?.RLN_TYPE}',
+    RLN_FM_NM_EN='${data?.RLN_FM_NM_EN}',RLN_L_NM_EN='${data?.RLN_L_NM_EN}',RLN_FM_NM_V1='${data?.RLN_FM_NM_V1}',RLN_L_NM_V1='${data?.RLN_L_NM_V1}',EPIC_NO='${data?.EPIC_NO}',GENDER='${data?.GENDER}',
+    AGE='${data?.AGE}',DOB='${data?.DOB}',MOBILE_NO='${data?.MOBILE_NO}',AC_NAME_EN='${data?.AC_NAME_EN}',AC_NAME_V1='${data?.AC_NAME_V1}',SECTION_NAME_EN='${data?.SECTION_NAME_EN}',
+    SECTION_NAME_V1='${data?.SECTION_NAME_V1}',PSBUILDING_NAME_EN='${data?.PSBUILDING_NAME_EN}',PSBUILDING_NAME_V1='${data?.PSBUILDING_NAME_V1}',PART_NAME_EN='${data?.PART_NAME_EN}',PART_NAME_V1='${data?.PART_NAME_V1}',
+    profile_image='${data?.profile_image_path}',
+    aadhar='${data?.aadhar}',
+    caste='${data?.caste}',
+    RELATION_PART_NO='${data?.RELATION_PART_NO}',
+    RELATION_SLNOINPART='${data?.RELATION_SLNOINPART}',
+    isMarried='${data?.isMarried}',
+    voter_label='${data?.voter_label}',
+    political_party='${data?.political_party}',
+    isDead='${data?.isDead}',
+    education='${data?.education}',
+    other_education='${data?.education_other}',
+    isHomeShifted='${data?.homeShifted}',
+    isHomeShiftedWithin='${data?.constituencyHomeShifted}',
+    shiftedAddress='${data?.homeShiftedAddress}',
+    shifted_country='${data?.home_shifted_country}',
+    shifted_state='${data?.home_shifted_state}',
+    shifted_city='${data?.home_shifted_city}',
+    shifted_address='${data?.home_shifted_address}',
+    profession='${data?.profession}',
+    other_profession='${data?.profession_other}',
+    isStayingOutside='${data?.outsideLocation}',
+    isStayingOutsideWithin='${data?.constituencyOutside}',
+    stayingAddress='${data?.outsideLocationAddress}',
+    staying_country='${data?.outside_location_country}',
+    staying_state='${data?.outside_location_state}',
+    staying_city='${data?.outside_location_city}',
+    staying_address='${data?.outside_location_address}',
+    labharthi_center='${data?.labharthi_center}',
+    labharthi_state='${data?.labharthi_state}',
+    labharthi_candidate='${data?.labharthi_candidate}',
+    approach_time='${data?.APPROACH_QTY}',
+    approach_reason='${data?.APPROACH_REASON}',
+    candidate_name='${data?.CANDIDATE_NAME}'
+    WHERE id=${data?.voter_id}`
+    console.warn('query--->',query)
+    await db.executeSql(query);
+  }catch(error:any){
+    console.warn('err-->',error)
+  }
+  // try {
+  //   $query = "UPDATE `voters_data` SET `AC_NO`=${form},`PART_NO`='$PART_NO',`SECTION_NO`='$SECTION_NO',`SLNOINPART`='$SLNOINPART',`C_HOUSE_NO`='$C_HOUSE_NO',
+  //   `C_HOUSE_NO_V1`='$C_HOUSE_NO_V1',`FM_NAME_EN`='$FM_NAME_EN',`LASTNAME_EN`='$LASTNAME_EN',`FM_NAME_V1`='$FM_NAME_V1',`LASTNAME_V1`='$LASTNAME_V1',`RLN_TYPE`='$RLN_TYPE',
+  //   `RLN_FM_NM_EN`='$RLN_FM_NM_EN',`RLN_L_NM_EN`='$RLN_L_NM_EN',`RLN_FM_NM_V1`='$RLN_FM_NM_V1',`RLN_L_NM_V1`='$RLN_L_NM_V1',`EPIC_NO`='$EPIC_NO',`GENDER`='$GENDER',
+  //   `AGE`='$AGE',`DOB`='$DOB',`MOBILE_NO`='$MOBILE_NO',`AC_NAME_EN`='$AC_NAME_EN',`AC_NAME_V1`='$AC_NAME_V1',`SECTION_NAME_EN`='$SECTION_NAME_EN',
+  //   `SECTION_NAME_V1`='$SECTION_NAME_V1',`PSBUILDING_NAME_EN`='$PSBUILDING_NAME_EN',`PSBUILDING_NAME_V1`='$PSBUILDING_NAME_V1',`PART_NAME_EN`='$PART_NAME_EN',`PART_NAME_V1`='$PART_NAME_V1',
+  //   `profile_image`='$basename',
+  //   `aadhar`='$aadhar',
+  //   `caste`='$caste',
+  //   `RELATION_PART_NO`='$RELATION_PART_NO',
+  //   `RELATION_SLNOINPART`='$RELATION_SLNOINPART',
+  //   `isMarried`='$isMarried',
+  //   `voter_label`='$voter_label',
+  //   `political_party`='$political_party',
+  //   `isDead`='$isDead',
+  //   `education`='$education',
+  //   `other_education`='$education_other',
+  //   `isHomeShifted`='$homeShifted',
+  //   `isHomeShiftedWithin`='$constituencyHomeShifted',
+  //   `shiftedAddress`='$homeShiftedAddress',
+  //   `shifted_country`='$home_shifted_country',
+  //   `shifted_state`='$home_shifted_state',
+  //   `shifted_city`='$home_shifted_city',
+  //   `shifted_address`='$home_shifted_address',
+  //   `profession`='$profession',
+  //   `other_profession`='$profession_other',
+  //   `isStayingOutside`='$outsideLocation',
+  //   `isStayingOutsideWithin`='$constituencyOutside',
+  //   `stayingAddress`='$outsideLocationAddress',
+  //   `staying_country`='$outside_location_country',
+  //   `staying_state`='$outside_location_state',
+  //   `staying_city`='$outside_location_city',
+  //   `staying_address`='$outside_location_address',
+  //   `labharthi_center`='$labharthi_center',
+  //   `labharthi_state`='$labharthi_state',
+  //   `labharthi_candidate`='$labharthi_candidate',
+  //   `approach_time`='$approach_time',
+  //   `approach_reason`='$approach_reason',
+  //   `candidate_name`='$candidate_name'
+  //   WHERE `id`='$voter_id'";
+
+  //   return db.executeSql(insertQuery);
+  // } catch (error: any) {
+  //   console.warn('ers--->', error);
+  // }
+};
+
 export const deleteTodoItem = async (db: SQLiteDatabase, id: number) => {
   const deleteQuery = `DELETE from ${tableName} where id = ${id}`;
   await db.executeSql(deleteQuery);
@@ -2459,3 +2553,110 @@ export const getTotalVoterSurvey = async (
     throw Error('Failed to get todoItems !!!');
   }
 };
+
+export const getACNo = async (
+  db: SQLiteDatabase,
+  leader_id: any,
+): Promise<ToDoVoterItem[]> => {
+  try {
+    const todoItems: ToDoVoterItem[] = [];
+    let WHERE = ``;
+    WHERE += `leader_id=${leader_id}`;
+    let results = [];
+    results = await db.executeSql(
+      `SELECT DISTINCT AC_NO FROM voters_data WHERE ${WHERE} ORDER BY AC_NO ASC`,
+    );
+
+    results.forEach((result: any) => {
+      for (let index = 0; index < result.rows.length; index++) {
+        todoItems.push(result.rows.item(index));
+      }
+    });
+    return todoItems;
+  } catch (error) {
+    console.error(error);
+    throw Error('Failed to get todoItems !!!');
+  }
+};
+
+export const getPARTNo = async (
+  db: SQLiteDatabase,
+  leader_id: any,
+  AC_NO: any,
+): Promise<ToDoVoterItem[]> => {
+  try {
+    const todoItems: ToDoVoterItem[] = [];
+    let WHERE = ``;
+    WHERE += `leader_id=${leader_id} AND AC_NO=${AC_NO}`;
+    let results = [];
+    results = await db.executeSql(
+      `SELECT DISTINCT CAST(PART_NO AS INT) AS PART_NO FROM voters_data WHERE ${WHERE} ORDER BY PART_NO ASC`,
+    );
+
+    results.forEach((result: any) => {
+      for (let index = 0; index < result.rows.length; index++) {
+        todoItems.push(result.rows.item(index));
+      }
+    });
+    return todoItems;
+  } catch (error) {
+    console.error(error);
+    throw Error('Failed to get todoItems !!!');
+  }
+};
+
+export const getSECTIONNo = async (
+  db: SQLiteDatabase,
+  leader_id: any,
+  AC_NO: any,
+  PART_NO: any,
+): Promise<ToDoVoterItem[]> => {
+  try {
+    const todoItems: ToDoVoterItem[] = [];
+    let WHERE = ``;
+    WHERE += `leader_id=${leader_id} AND AC_NO=${AC_NO} AND PART_NO=${PART_NO}`;
+    let results = [];
+    results = await db.executeSql(
+      `SELECT DISTINCT CAST(SECTION_NO AS INT) AS SECTION_NO FROM voters_data WHERE ${WHERE} ORDER BY SECTION_NO ASC`,
+    );
+
+    results.forEach((result: any) => {
+      for (let index = 0; index < result.rows.length; index++) {
+        todoItems.push(result.rows.item(index));
+      }
+    });
+    return todoItems;
+  } catch (error) {
+    console.error(error);
+    throw Error('Failed to get todoItems !!!');
+  }
+};
+
+export const getSLNOINPART = async (
+  db: SQLiteDatabase,
+  leader_id: any,
+  AC_NO: any,
+  PART_NO: any,
+  SECTION_NO: any,
+): Promise<ToDoVoterItem[]> => {
+  try {
+    const todoItems: ToDoVoterItem[] = [];
+    let WHERE = ``;
+    WHERE += `leader_id=${leader_id} AND AC_NO=${AC_NO} AND PART_NO=${PART_NO} AND SECTION_NO=${SECTION_NO}`;
+    let results = [];
+    results = await db.executeSql(
+      `SELECT DISTINCT CAST(SLNOINPART AS INT) AS SLNOINPART FROM voters_data WHERE ${WHERE} ORDER BY SECTION_NO ASC`,
+    );
+
+    results.forEach((result: any) => {
+      for (let index = 0; index < result.rows.length; index++) {
+        todoItems.push(result.rows.item(index));
+      }
+    });
+    return todoItems;
+  } catch (error) {
+    console.error(error);
+    throw Error('Failed to get todoItems !!!');
+  }
+};
+

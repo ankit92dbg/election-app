@@ -598,9 +598,7 @@ const ViewVoterScreen = ({
           style={{marginRight: 15, marginLeft: 15}}
           onPress={() =>
             navigation.navigate('UpdateVoterScreen', {
-              routeFrom: 'PART A',
-              filterName: 'Search List',
-              voterName: 'Praveen Singh',
+              item:voterData
             })
           }>
           <View

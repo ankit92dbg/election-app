@@ -4058,7 +4058,7 @@ const VoterFilterScreen = ({
                 valueField="value"
                 placeholder={!isFocus ? 'Select Scheme(center)' : '...'}
                 searchPlaceholder="Search..."
-                value={dead}
+                value={selectedLBCenter}
                 onChange={(item: any) => {
                   setSelectedLBCenter(item.value);
                   setIsFocus(false);
@@ -4085,7 +4085,7 @@ const VoterFilterScreen = ({
                 valueField="value"
                 placeholder={!isFocus ? 'Select Scheme(state)' : '...'}
                 searchPlaceholder="Search..."
-                value={dead}
+                value={selectedLBState}
                 onChange={(item: any) => {
                   setSelectedLBState(item.value);
                   setIsFocus(false);
@@ -4112,7 +4112,7 @@ const VoterFilterScreen = ({
                 valueField="value"
                 placeholder={!isFocus ? 'Select Scheme(candidate)' : '...'}
                 searchPlaceholder="Search..."
-                value={dead}
+                value={selectedLBCandidate}
                 onChange={(item: any) => {
                   setSelectedLBCandidate(item.value);
                   setIsFocus(false);

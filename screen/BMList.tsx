@@ -221,7 +221,7 @@ const BMList = ({navigation}: {navigation: any}) => {
             <View style={{flex: 4}}>
               <TouchableOpacity
                 style={{marginTop: 2}}
-                onPress={() => navigation.navigate('CreateBM')}>
+                onPress={() => navigation.navigate('UpdateBM',{item:item})}>
                 <Icon name="pencil" color={'#424242'} size={16} />
               </TouchableOpacity>
             </View>

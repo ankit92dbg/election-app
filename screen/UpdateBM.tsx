@@ -16,14 +16,17 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useState} from 'react';
 import {Dropdown} from 'react-native-element-dropdown';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Snackbar from 'react-native-snackbar';
 import Loader from '../components/Loader';
 import { retrieveUserSession } from '../utils';
 import { postRequest } from '../networkInterface';
+import { getAllBM } from '../redux/action/BMData';
 
-const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
+const UpdateBM = ({route, navigation}: {route: any; navigation: any}) => {
+  const dispatch = useDispatch();
   const {data} = useSelector((state: any) => state?.MasterData);
+  const item = route?.params?.item;
   const [loading, setLoading] = React.useState(false);
   const [userData, setUserData] = React.useState<any>(null);
   const [loadingText, setLoadingText] = React.useState('');
@@ -44,9 +47,7 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
   const [sectionNo, setSectionNo] = React.useState([]);
   const [sectionList, setSectionList] = React.useState([]);
   const [userImage, setUserImage] = React.useState('');
-  const [numInputs, setNumInputs] = useState<any>([
-    {key: '', sectionFrom: '', sectionTo: ''},
-  ]);
+  const [numInputs, setNumInputs] = useState<any>([]);
 
   React.useEffect(() => {
     if (route?.params?.category) {
@@ -141,11 +142,46 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
     setNumInputs(_inputs);
   };
 
+  const setFormaData = () =>{
+    setFName(item?.f_name)
+    setLName(item?.l_name)
+    setAge(item?.age)
+    setDesignation(item?.designation)
+    // setAssemblyName(item?.assembly_name)
+    setAddress(item?.address)
+    setEmail(item?.email)
+    setPhone(item?.phone)
+    setState(item?.state)
+    setCity(item?.city)
+    const _inputs: any = [...numInputs];
+    let arr = []
+    let result = []
+    for (let i = 0; i < item.SECTION.length; i++) {
+        arr.push(parseInt(item.SECTION[i].SECTION_NO))
+    }
+    for (let j = 0; j < arr.length; j++) {
+        if (j === 0) {
+            result.push([arr[0]])
+        } else if (arr[j] != arr[j-1] + 1) {
+            result.push([arr[j]])
+        } else {
+            let tmp : any = result[result.length - 1]
+            tmp.push(arr[j])
+            result[result.length - 1] = tmp
+        }
+    }
+    for(let k = 0; k < result.length; k++){
+        _inputs.push({key: k, sectionFrom: String(result[k][0]), sectionTo: String(result[k][result[k].length-1])});
+        setNumInputs(_inputs);
+    }    
+  }
+
   async function getUserSession() {
     try {
       const session: any = await retrieveUserSession();
       if (session !== undefined) {
         await setUserData(session);
+        await setFormaData()
       }
     } catch (error) {
       // There was an error on the native side
@@ -217,17 +253,11 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
       });
       return false;
     }
-    if (password == '') {
-      Snackbar.show({
-        text: 'Please enter the password !',
-        duration: Snackbar.LENGTH_LONG,
-        backgroundColor: '#e33443',
-      });
-      return false;
-    }
+
     setLoadingText('Saving profile, please wait...');
     const formData = new FormData();
     formData.append('leader_id', userData?.id);
+    formData.append('user_id', item?.id);
     formData.append('f_name', fName);
     formData.append('l_name', lName);
     formData.append('email', email);
@@ -238,7 +268,7 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
     formData.append('city', city);
     formData.append('state', state);
     formData.append('address', address);
-    formData.append('category', category);
+    formData.append('category', item?.category);
     if(userImage!=''){
       formData.append('profile_image', {
         uri: userImage,
@@ -268,12 +298,13 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
       formData.append('SECTION_NO_TO[]', numInputs[i].sectionTo);
     }
     setLoading(true);
-    const response: any = await postRequest('create-bm.php', formData);
+    const response: any = await postRequest('update-bm.php', formData);
     if (response?.error == '') {
+      dispatch(await getAllBM({ leader_id: userData?.id }))
       setTimeout(() => {
         setLoading(false);
         Snackbar.show({
-          text: 'BM added successfully !',
+          text: 'BM updated successfully !',
           duration: Snackbar.LENGTH_LONG,
           backgroundColor: '#3db362',
         });
@@ -325,7 +356,7 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
                           fontWeight: '600',
                           color: '#4e4f4f',
                         }}>
-                        CREATE BM
+                        UPDATE BM
                       </Text>
                     </View>
                     <View style={{marginTop: 15}}>
@@ -340,6 +371,7 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
                           placeholder="First Name"
                           placeholderTextColor={'gray'}
                           style={styles.input}
+                          value={fName}
                           onChangeText={value => {
                             setFName(value);
                           }}
@@ -356,6 +388,7 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
                           placeholder="Last Name"
                           placeholderTextColor={'gray'}
                           style={styles.input}
+                          value={lName}
                           onChangeText={value => {
                             setLName(value);
                           }}
@@ -458,6 +491,7 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
                         <TextInput
                           placeholder="Email"
                           placeholderTextColor={'gray'}
+                          value={email}
                           style={styles.input}
                           onChangeText={value => {
                             setEmail(value);
@@ -474,6 +508,7 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
                         <TextInput
                           placeholder="Phone"
                           placeholderTextColor={'gray'}
+                          value={phone}
                           style={styles.input}
                           onChangeText={value => {
                             setPhone(value);
@@ -490,6 +525,7 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
                         <TextInput
                           placeholder="Age"
                           placeholderTextColor={'gray'}
+                          value={age}
                           style={styles.input}
                           onChangeText={value => {
                             setAge(value);
@@ -507,6 +543,7 @@ const CreateBM = ({route, navigation}: {route: any; navigation: any}) => {
                           placeholder="Designation"
                           placeholderTextColor={'gray'}
                           style={styles.input}
+                          value={designation}
                           onChangeText={value => {
                             setDesignation(value);
                           }}
@@ -775,4 +812,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateBM;
+export default UpdateBM;

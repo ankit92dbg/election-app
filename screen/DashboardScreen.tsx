@@ -49,7 +49,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
         if(session?.user_type==2){
           leader_id = session?.leader_id
         }
-        getDashBoardData(leader_id)
+        await getDashBoardData(leader_id)
         setLoading(false)
       }
     } catch (error) {

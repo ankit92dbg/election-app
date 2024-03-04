@@ -4,9 +4,11 @@ import { postRequest } from '../../networkInterface';
 import { setMasterData } from '../reducer/MasterData';
 
 function* getMasterData(data:any):any{
+    console.warn('getMasterData--->')
     const formData = new FormData();
     formData.append('leader_id', data?.data?.leader_id);
     const response:any = yield postRequest('master-data.php', formData);
+    console.warn('response--->',response)
     yield put(setMasterData(response));
 }
 
