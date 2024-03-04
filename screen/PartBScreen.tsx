@@ -297,7 +297,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                       }}>
                       <Image
                         style={{width: 60, height: 60}}
-                        source={require('../assets/images/new-voter.png')}
+                        source={require('../assets/images/newvoter.png')}
                       />
                       <Text
                         style={{
@@ -358,7 +358,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                       }}>
                       <Image
                         style={{width: 60, height: 60}}
-                        source={require('../assets/images/outside-location.webp')}
+                        source={require('../assets/images/outsidelocation.webp')}
                       />
                       <Text
                         style={{
@@ -387,7 +387,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                       }}>
                       <Image
                         style={{width: 60, height: 60}}
-                        source={require('../assets/images/center-govt.png')}
+                        source={require('../assets/images/centergovt.png')}
                       />
                       <Text
                         style={{
@@ -420,7 +420,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                       }}>
                       <Image
                         style={{width: 60, height: 60}}
-                        source={require('../assets/images/state-govt.png')}
+                        source={require('../assets/images/stategovt.png')}
                       />
                       <Text
                         style={{
@@ -449,7 +449,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                       }}>
                       <Image
                         style={{width: 60, height: 60}}
-                        source={require('../assets/images/l-candidate.png')}
+                        source={require('../assets/images/lcandidate.png')}
                       />
                       <Text
                         style={{
@@ -542,7 +542,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                       }}>
                       <Image
                         style={{width: 60, height: 60}}
-                        source={require('../assets/images/social-media.png')}
+                        source={require('../assets/images/socialmedia.png')}
                       />
                       <Text
                         style={{
@@ -571,7 +571,7 @@ const PartBScreen = ({navigation}: {navigation: any}) => {
                       }}>
                       <Image
                         style={{width: 60, height: 60}}
-                        source={require('../assets/images/voter-survey.jpeg')}
+                        source={require('../assets/images/votersurvey.jpeg')}
                       />
                       <Text
                         style={{

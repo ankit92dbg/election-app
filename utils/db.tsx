@@ -82,7 +82,8 @@ export const createTable = async (db: SQLiteDatabase) => {
         approach_reason  TEXT,
         candidate_name  TEXT,
         created_at  TEXT,
-        updated_at  TEXT
+        updated_at  TEXT,
+        needUpdate string
     );`;
 
   await db.executeSql(query);
@@ -157,7 +158,8 @@ export const saveTodoItems = async (db: SQLiteDatabase, todoItems: any) => {
     approach_reason,
     candidate_name,
     created_at,
-    updated_at
+    updated_at,
+    needUpdate
     ) VALUES` +
       todoItems
         .map(
@@ -226,7 +228,8 @@ export const saveTodoItems = async (db: SQLiteDatabase, todoItems: any) => {
       '${i.approach_reason}',
       '${i.candidate_name}',
       '${i.created_at}',
-      '${i.updated_at}'
+      '${i.updated_at}',
+      '0'
       )`,
         )
         .join(',');
@@ -277,7 +280,8 @@ export const updateItems = async (db: SQLiteDatabase, formData: any) => {
     labharthi_candidate='${data?.labharthi_candidate}',
     approach_time='${data?.APPROACH_QTY}',
     approach_reason='${data?.APPROACH_REASON}',
-    candidate_name='${data?.CANDIDATE_NAME}'
+    candidate_name='${data?.CANDIDATE_NAME}',
+    needUpdate='${data?.needUpdate}'
     WHERE id=${data?.voter_id}`
     console.warn('query--->',query)
     await db.executeSql(query);

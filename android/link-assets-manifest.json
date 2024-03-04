@@ -1,0 +1,177 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/images/addresswise.png",
+      "sha1": "b3cb3579958cec896dc74cd3db7a44b2abfcba16"
+    },
+    {
+      "path": "assets/images/agewise.png",
+      "sha1": "73ceb1e1eec55fa224d597fbd25557a6f6ca8739"
+    },
+    {
+      "path": "assets/images/alphabets.png",
+      "sha1": "a211b9a20ef8cda4e149950a4d2ac6ce96b66ad3"
+    },
+    {
+      "path": "assets/images/approach.png",
+      "sha1": "151e9a8f00553f1f18d254585da48736eff5581d"
+    },
+    {
+      "path": "assets/images/areawise.png",
+      "sha1": "87960814c61960af5816db4e492ecefb02524b02"
+    },
+    {
+      "path": "assets/images/background-placeholder.png",
+      "sha1": "389a2cf9cbd98c156e69ca4703ce063365ef19e2"
+    },
+    {
+      "path": "assets/images/background.png",
+      "sha1": "ad7af86274855814ef9cea8ff9e33c79665330eb"
+    },
+    {
+      "path": "assets/images/birthday.png",
+      "sha1": "5fd62a46998a076c78c2e04472a4e66f7d48d314"
+    },
+    {
+      "path": "assets/images/booth.png",
+      "sha1": "82e8bbfa86332c1faa90fb245182ac5bac264721"
+    },
+    {
+      "path": "assets/images/campaign.png",
+      "sha1": "5a5b86b68124222e4aec246449d1b2dfde6db6a6"
+    },
+    {
+      "path": "assets/images/caste.png",
+      "sha1": "9efe830fedbcf8686bed4776f91eac2dc72ebe1f"
+    },
+    {
+      "path": "assets/images/center-govt.png",
+      "sha1": "66ac60c84228db0364f14f82c3f8106a473612de"
+    },
+    {
+      "path": "assets/images/center.png",
+      "sha1": "894c898cf778c06bf571fac35c5a56ab4bd701e2"
+    },
+    {
+      "path": "assets/images/deadlist.jpg",
+      "sha1": "403fd1ef1246c5d509036bebb10f9a34eba56933"
+    },
+    {
+      "path": "assets/images/education.png",
+      "sha1": "88ad3d08e78a7c8f62a5792d23a317ee1f8915b4"
+    },
+    {
+      "path": "assets/images/familyhead.png",
+      "sha1": "11af5b7357353e0ec2c3fe444fbd8a0631273e25"
+    },
+    {
+      "path": "assets/images/familylabel.png",
+      "sha1": "d5430a1be0e30a8c6a154731a00719f7954c959a"
+    },
+    {
+      "path": "assets/images/familywise.png",
+      "sha1": "ea27cec889bce8c7d60d0c117091605953808cb4"
+    },
+    {
+      "path": "assets/images/female.png",
+      "sha1": "3f48b6646681c25a7418c76a8666f267b2cf9548"
+    },
+    {
+      "path": "assets/images/fullname.png",
+      "sha1": "d8a21e462fe609baf6b4981280f0329acd92dec0"
+    },
+    {
+      "path": "assets/images/l-candidate.png",
+      "sha1": "498355205ee65f167eddc00f52dcc58709b33d77"
+    },
+    {
+      "path": "assets/images/labelvalue.png",
+      "sha1": "7bf70a0ceca57b807c3d43ac48a577557bb298dc"
+    },
+    {
+      "path": "assets/images/light.png",
+      "sha1": "8d3bcac64ab1295f5458520b1230d29545b7dd82"
+    },
+    {
+      "path": "assets/images/male.png",
+      "sha1": "2190afb18854076deb667ad8d8ad7654ce2f0a62"
+    },
+    {
+      "path": "assets/images/new-voter.png",
+      "sha1": "75bcfac8faa204b8cf6af98f2aae2098425c80c6"
+    },
+    {
+      "path": "assets/images/outside-location.webp",
+      "sha1": "5d5a8e6966294ae6ab741637b4314812acc0e603"
+    },
+    {
+      "path": "assets/images/part1.png",
+      "sha1": "534d5b2ffc24cde827246b44777814d3ca2600f8"
+    },
+    {
+      "path": "assets/images/part2.png",
+      "sha1": "d914bb1c5ab479d138875b4756ba90e718dc6251"
+    },
+    {
+      "path": "assets/images/partywise.png",
+      "sha1": "da9e82cec96796c9b65ce8f63b62f9f6b3077931"
+    },
+    {
+      "path": "assets/images/profession.png",
+      "sha1": "7268d04d101914ed9513adb56009f6632588e6da"
+    },
+    {
+      "path": "assets/images/religion.png",
+      "sha1": "12bcd9669ca9eab46992583a94c67213ec8bad9f"
+    },
+    {
+      "path": "assets/images/search.png",
+      "sha1": "4e7be4d7f6bd4ebff84242f1a078ce1f3679e90c"
+    },
+    {
+      "path": "assets/images/shift.png",
+      "sha1": "4227fcf7a992b40aeb64a508ed04a6bd84f241e4"
+    },
+    {
+      "path": "assets/images/singlevoter.png",
+      "sha1": "b6696498476506d4160fbbe3ce63eca8064648a0"
+    },
+    {
+      "path": "assets/images/sms.png",
+      "sha1": "0859f7b895c8aa252e0f9fabfd994ed9ef11ec56"
+    },
+    {
+      "path": "assets/images/social-media.png",
+      "sha1": "1edd81028ac2bcbaa235072ffed4e65346a46147"
+    },
+    {
+      "path": "assets/images/state-govt.png",
+      "sha1": "eb5ef1a209d274e88f1c71fea327565bed79a3a2"
+    },
+    {
+      "path": "assets/images/surname.png",
+      "sha1": "f0e02b5ef9f945be1b7323171263513a2e56a150"
+    },
+    {
+      "path": "assets/images/user.png",
+      "sha1": "5fd6a4d14b176c9fe6c5a6f3c2f20979ccb9585a"
+    },
+    {
+      "path": "assets/images/voter-survey.jpeg",
+      "sha1": "032a89f2afeb761461e906f464be0147b0b47de0"
+    },
+    {
+      "path": "assets/images/wedding.webp",
+      "sha1": "b9cff414831bad4b61c14a8939bdfaf8794cdf22"
+    },
+    {
+      "path": "assets/images/zila.png",
+      "sha1": "3ce36a8e47e58cc36ff1642ffa8734ae4050ac3f"
+    },
+    {
+      "path": "assets/images/zone.png",
+      "sha1": "8cc3db736d5b6ae2db587f66e6aa4e3464ec5c21"
+    }
+  ]
+}

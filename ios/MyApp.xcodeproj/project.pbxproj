@@ -14,6 +14,49 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-MyApp-MyAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-MyApp-MyAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		06D82D7B63C6427D9C859400 /* addresswise.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A542638FEB8413B8F8C79FD /* addresswise.png */; };
+		B59DBCA51CD944ED97C9D814 /* agewise.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FA91A97C34D4F9E96DD878A /* agewise.png */; };
+		E69C9CCA7CB74050959A5D4C /* alphabets.png in Resources */ = {isa = PBXBuildFile; fileRef = E359F9EAC0654074B9EF2CCC /* alphabets.png */; };
+		D3D2B449DC424B06BF0E15D3 /* approach.png in Resources */ = {isa = PBXBuildFile; fileRef = 7C21F019FAFB4D91BE91CC13 /* approach.png */; };
+		250BFB3EFBE0459D9D811BB2 /* areawise.png in Resources */ = {isa = PBXBuildFile; fileRef = 24B0059238D24476BBFE468B /* areawise.png */; };
+		E16CAF3DAC3244FF9A6F334B /* background-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 6857A4682AE74B7296592B8A /* background-placeholder.png */; };
+		38BB43C1DFAE4F28BEACEC0A /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = D440E347ADE04EA7A462DCB5 /* background.png */; };
+		F6614F4FE0A346A58EBCDDF2 /* birthday.png in Resources */ = {isa = PBXBuildFile; fileRef = A11AA98447F344078D021245 /* birthday.png */; };
+		FE8C25CAB9A742DD95928B3E /* booth.png in Resources */ = {isa = PBXBuildFile; fileRef = B9D565F7179F4FDBB9CABEF9 /* booth.png */; };
+		B3EF3CA2F72C42BE890E7829 /* campaign.png in Resources */ = {isa = PBXBuildFile; fileRef = 261FCCACFD9048A284C7EA65 /* campaign.png */; };
+		4FC041BFA8C240BE882B6786 /* caste.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C6E58AD9974E0CA028C1AE /* caste.png */; };
+		6286DD6DA0474548A5DC74E2 /* center-govt.png in Resources */ = {isa = PBXBuildFile; fileRef = 98ABF44D5681414398152659 /* center-govt.png */; };
+		7C400F459A4F4A3ABCE81F34 /* center.png in Resources */ = {isa = PBXBuildFile; fileRef = A6F9B5E32B3B494A8DD3F512 /* center.png */; };
+		33533BD809484FAEB6EE1B44 /* deadlist.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 49BC1FA96D5F4CD7A1224DD6 /* deadlist.jpg */; };
+		C222130B0BFF49EF929DE63F /* education.png in Resources */ = {isa = PBXBuildFile; fileRef = F6F2FAC7B2E146FCA4BFE194 /* education.png */; };
+		0C4A11E4C8CE464B9D2A72CE /* familyhead.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D76A5230CAA400794947A8D /* familyhead.png */; };
+		FCCACF169FF94843962939B3 /* familylabel.png in Resources */ = {isa = PBXBuildFile; fileRef = D0DDE2D59F04422EACBCF4B9 /* familylabel.png */; };
+		C535E935D9FE43EC844555AB /* familywise.png in Resources */ = {isa = PBXBuildFile; fileRef = E856A27AEDDD4EE1834ACB9F /* familywise.png */; };
+		53867390F88C4E50A12EDD54 /* female.png in Resources */ = {isa = PBXBuildFile; fileRef = CA7BEF45D1AF42E5B1640F6B /* female.png */; };
+		209B2CA3212449DF8C64A4D3 /* fullname.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD83E0B8D9C40BEB42904D3 /* fullname.png */; };
+		A9C986B6CB8B46E592D413C1 /* l-candidate.png in Resources */ = {isa = PBXBuildFile; fileRef = DF1840C3E3E347479D926A1E /* l-candidate.png */; };
+		7050516661E44961B617A835 /* labelvalue.png in Resources */ = {isa = PBXBuildFile; fileRef = 58775A9136A548E8A3B2E1DC /* labelvalue.png */; };
+		0A8FE966E2FC4F5C9A06F0A8 /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CB3B903A4BA4830AA67C9A4 /* light.png */; };
+		1A56480D08794D408C9445BA /* male.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F2767E5EEE4446B978E18E9 /* male.png */; };
+		30E041607D874E9E81347DD2 /* new-voter.png in Resources */ = {isa = PBXBuildFile; fileRef = E76D56A757FE4D06A717BA28 /* new-voter.png */; };
+		CFAEA23CA2B74545B9DF4017 /* outside-location.webp in Resources */ = {isa = PBXBuildFile; fileRef = 52E56B64BC484B7CB46EE53A /* outside-location.webp */; };
+		83959740ECF14E0AACC124B4 /* part1.png in Resources */ = {isa = PBXBuildFile; fileRef = 041285C66E514C82A59DF9BA /* part1.png */; };
+		1A0B69716ED24717BEE12928 /* part2.png in Resources */ = {isa = PBXBuildFile; fileRef = E309E14629C7415697CD5087 /* part2.png */; };
+		D87BB1204001427598A54768 /* partywise.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DCD88A5006B4BCBAA9FB3AF /* partywise.png */; };
+		A7E5161D0C45462D851D6658 /* profession.png in Resources */ = {isa = PBXBuildFile; fileRef = 47DDF1BFD2D4497CA43FA1D5 /* profession.png */; };
+		8D139F04BA4B42F0B41817E7 /* religion.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B51D5DF1C6C4D70B302DC2D /* religion.png */; };
+		90C76ABE2C714966B87B578F /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E65844CB4774B18BF98E605 /* search.png */; };
+		D9FEDEF8211548BA810AB28F /* shift.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E1471DA1B8A47A79130280D /* shift.png */; };
+		6DDC499F49F34750B87B32A0 /* singlevoter.png in Resources */ = {isa = PBXBuildFile; fileRef = 87539AC6A4474290AF0E76A7 /* singlevoter.png */; };
+		43F35A01FBDC42BEBC0A7761 /* sms.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB737398539400F81454DCB /* sms.png */; };
+		945DE06A05764216AEE843CE /* social-media.png in Resources */ = {isa = PBXBuildFile; fileRef = D2BF6AE7294D46CF80B625FD /* social-media.png */; };
+		D10A3291F011499695C82E79 /* state-govt.png in Resources */ = {isa = PBXBuildFile; fileRef = 48FB19F754214036AED8E50F /* state-govt.png */; };
+		4FBCA8BE61CE449686963FB2 /* surname.png in Resources */ = {isa = PBXBuildFile; fileRef = D110029C372A470397777185 /* surname.png */; };
+		99C897F6E4A746A1AA9B568A /* user.png in Resources */ = {isa = PBXBuildFile; fileRef = 82C94B16A29C4768998760B0 /* user.png */; };
+		C41B370AB6C041B8AF57825C /* voter-survey.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AA2735791BAA4254A9009928 /* voter-survey.jpeg */; };
+		AE9F518EDFD64E02957CED9F /* wedding.webp in Resources */ = {isa = PBXBuildFile; fileRef = 58DC3B61A3B0473CBB6B60F7 /* wedding.webp */; };
+		97FB870F6DD0477784A5D3AD /* zila.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B9DDFCAD3484CF4ACA8A998 /* zila.png */; };
+		C7275436BB224B279F6DE914 /* zone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4ADD366F5FF74018BAE0AE97 /* zone.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +87,49 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MyApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-MyApp-MyAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyApp-MyAppTests.release.xcconfig"; path = "Target Support Files/Pods-MyApp-MyAppTests/Pods-MyApp-MyAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		0A542638FEB8413B8F8C79FD /* addresswise.png */ = {isa = PBXFileReference; name = "addresswise.png"; path = "../assets/images/addresswise.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9FA91A97C34D4F9E96DD878A /* agewise.png */ = {isa = PBXFileReference; name = "agewise.png"; path = "../assets/images/agewise.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E359F9EAC0654074B9EF2CCC /* alphabets.png */ = {isa = PBXFileReference; name = "alphabets.png"; path = "../assets/images/alphabets.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7C21F019FAFB4D91BE91CC13 /* approach.png */ = {isa = PBXFileReference; name = "approach.png"; path = "../assets/images/approach.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		24B0059238D24476BBFE468B /* areawise.png */ = {isa = PBXFileReference; name = "areawise.png"; path = "../assets/images/areawise.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6857A4682AE74B7296592B8A /* background-placeholder.png */ = {isa = PBXFileReference; name = "background-placeholder.png"; path = "../assets/images/background-placeholder.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D440E347ADE04EA7A462DCB5 /* background.png */ = {isa = PBXFileReference; name = "background.png"; path = "../assets/images/background.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A11AA98447F344078D021245 /* birthday.png */ = {isa = PBXFileReference; name = "birthday.png"; path = "../assets/images/birthday.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B9D565F7179F4FDBB9CABEF9 /* booth.png */ = {isa = PBXFileReference; name = "booth.png"; path = "../assets/images/booth.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		261FCCACFD9048A284C7EA65 /* campaign.png */ = {isa = PBXFileReference; name = "campaign.png"; path = "../assets/images/campaign.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		42C6E58AD9974E0CA028C1AE /* caste.png */ = {isa = PBXFileReference; name = "caste.png"; path = "../assets/images/caste.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		98ABF44D5681414398152659 /* center-govt.png */ = {isa = PBXFileReference; name = "center-govt.png"; path = "../assets/images/center-govt.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A6F9B5E32B3B494A8DD3F512 /* center.png */ = {isa = PBXFileReference; name = "center.png"; path = "../assets/images/center.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		49BC1FA96D5F4CD7A1224DD6 /* deadlist.jpg */ = {isa = PBXFileReference; name = "deadlist.jpg"; path = "../assets/images/deadlist.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F6F2FAC7B2E146FCA4BFE194 /* education.png */ = {isa = PBXFileReference; name = "education.png"; path = "../assets/images/education.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7D76A5230CAA400794947A8D /* familyhead.png */ = {isa = PBXFileReference; name = "familyhead.png"; path = "../assets/images/familyhead.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D0DDE2D59F04422EACBCF4B9 /* familylabel.png */ = {isa = PBXFileReference; name = "familylabel.png"; path = "../assets/images/familylabel.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E856A27AEDDD4EE1834ACB9F /* familywise.png */ = {isa = PBXFileReference; name = "familywise.png"; path = "../assets/images/familywise.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CA7BEF45D1AF42E5B1640F6B /* female.png */ = {isa = PBXFileReference; name = "female.png"; path = "../assets/images/female.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4CD83E0B8D9C40BEB42904D3 /* fullname.png */ = {isa = PBXFileReference; name = "fullname.png"; path = "../assets/images/fullname.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DF1840C3E3E347479D926A1E /* l-candidate.png */ = {isa = PBXFileReference; name = "l-candidate.png"; path = "../assets/images/l-candidate.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		58775A9136A548E8A3B2E1DC /* labelvalue.png */ = {isa = PBXFileReference; name = "labelvalue.png"; path = "../assets/images/labelvalue.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5CB3B903A4BA4830AA67C9A4 /* light.png */ = {isa = PBXFileReference; name = "light.png"; path = "../assets/images/light.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0F2767E5EEE4446B978E18E9 /* male.png */ = {isa = PBXFileReference; name = "male.png"; path = "../assets/images/male.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E76D56A757FE4D06A717BA28 /* new-voter.png */ = {isa = PBXFileReference; name = "new-voter.png"; path = "../assets/images/new-voter.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		52E56B64BC484B7CB46EE53A /* outside-location.webp */ = {isa = PBXFileReference; name = "outside-location.webp"; path = "../assets/images/outside-location.webp"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		041285C66E514C82A59DF9BA /* part1.png */ = {isa = PBXFileReference; name = "part1.png"; path = "../assets/images/part1.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E309E14629C7415697CD5087 /* part2.png */ = {isa = PBXFileReference; name = "part2.png"; path = "../assets/images/part2.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6DCD88A5006B4BCBAA9FB3AF /* partywise.png */ = {isa = PBXFileReference; name = "partywise.png"; path = "../assets/images/partywise.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		47DDF1BFD2D4497CA43FA1D5 /* profession.png */ = {isa = PBXFileReference; name = "profession.png"; path = "../assets/images/profession.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8B51D5DF1C6C4D70B302DC2D /* religion.png */ = {isa = PBXFileReference; name = "religion.png"; path = "../assets/images/religion.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1E65844CB4774B18BF98E605 /* search.png */ = {isa = PBXFileReference; name = "search.png"; path = "../assets/images/search.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9E1471DA1B8A47A79130280D /* shift.png */ = {isa = PBXFileReference; name = "shift.png"; path = "../assets/images/shift.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		87539AC6A4474290AF0E76A7 /* singlevoter.png */ = {isa = PBXFileReference; name = "singlevoter.png"; path = "../assets/images/singlevoter.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DEB737398539400F81454DCB /* sms.png */ = {isa = PBXFileReference; name = "sms.png"; path = "../assets/images/sms.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D2BF6AE7294D46CF80B625FD /* social-media.png */ = {isa = PBXFileReference; name = "social-media.png"; path = "../assets/images/social-media.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		48FB19F754214036AED8E50F /* state-govt.png */ = {isa = PBXFileReference; name = "state-govt.png"; path = "../assets/images/state-govt.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D110029C372A470397777185 /* surname.png */ = {isa = PBXFileReference; name = "surname.png"; path = "../assets/images/surname.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		82C94B16A29C4768998760B0 /* user.png */ = {isa = PBXFileReference; name = "user.png"; path = "../assets/images/user.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AA2735791BAA4254A9009928 /* voter-survey.jpeg */ = {isa = PBXFileReference; name = "voter-survey.jpeg"; path = "../assets/images/voter-survey.jpeg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		58DC3B61A3B0473CBB6B60F7 /* wedding.webp */ = {isa = PBXFileReference; name = "wedding.webp"; path = "../assets/images/wedding.webp"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9B9DDFCAD3484CF4ACA8A998 /* zila.png */ = {isa = PBXFileReference; name = "zila.png"; path = "../assets/images/zila.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4ADD366F5FF74018BAE0AE97 /* zone.png */ = {isa = PBXFileReference; name = "zone.png"; path = "../assets/images/zone.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +208,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				5AD97030809944B290A3E83B /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +234,57 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		5AD97030809944B290A3E83B /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				0A542638FEB8413B8F8C79FD /* addresswise.png */,
+				9FA91A97C34D4F9E96DD878A /* agewise.png */,
+				E359F9EAC0654074B9EF2CCC /* alphabets.png */,
+				7C21F019FAFB4D91BE91CC13 /* approach.png */,
+				24B0059238D24476BBFE468B /* areawise.png */,
+				6857A4682AE74B7296592B8A /* background-placeholder.png */,
+				D440E347ADE04EA7A462DCB5 /* background.png */,
+				A11AA98447F344078D021245 /* birthday.png */,
+				B9D565F7179F4FDBB9CABEF9 /* booth.png */,
+				261FCCACFD9048A284C7EA65 /* campaign.png */,
+				42C6E58AD9974E0CA028C1AE /* caste.png */,
+				98ABF44D5681414398152659 /* center-govt.png */,
+				A6F9B5E32B3B494A8DD3F512 /* center.png */,
+				49BC1FA96D5F4CD7A1224DD6 /* deadlist.jpg */,
+				F6F2FAC7B2E146FCA4BFE194 /* education.png */,
+				7D76A5230CAA400794947A8D /* familyhead.png */,
+				D0DDE2D59F04422EACBCF4B9 /* familylabel.png */,
+				E856A27AEDDD4EE1834ACB9F /* familywise.png */,
+				CA7BEF45D1AF42E5B1640F6B /* female.png */,
+				4CD83E0B8D9C40BEB42904D3 /* fullname.png */,
+				DF1840C3E3E347479D926A1E /* l-candidate.png */,
+				58775A9136A548E8A3B2E1DC /* labelvalue.png */,
+				5CB3B903A4BA4830AA67C9A4 /* light.png */,
+				0F2767E5EEE4446B978E18E9 /* male.png */,
+				E76D56A757FE4D06A717BA28 /* new-voter.png */,
+				52E56B64BC484B7CB46EE53A /* outside-location.webp */,
+				041285C66E514C82A59DF9BA /* part1.png */,
+				E309E14629C7415697CD5087 /* part2.png */,
+				6DCD88A5006B4BCBAA9FB3AF /* partywise.png */,
+				47DDF1BFD2D4497CA43FA1D5 /* profession.png */,
+				8B51D5DF1C6C4D70B302DC2D /* religion.png */,
+				1E65844CB4774B18BF98E605 /* search.png */,
+				9E1471DA1B8A47A79130280D /* shift.png */,
+				87539AC6A4474290AF0E76A7 /* singlevoter.png */,
+				DEB737398539400F81454DCB /* sms.png */,
+				D2BF6AE7294D46CF80B625FD /* social-media.png */,
+				48FB19F754214036AED8E50F /* state-govt.png */,
+				D110029C372A470397777185 /* surname.png */,
+				82C94B16A29C4768998760B0 /* user.png */,
+				AA2735791BAA4254A9009928 /* voter-survey.jpeg */,
+				58DC3B61A3B0473CBB6B60F7 /* wedding.webp */,
+				9B9DDFCAD3484CF4ACA8A998 /* zila.png */,
+				4ADD366F5FF74018BAE0AE97 /* zone.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +382,49 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				06D82D7B63C6427D9C859400 /* addresswise.png in Resources */,
+				B59DBCA51CD944ED97C9D814 /* agewise.png in Resources */,
+				E69C9CCA7CB74050959A5D4C /* alphabets.png in Resources */,
+				D3D2B449DC424B06BF0E15D3 /* approach.png in Resources */,
+				250BFB3EFBE0459D9D811BB2 /* areawise.png in Resources */,
+				E16CAF3DAC3244FF9A6F334B /* background-placeholder.png in Resources */,
+				38BB43C1DFAE4F28BEACEC0A /* background.png in Resources */,
+				F6614F4FE0A346A58EBCDDF2 /* birthday.png in Resources */,
+				FE8C25CAB9A742DD95928B3E /* booth.png in Resources */,
+				B3EF3CA2F72C42BE890E7829 /* campaign.png in Resources */,
+				4FC041BFA8C240BE882B6786 /* caste.png in Resources */,
+				6286DD6DA0474548A5DC74E2 /* center-govt.png in Resources */,
+				7C400F459A4F4A3ABCE81F34 /* center.png in Resources */,
+				33533BD809484FAEB6EE1B44 /* deadlist.jpg in Resources */,
+				C222130B0BFF49EF929DE63F /* education.png in Resources */,
+				0C4A11E4C8CE464B9D2A72CE /* familyhead.png in Resources */,
+				FCCACF169FF94843962939B3 /* familylabel.png in Resources */,
+				C535E935D9FE43EC844555AB /* familywise.png in Resources */,
+				53867390F88C4E50A12EDD54 /* female.png in Resources */,
+				209B2CA3212449DF8C64A4D3 /* fullname.png in Resources */,
+				A9C986B6CB8B46E592D413C1 /* l-candidate.png in Resources */,
+				7050516661E44961B617A835 /* labelvalue.png in Resources */,
+				0A8FE966E2FC4F5C9A06F0A8 /* light.png in Resources */,
+				1A56480D08794D408C9445BA /* male.png in Resources */,
+				30E041607D874E9E81347DD2 /* new-voter.png in Resources */,
+				CFAEA23CA2B74545B9DF4017 /* outside-location.webp in Resources */,
+				83959740ECF14E0AACC124B4 /* part1.png in Resources */,
+				1A0B69716ED24717BEE12928 /* part2.png in Resources */,
+				D87BB1204001427598A54768 /* partywise.png in Resources */,
+				A7E5161D0C45462D851D6658 /* profession.png in Resources */,
+				8D139F04BA4B42F0B41817E7 /* religion.png in Resources */,
+				90C76ABE2C714966B87B578F /* search.png in Resources */,
+				D9FEDEF8211548BA810AB28F /* shift.png in Resources */,
+				6DDC499F49F34750B87B32A0 /* singlevoter.png in Resources */,
+				43F35A01FBDC42BEBC0A7761 /* sms.png in Resources */,
+				945DE06A05764216AEE843CE /* social-media.png in Resources */,
+				D10A3291F011499695C82E79 /* state-govt.png in Resources */,
+				4FBCA8BE61CE449686963FB2 /* surname.png in Resources */,
+				99C897F6E4A746A1AA9B568A /* user.png in Resources */,
+				C41B370AB6C041B8AF57825C /* voter-survey.jpeg in Resources */,
+				AE9F518EDFD64E02957CED9F /* wedding.webp in Resources */,
+				97FB870F6DD0477784A5D3AD /* zila.png in Resources */,
+				C7275436BB224B279F6DE914 /* zone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

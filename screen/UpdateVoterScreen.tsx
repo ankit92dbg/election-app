@@ -143,6 +143,8 @@ const UpdateVoterScreen = ({
   // const [AGE, setAGE] = useState('');
 
   React.useEffect(() => {
+    setLoadingText('Populating data, please wait...');
+    setLoading(true)
     getUserSession();
     setLabelValueList(formatLabelValue(data?.voters_label));
     setPartyList(formatPartyList(data?.political_party));
@@ -174,6 +176,7 @@ const UpdateVoterScreen = ({
     setLalBhartiCandidate(
       lBhartiCandidate ? formatLBDropdown(lBhartiCandidate) : [],
     );
+    
   }, [navigation]);
 
   React.useEffect(() => {
@@ -324,6 +327,9 @@ const UpdateVoterScreen = ({
     setSelectedLBCenter(voterData?.labharthi_center != 'null' ? voterData?.labharthi_center : '')
     setSelectedLBState(voterData?.labharthi_state != 'null' ? voterData?.labharthi_state : '')
     setSelectedLBCandidate(voterData?.labharthi_candidate != 'null' ? voterData?.labharthi_candidate : '')
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000);
   };
 
   const formatACNo = async (session: any) => {
@@ -804,7 +810,6 @@ const UpdateVoterScreen = ({
     setLoadingText('Saving profile, please wait...');
     const formData = new FormData();
     console.warn('RLN_FM_NAME_EN',RLN_FM_NAME_EN)
-    console.warn('hhh--->',RLN_FM_NAME_EN !='undefined' ? RLN_FM_NAME_EN : '')
     formData.append('voter_id', voterData?.id);
     formData.append('AC_NO', acNo !='undefined' ? acNo : '');
     formData.append('PART_NO', partNo !='undefined' ? partNo : '');
@@ -884,8 +889,10 @@ const UpdateVoterScreen = ({
       });
     }
     setLoading(true);
-    const response: any = await saveVoterData(formData);
+    const response: any = await postRequest('update-voters.php', formData);
     if (response?.error == '') {
+      formData.append('needUpdate','0');
+      await saveVoterData(formData);
       setTimeout(() => {
         setLoading(false);
         Snackbar.show({
@@ -896,13 +903,16 @@ const UpdateVoterScreen = ({
         navigation.navigate('Home');
       }, 1000);
     } else {
+      formData.append('needUpdate','1');
+      await saveVoterData(formData);
       setTimeout(() => {
         setLoading(false);
         Snackbar.show({
-          text: response?.message,
+          text: "Voter data is saved locally, please sync you app when you are online.",
           duration: Snackbar.LENGTH_LONG,
-          backgroundColor: '#e33443',
+          backgroundColor: '#c97616',
         });
+        navigation.navigate('Home');
       }, 1000);
     }
   };
@@ -1575,6 +1585,7 @@ const UpdateVoterScreen = ({
                               style={styles.inputInner}
                               placeholderTextColor={'#000'}
                               value={AADHAR_NO}
+                              keyboardType='numeric'
                               onChangeText={value => {
                                 setAADHAR_NO(value);
                               }}
@@ -1593,6 +1604,7 @@ const UpdateVoterScreen = ({
                               style={styles.inputInner}
                               placeholderTextColor={'#000'}
                               value={RELATIVE_PART_NO}
+                              keyboardType='numeric'
                               onChangeText={value => {
                                 setRELATIVE_PART_NO(value);
                               }}
@@ -1611,6 +1623,7 @@ const UpdateVoterScreen = ({
                               style={styles.inputInner}
                               placeholderTextColor={'#000'}
                               value={RELATION_SLNOINPART}
+                              keyboardType='numeric'
                               onChangeText={value => {
                                 setRELATION_SLNOINPART(value);
                               }}

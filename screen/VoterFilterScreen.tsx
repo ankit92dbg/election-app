@@ -89,7 +89,7 @@ const VoterFilterScreen = ({
   const [socialMediaList, setSocialMediaList] = React.useState<any>([]);
   const [socialMediaTitle, setSocialMediaTitle] = useState('');
   const {data} = useSelector((state: any) => state?.MasterData);
-
+console.warn('data--->',data)
   const listVotersData = async (pageNo: any, total: any) => {
     setLoading(true);
     const session: any = await retrieveUserSession();

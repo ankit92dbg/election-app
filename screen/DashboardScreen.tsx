@@ -26,6 +26,7 @@ import LoaderWithData from '../components/LoaderWithData';
 const DashboardScreen = ({navigation}: {navigation: any}) => {
   const dispatch = useDispatch();
   const [userData, setUserData] = React.useState<any>(null);
+  const [totalOfflineData, setTotalOfflineData] = React.useState<any>(0);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [syncModalVisible, setSyncModalVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -50,7 +51,6 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
           leader_id = session?.leader_id
         }
         await getDashBoardData(leader_id)
-        setLoading(false)
       }
     } catch (error) {
       // There was an error on the native side
@@ -60,6 +60,9 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
   const getDashBoardData = async(user_id:any)=>{
     dispatch(await getAllBM({ leader_id: user_id }))
     dispatch(await getMasterData({leader_id: user_id }))
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000);
   }
 
 
@@ -166,7 +169,10 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
 
   return (
     <>
-    <View style={styles.mainContainer}>
+      {loading ? (
+      <Loader text="Loading data..." loading={true} />
+      ) : (
+      <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
         <View style={styles.parent}>
           <View style={styles.child}>
@@ -239,6 +245,9 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                   paddingRight: 15,
                 }}>
                 <TouchableOpacity onPress={() => setSyncModalVisible(true)}>
+                  <View style={{position:'absolute',marginTop:-5,zIndex:99999,right:-18,width:24,height:24,borderRadius:24,backgroundColor:'#a8323a',alignSelf:'center',justifyContent:'center',}}>
+                   <Text style={{color:'#FFFFFF',textAlign:'center'}}>{totalOfflineData}</Text>
+                  </View>
                   <Icon name="refresh" color={'#FFFFFF'} size={22} />
                 </TouchableOpacity>
               </View>
@@ -516,7 +525,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
       </View>
       {logOutModal()}
       {syncModal()}
-          </View>
+      </View>
+      )}
     </>
   );
 };
