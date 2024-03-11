@@ -16,6 +16,7 @@ import UpdateScreen from './screen/UpdateScreen';
 import CreateBM from './screen/CreateBM';
 import UpdateBM from './screen/UpdateBM';
 import BMList from './screen/BMList';
+import PrintScreen from './screen/PrintScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { retrieveUserSession } from './utils';
@@ -95,6 +96,12 @@ export function InnerStack() {
             name="UpdateScreen"
             component={UpdateScreen}
             options={{headerShown:false}}
+        />
+
+        <Stack.Screen
+            name="PrintScreen"
+            component={PrintScreen}
+            options={{headerTitle: 'Home > Print Voter',headerTitleStyle:{fontSize:14}, headerTransparent: true, headerTintColor:'#FFFFFF'}}         
         />
        
     </Stack.Navigator>

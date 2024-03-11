@@ -1,5 +1,5 @@
 import EncryptedStorage from "react-native-encrypted-storage";
-import { createTable, deleteTable, getACNo, getAddressWise, getAgewise, getAlphabetical, getApproachQty, getAreaWise, getBirthday, getCasteWise, getDBConnection, getDeadList, getDoubleName, getEducationList, getFamilyHeadReport, getFamilyLabel, getFamilyReport, getHomeShifted, getLabelValue, getLabharthiCenter, getLabharthiState, getMarried, getNewVoterList, getOutsideLocation, getPARTNo, getPartyWise, getProfessionList, getSECTIONNo, getSLNOINPART, getSMSReport, getSearch, getSingleVoter, getSurnameReport, getTotalAddressWise, getTotalAgewise, getTotalAlphabetical, getTotalApproachQty, getTotalAreaWise, getTotalBirthday, getTotalCasteWise, getTotalDeadList, getTotalDoubleName, getTotalEducationList, getTotalFamilyHeadReport, getTotalFamilyLabel, getTotalFamilyReport, getTotalHomeShifted, getTotalLabelValue, getTotalLabharthiCenter, getTotalLabharthiState, getTotalMarried, getTotalNewVoterList, getTotalOutsideLocation, getTotalPartyWise, getTotalProfessionList, getTotalSMSReport, getTotalSearch, getTotalSingleVoter, getTotalSurnameReport, getTotalVoterSurvey, getVoterSurvey, saveTodoItems, updateItems } from "./db";
+import { createTable, deleteTable, getACNo, getAddressWise, getAgewise, getAlphabetical, getApproachQty, getAreaWise, getBirthday, getCasteWise, getDBConnection, getDeadList, getDoubleName, getEducationList, getFamilyHeadReport, getFamilyLabel, getFamilyReport, getHomeShifted, getLabelValue, getLabharthiCenter, getLabharthiState, getMarried, getNewVoterList, getOutsideLocation, getPARTNo, getPartyWise, getProfessionList, getSECTIONNo, getSLNOINPART, getSMSReport, getSearch, getSingleVoter, getSurnameReport, getTotalAddressWise, getTotalAgewise, getTotalAlphabetical, getTotalApproachQty, getTotalAreaWise, getTotalBirthday, getTotalCasteWise, getTotalDeadList, getTotalDoubleName, getTotalEducationList, getTotalFamilyHeadReport, getTotalFamilyLabel, getTotalFamilyReport, getTotalHomeShifted, getTotalLabelValue, getTotalLabharthiCenter, getTotalLabharthiState, getTotalMarried, getTotalNewVoterList, getTotalOutsideLocation, getTotalPartyWise, getTotalProfessionList, getTotalSMSReport, getTotalSearch, getTotalSingleVoter, getTotalSurnameReport, getTotalVoterSurvey, getTotalVoters, getUnsyncData, getUnsyncDataForUpdate, getVoterSurvey, saveTodoItems, updateItems } from "./db";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 
 export const storeUserSession = async(data: any) => {
@@ -9,6 +9,52 @@ export const storeUserSession = async(data: any) => {
       // Congrats! You've just stored your first value!
     } catch (error) {
       // There was an error on the native side
+    }
+  }
+
+  export const storeMasterData = async(data: any) => {
+    try {
+      await EncryptedStorage.setItem('master_data', JSON.stringify(data));
+
+      // Congrats! You've just stored your first value!
+    } catch (error) {
+      // There was an error on the native side
+    }
+  }
+
+  export const retrieveMasterData = async() => {
+    try {   
+        const master_data:any = await EncryptedStorage.getItem("master_data");
+        if (master_data != null) {
+          return JSON.parse(master_data)
+        }else{
+          return null
+        }
+    } catch (error) {
+        // There was an error on the native side
+    }
+  }
+
+  export const storeSelectedLanguage = async(data: any) => {
+    try {
+      await EncryptedStorage.setItem('selected_language', JSON.stringify(data));
+
+      // Congrats! You've just stored your first value!
+    } catch (error) {
+      // There was an error on the native side
+    }
+  }
+
+  export const retrieveSelectedLanguage = async() => {
+    try {   
+        const session:any = await EncryptedStorage.getItem("selected_language");
+        if (session != null) {
+          return JSON.parse(session)
+        }else{
+          return null
+        }
+    } catch (error) {
+        // There was an error on the native side
     }
   }
 
@@ -414,6 +460,36 @@ export const storeUserSession = async(data: any) => {
     try {   
       const db = await getDBConnection();
       const data = await updateItems(db,formData);
+      return {message:"success",data}
+    } catch (error) {
+        // There was an error on the native side
+    }
+  }
+
+  export const retrieveUnsyncData = async() => {
+    try {   
+      const db = await getDBConnection();
+      const data = await getUnsyncData(db);
+      return {message:"success",totalData:data}
+    } catch (error) {
+        // There was an error on the native side
+    }
+  }
+
+  export const retrieveUnsyncDataForUpdate = async() => {
+    try {   
+      const db = await getDBConnection();
+      const data = await getUnsyncDataForUpdate(db);
+      return {message:"success",data}
+    } catch (error) {
+        // There was an error on the native side
+    }
+  }
+
+  export const retrieveTotalVoters = async() => {
+    try {   
+      const db = await getDBConnection();
+      const data = await getTotalVoters(db);
       return {message:"success",data}
     } catch (error) {
         // There was an error on the native side

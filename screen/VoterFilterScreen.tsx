@@ -9,6 +9,7 @@ import {
   ScrollView,
   Dimensions,
   Modal,
+  Linking,
 } from 'react-native';
 import Animated, {FadeInDown} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -44,12 +45,14 @@ import {
   retrieveProfessionData,
   retrieveSMSData,
   retrieveSearchData,
+  retrieveSelectedLanguage,
   retrieveSingleVoterData,
   retrieveSurnameData,
   retrieveUserSession,
   retrieveVoterSurveyData,
 } from '../utils';
 import Loader from '../components/Loader';
+import { IMAGE_BASE_URL } from '../config';
 
 const isCloseToBottom = ({
   layoutMeasurement,
@@ -72,6 +75,7 @@ const VoterFilterScreen = ({
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = React.useState(true);
+  const [language, setLanguage] = React.useState('');
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
   const [numberOfItemsPerPageList] = React.useState([50]);
@@ -82,6 +86,10 @@ const VoterFilterScreen = ({
   const [compaignIntitialList, setCompaignIntitialList] = React.useState<any>(
     [],
   );
+  const checkLanguage = async() =>{
+    const session : any = await retrieveSelectedLanguage()
+    setLanguage(session?.language == undefined ? 'English' : session?.language)
+  }
   const [compaignList, setCompaignList] = React.useState<any>([]);
   const [compaignTitle, setCompaignTitle] = useState('');
   const [socialMediaIntitialList, setSocialMediaIntitialList] =
@@ -89,7 +97,6 @@ const VoterFilterScreen = ({
   const [socialMediaList, setSocialMediaList] = React.useState<any>([]);
   const [socialMediaTitle, setSocialMediaTitle] = useState('');
   const {data} = useSelector((state: any) => state?.MasterData);
-console.warn('data--->',data)
   const listVotersData = async (pageNo: any, total: any) => {
     setLoading(true);
     const session: any = await retrieveUserSession();
@@ -115,7 +122,6 @@ console.warn('data--->',data)
           fatherName,
           leader_id,
         );
-        console.warn('dataSearch--->',loading,dataSearch)
         setItems([]);
         setItems(dataSearch?.data);
         setTotalPage(dataSearch?.totalData);
@@ -593,9 +599,13 @@ console.warn('data--->',data)
         setLoading(false);
 
       case 'Campaign Abhiyan':
+        setCompaignList(data?.compaign);
+        setCompaignIntitialList(data?.compaign);
         setLoading(false);
 
       case 'Social Media':
+        setSocialMediaList(data?.social_media);
+        setSocialMediaIntitialList(data?.social_media);
         setLoading(false);
     }
   };
@@ -615,10 +625,6 @@ console.warn('data--->',data)
       await listVotersData(Number(page) - 1, 50);
     }
   };
-
-  const [showDropDown, setShowDropDown] = useState(false);
-  const DEVICE_HEIGHT = Dimensions.get('window').height;
-
   /* setting form values */
   const [isFocus, setIsFocus] = useState(false);
   const [name, setName] = useState('');
@@ -697,7 +703,8 @@ console.warn('data--->',data)
     setCompaignIntitialList(data?.compaign);
     setSocialMediaList(data?.social_media);
     setSocialMediaIntitialList(data?.social_media);
-  }, []);
+    checkLanguage()
+  }, [navigation]);
 
   const filterCompaign = () => {
     if (compaignTitle != '') {
@@ -4334,7 +4341,7 @@ console.warn('data--->',data)
     return partyData.length > 0 && partyData[0]['label'];
   };
 
-  const getDataTable = () => {
+  const getDataTableEnglish = () => {
     switch (route?.params?.filterName) {
       case 'Search':
         return (
@@ -6998,7 +7005,7 @@ console.warn('data--->',data)
                   <Text style={{fontWeight: '600'}}>Created On</Text>
                 </DataTable.Title>
               </DataTable.Header>
-
+              {console.warn('compaignList--->',compaignList)}
               {compaignList?.map((item: any, i: number) => (
                 <DataTable.Row key={item?.id}>
                   <DataTable.Cell style={{width: 60}}>
@@ -7040,6 +7047,9 @@ console.warn('data--->',data)
                 <DataTable.Title style={{width: 160}}>
                   <Text style={{fontWeight: '600'}}>Image</Text>
                 </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Link</Text>
+                </DataTable.Title>
                 <DataTable.Title style={{width: 110}}>
                   <Text style={{fontWeight: '600'}}>Description</Text>
                 </DataTable.Title>
@@ -7057,7 +7067,23 @@ console.warn('data--->',data)
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 160}}>
                     <View style={{alignSelf: 'center'}}>
-                      <Text style={{color: '#000000'}}>Test</Text>
+                    { item?.image ?  (
+                    <Image
+                      style={{width: 100, height: 100}} // required Dimensions and styling of Image
+                      source={{uri: IMAGE_BASE_URL + item?.image }} // enter your avatar image path
+                    />
+                    ):(
+                      <Text style={{color:'#8f8d8d'}}>N/A</Text>
+                    )}
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                    <TouchableOpacity onPress={ ()=>{ Linking.openURL(item?.url)}}>
+                      <View>
+                        <Text style={{color:'#8f8d8d'}}>Open Link</Text>
+                      </View>
+                    </TouchableOpacity>
                     </View>
                   </DataTable.Cell>
                   <DataTable.Cell style={{width: 110}}>
@@ -7124,6 +7150,2927 @@ console.warn('data--->',data)
                           color: '#000000',
                         }}>
                         {item?.RLN_FM_NM_EN} {item?.RLN_L_NM_EN}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.political_party == 'null'
+                          ? 'N/A'
+                          : getParty(item?.political_party)}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.candidate_name == 'null'
+                          ? 'N/A'
+                          : item?.candidate_name}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Religion':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Religion Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Total</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Male</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Female</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <Text style={{color: '#000000'}}>Hindu</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        100
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        50
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        50
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      default:
+        return false;
+    }
+  };
+
+  const getDataTableHindi = () => {
+    switch (route?.params?.filterName) {
+      case 'Search':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items &&
+                items.map((item: any) => (
+                  <DataTable.Row key={item?.id}>
+                    <DataTable.Cell style={{width: 60}}>
+                      <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{alignSelf: 'center'}}>
+                        <Text style={{color: '#000000'}}>
+                          {item?.SLNOINPART}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 140}}>
+                      <View style={{width: '100%'}}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            navigation.navigate('ViewVoterScreen', {
+                              routeFrom: 'Part A',
+                              filterName: 'Search List',
+                              item:item
+                            });
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              flexWrap: 'wrap',
+                              fontWeight: '600',
+                              color: '#000000',
+                            }}>
+                            {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                          </Text>
+                        </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '400',
+                            color: '#000000',
+                          }}>
+                          {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.EPIC_NO}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 60}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.GENDER}-{item?.AGE}y
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 300}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.SECTION_NAME_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+            </DataTable>
+          </>
+        );
+      case 'Alphabetical List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 60}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.GENDER}-{item?.AGE}y
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 300}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Agewise List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 60}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.GENDER}-{item?.AGE}y
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 300}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Family Report':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={+item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        H/No. - {item?.C_HOUSE_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 60}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.GENDER}-{item?.AGE}y
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Family Head Report':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={+item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 60}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.GENDER}-{item?.AGE}y
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 300}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Double Name List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 60}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.GENDER}-{item?.AGE}y
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 300}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Married Woman Report':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 60}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.GENDER}-{item?.AGE}y
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 300}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Single Voter List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        H/No. - {item?.C_HOUSE_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 60}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.GENDER}-{item?.AGE}y
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Address Wise List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 180}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        H/No. - {item?.C_HOUSE_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 60}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.GENDER}-{item?.AGE}y
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 180}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.PSBUILDING_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Surname Report':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Surname</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Total</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          fontWeight: '600',
+                        }}>
+                        {item?.LASTNAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.Total}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Family Labels':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 150}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 100}}>
+                  <Text style={{fontWeight: '600'}}>Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 130}}>
+                  <Text style={{fontWeight: '600'}}>House No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 180}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 150}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 100}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 130}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.C_HOUSE_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 180}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'SMS':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Phone Number</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 180}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.MOBILE_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 180}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Caste Wise List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items &&
+                items.map((item: any) => (
+                  <DataTable.Row key={+item?.id}>
+                    <DataTable.Cell style={{width: 60}}>
+                      <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{alignSelf: 'center'}}>
+                        <Text style={{color: '#000000'}}>
+                          {item?.SLNOINPART}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 140}}>
+                      <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '400',
+                            color: '#000000',
+                          }}>
+                          {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.EPIC_NO}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 60}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.GENDER}-{item?.AGE}y
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 300}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.SECTION_NAME_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+            </DataTable>
+          </>
+        );
+      case 'Label Value Filter':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items &&
+                items.map((item: any) => (
+                  <DataTable.Row key={+item?.id}>
+                    <DataTable.Cell style={{width: 60}}>
+                      <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{alignSelf: 'center'}}>
+                        <Text style={{color: '#000000'}}>
+                          {item?.SLNOINPART}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 140}}>
+                      <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '400',
+                            color: '#000000',
+                          }}>
+                          {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.EPIC_NO}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 60}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.GENDER}-{item?.AGE}y
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 300}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.SECTION_NAME_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+            </DataTable>
+          </>
+        );
+      case 'Area Wise List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items &&
+                items.map((item: any) => (
+                  <DataTable.Row key={+item?.id}>
+                    <DataTable.Cell style={{width: 60}}>
+                      <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{alignSelf: 'center'}}>
+                        <Text style={{color: '#000000'}}>
+                          {item?.SLNOINPART}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 140}}>
+                      <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '400',
+                            color: '#000000',
+                          }}>
+                          {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.EPIC_NO}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 60}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.GENDER}-{item?.AGE}y
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 300}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.SECTION_NAME_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+            </DataTable>
+          </>
+        );
+      case 'Party Wise List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items &&
+                items.map((item: any) => (
+                  <DataTable.Row key={+item?.id}>
+                    <DataTable.Cell style={{width: 60}}>
+                      <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{alignSelf: 'center'}}>
+                        <Text style={{color: '#000000'}}>
+                          {item?.SLNOINPART}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 140}}>
+                      <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '400',
+                            color: '#000000',
+                          }}>
+                          {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.EPIC_NO}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 60}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.GENDER}-{item?.AGE}y
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 300}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.SECTION_NAME_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+            </DataTable>
+          </>
+        );
+      case 'Dead List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 60}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.GENDER}-{item?.AGE}y
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 300}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Birthday List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 100}}>
+                  <Text style={{fontWeight: '600'}}>DOB</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={{width: 100}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.DOB}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 300}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Education Report':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Edu Q</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>
+                        {item?.education == '7'
+                          ? item?.other_education
+                          : getEducation(item?.education)}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Shifted Report':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 180}}>
+                  <Text style={{fontWeight: '600'}}>Adress</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 180}}>
+                  <Text style={{fontWeight: '600'}}>Home Shifted</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 180}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.isHomeShifted == '1'
+                          ? item?.shiftedAddress
+                          : item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 180}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.isHomeShifted == '0'
+                          ? 'No'
+                          : item?.isHomeShifted == '1'
+                          ? 'Yes'
+                          : 'No'}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'New Voter List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Age</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 300}}>
+                  <Text style={{fontWeight: '600'}}>Address</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items &&
+                items?.map((item: any) => (
+                  <DataTable.Row key={item?.id}>
+                    <DataTable.Cell style={{width: 60}}>
+                      <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{alignSelf: 'center'}}>
+                        <Text style={{color: '#000000'}}>
+                          {item?.SLNOINPART}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 140}}>
+                      <View style={{width: '100%'}}>
+                      <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '400',
+                            color: '#000000',
+                          }}>
+                          {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 80}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.EPIC_NO}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 60}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.GENDER}-{item?.AGE}y
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{width: 300}}>
+                      <View style={{width: '100%'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            color: '#000000',
+                          }}>
+                          {item?.SECTION_NAME_V1}
+                        </Text>
+                      </View>
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+            </DataTable>
+          </>
+        );
+      case 'Profession Wise List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Id</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Profession</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.EPIC_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>
+                        {item?.profession == '25'
+                          ? item?.other_profession
+                          : getProfession(item?.profession)}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Outside Location List':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 180}}>
+                  <Text style={{fontWeight: '600'}}>Adress</Text>
+                </DataTable.Title>
+
+                <DataTable.Title style={{width: 180}}>
+                  <Text style={{fontWeight: '600'}}>Staying Outside</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 180}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.isStayingOutside == '1'
+                          ? item?.stayingAddress
+                          : item?.SECTION_NAME_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 180}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.isStayingOutside == '0'
+                          ? 'No'
+                          : item?.isStayingOutside == '1'
+                          ? 'Yes'
+                          : 'No'}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Labharthi By Center Govt':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 120}}>
+                  <Text style={{fontWeight: '600'}}>Phone No</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          fontWeight: '400',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 120}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.MOBILE_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Labharthi By State Govt':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 120}}>
+                  <Text style={{fontWeight: '600'}}>Phone No</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          fontWeight: '400',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 120}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.MOBILE_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Labharthi By Candidate':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 120}}>
+                  <Text style={{fontWeight: '600'}}>Phone No</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          fontWeight: '400',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 120}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.MOBILE_NO}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Approached Qty':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Voter Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 120}}>
+                  <Text style={{fontWeight: '600'}}>Approached Qty</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Approached Reason</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.SLNOINPART}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          fontWeight: '400',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 120}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.approach_time == 'null'
+                          ? 0
+                          : item?.approach_time}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          color: '#000000',
+                        }}>
+                        {item?.approach_reason == 'null'
+                          ? 'N/A'
+                          : item?.approach_reason}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Campaign Abhiyan':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Campaign Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 180}}>
+                  <Text style={{fontWeight: '600'}}>Description</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 100}}>
+                  <Text style={{fontWeight: '600'}}>Created On</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+              {console.warn('compaignList--->',compaignList)}
+              {compaignList?.map((item: any, i: number) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{i + 1}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.title}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 180}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>
+                        {item?.description}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 100}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.created_at}</Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Social Media':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Sl No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Title</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Image</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 80}}>
+                  <Text style={{fontWeight: '600'}}>Link</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 110}}>
+                  <Text style={{fontWeight: '600'}}>Description</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {socialMediaList?.map((item: any, i: number) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{i + 1}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>{item?.title}</Text>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 160}}>
+                    <View style={{alignSelf: 'center'}}>
+                    { item?.image ?  (
+                    <Image
+                      style={{width: 100, height: 100}} // required Dimensions and styling of Image
+                      source={{uri: IMAGE_BASE_URL + item?.image }} // enter your avatar image path
+                    />
+                    ):(
+                      <Text style={{color:'#8f8d8d'}}>N/A</Text>
+                    )}
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 80}}>
+                    <View style={{alignSelf: 'center'}}>
+                    <TouchableOpacity onPress={ ()=>{ Linking.openURL(item?.url)}}>
+                      <View>
+                        <Text style={{color:'#8f8d8d'}}>Open Link</Text>
+                      </View>
+                    </TouchableOpacity>
+                    </View>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 110}}>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={{color: '#000000'}}>
+                        {item?.description}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </>
+        );
+      case 'Voter Survey':
+        return (
+          <>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={{width: 60}}>
+                  <Text style={{fontWeight: '600'}}>Part No.</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 140}}>
+                  <Text style={{fontWeight: '600'}}>Voter Name</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Party Like</Text>
+                </DataTable.Title>
+                <DataTable.Title style={{width: 160}}>
+                  <Text style={{fontWeight: '600'}}>Candidate Like</Text>
+                </DataTable.Title>
+              </DataTable.Header>
+
+              {items?.map((item: any) => (
+                <DataTable.Row key={item?.id}>
+                  <DataTable.Cell style={{width: 60}}>
+                    <Text style={{color: '#000000'}}>{item?.PART_NO}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell style={{width: 140}}>
+                    <View style={{width: '100%'}}>
+                    <TouchableOpacity
+                         onPress={() => {
+                          navigation.navigate('ViewVoterScreen', {
+                            routeFrom: 'Part A',
+                            filterName: 'Search List',
+                            item:item
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            flexWrap: 'wrap',
+                            fontWeight: '600',
+                            color: '#000000',
+                          }}>
+                          {item?.FM_NAME_V1} {item?.LASTNAME_V1}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          flexWrap: 'wrap',
+                          fontWeight: '400',
+                          color: '#000000',
+                        }}>
+                        {item?.RLN_FM_NM_V1} {item?.RLN_L_NM_V1}
                       </Text>
                     </View>
                   </DataTable.Cell>
@@ -7486,7 +10433,7 @@ console.warn('data--->',data)
           <View style={{flex: 9}}>
             <View style={styles.card}>
               <ScrollView>
-                <ScrollView horizontal={true}>{getDataTable()}</ScrollView>
+                <ScrollView horizontal={true}>{language == 'English' ? getDataTableEnglish() : getDataTableHindi()}</ScrollView>
               </ScrollView>
             </View>
           </View>

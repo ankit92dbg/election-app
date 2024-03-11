@@ -13,7 +13,7 @@ import Card from '../components/Card';
 import Badge from '../components/Badge';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {BASE_URL, IMAGE_BASE_URL} from '../config';
-import { deleteVoterTable, logutUser, retrieveUserSession, storeVoterData } from '../utils';
+import { deleteVoterTable, logutUser, retrieveMasterData, retrieveTotalVoters, retrieveUnsyncData, retrieveUserSession, storeMasterData, storeVoterData } from '../utils';
 import Loader from '../components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllBM } from '../redux/action/BMData';
@@ -22,18 +22,37 @@ import { getAllVoters } from '../redux/action/VoterData';
 import { postRequest } from '../networkInterface';
 import Snackbar from 'react-native-snackbar';
 import LoaderWithData from '../components/LoaderWithData';
+import { useFocusEffect } from '@react-navigation/native';
+import { setMasterData } from '../redux/reducer/MasterData';
 
 const DashboardScreen = ({navigation}: {navigation: any}) => {
   const dispatch = useDispatch();
+  const {data} = useSelector((state: any) => state?.MasterData);
   const [userData, setUserData] = React.useState<any>(null);
   const [totalOfflineData, setTotalOfflineData] = React.useState<any>(0);
+  const [totalVotersData, setTotalVotersData] = React.useState<any>(0);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [syncModalVisible, setSyncModalVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    getUserSession();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      getUserSession()
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      (async()=>{
+        const unsyncData: any = await retrieveUnsyncData();
+        setTotalOfflineData(unsyncData?.totalData)
+        const data: any = await retrieveTotalVoters();
+        setTotalVotersData(data?.data)
+        setLoading(false)
+      })()
+    }, [])
+  );
 
 
 
@@ -41,6 +60,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
     try {
       setLoading(true)
       const session: any = await retrieveUserSession();
+      let newMasterData = await retrieveMasterData()
+      await dispatch(setMasterData(newMasterData))
       if (session !== undefined) {
         setUserData(session);
         let leader_id = ""
@@ -51,6 +72,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
           leader_id = session?.leader_id
         }
         await getDashBoardData(leader_id)
+        dispatch(await getAllBM({ leader_id: leader_id }))
       }
     } catch (error) {
       // There was an error on the native side
@@ -58,8 +80,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
   }
 
   const getDashBoardData = async(user_id:any)=>{
-    dispatch(await getAllBM({ leader_id: user_id }))
-    dispatch(await getMasterData({leader_id: user_id }))
+    const unsyncData: any = await retrieveUnsyncData();
+    setTotalOfflineData(unsyncData?.totalData)
     setTimeout(() => {
       setLoading(false)
     }, 1000);
@@ -170,7 +192,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
   return (
     <>
       {loading ? (
-      <Loader text="Loading data..." loading={true} />
+      <Loader text="Loading data..." loading={loading} />
       ) : (
       <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
@@ -189,7 +211,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                     { userData?.profile_image ?  (
                     <Image
                       style={{width: 55, height: 55, borderRadius: 55}} // required Dimensions and styling of Image
-                      source={{uri: IMAGE_BASE_URL + userData?.profile_image}} // enter your avatar image path
+                      source={{uri: userData?.profile_image?.substring(0,4)=='file' ? userData?.profile_image : IMAGE_BASE_URL + userData?.profile_image}} // enter your avatar image path
                     />
                     ):(
                       <Image
@@ -215,7 +237,36 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                       <View style={{marginTop: 3}}>
                         <Text style={styles.desgText}>
                           {userData?.designation}
-                          {/* Karyakarta */}
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        paddingLeft: 12,
+                      }}>
+                      <View style={{marginTop: 5}}>
+                        <Icon name="users" color={'#d4d2d2'} size={12} />
+                      </View>
+                      <View style={{marginTop: 3}}>
+                        <Text style={styles.desgText}>
+                          Total Voters : {totalVotersData}
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        paddingLeft: 12,
+                      }}>
+                      <View style={{marginTop: 5}}>
+                        <Icon name="book" color={'#d4d2d2'} size={12} />
+                      </View>
+                      <View style={{marginTop: 3}}>
+                        <Text style={styles.desgText}>
+                          Part No : {userData?.PART_NO ? userData?.PART_NO : 'N/A'}
                         </Text>
                       </View>
                     </View>
@@ -228,7 +279,7 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
                             zIndex: 1111,
                             fontWeight: '600',
                           }}>
-                          Assemble Name : {userData?.assembly_name
+                          Assembly Name : {userData?.assembly_name
                             ? userData?.assembly_name
                             : 'Badarpur'}
                         </Text>
@@ -510,8 +561,8 @@ const DashboardScreen = ({navigation}: {navigation: any}) => {
           {userData?.home_banner ? (
             <Image
               style={{width: '100%', height: '100%',borderRadius:10}} 
-              source={{uri: IMAGE_BASE_URL + userData?.home_banner}}
-              //resizeMode={'contain'}
+              source={{uri: userData?.profile_image?.substring(0,4)=='file' ? userData?.home_banner :  IMAGE_BASE_URL + userData?.home_banner}}
+              //resizeMode={'contain'} 
             />
           ):(
             <Image
@@ -592,7 +643,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#de8100',
     justifyContent: 'center', //Centered vertically
-    alignItems: 'center', // Centered horizontally
+    // alignItems: 'center', // Centered horizontally
   },
   centeredView: {
     flex: 1,

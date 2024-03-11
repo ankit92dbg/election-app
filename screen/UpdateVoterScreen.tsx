@@ -33,6 +33,8 @@ import {useSelector} from 'react-redux';
 import Loader from '../components/Loader';
 import {postRequest} from '../networkInterface';
 import Snackbar from 'react-native-snackbar';
+import NetInfo from "@react-native-community/netinfo";
+
 
 const UpdateVoterScreen = ({
   route,
@@ -199,6 +201,13 @@ const UpdateVoterScreen = ({
       setSlNo(voterData?.SLNOINPART);
     })();
   }, []);
+
+  const getNetInfo = async() => {
+    const connection = await NetInfo.fetch().then((state) => {
+      return state.isConnected
+    });
+    return connection
+  };
 
   const formatLBDropdown = (data: any) => {
     const result = data.map((o: any) => ({
@@ -889,20 +898,35 @@ const UpdateVoterScreen = ({
       });
     }
     setLoading(true);
-    const response: any = await postRequest('update-voters.php', formData);
-    if (response?.error == '') {
-      formData.append('needUpdate','0');
-      await saveVoterData(formData);
-      setTimeout(() => {
-        setLoading(false);
-        Snackbar.show({
-          text: 'Voter updated successfully !',
-          duration: Snackbar.LENGTH_LONG,
-          backgroundColor: '#3db362',
-        });
-        navigation.navigate('Home');
-      }, 1000);
-    } else {
+
+    if(await getNetInfo()==true){
+      const response: any = await postRequest('update-voters.php', formData);
+      if (response?.error == '') {
+        formData.append('needUpdate','0');
+        await saveVoterData(formData);
+        setTimeout(() => {
+          setLoading(false);
+          Snackbar.show({
+            text: 'Voter updated successfully !',
+            duration: Snackbar.LENGTH_LONG,
+            backgroundColor: '#3db362',
+          });
+          navigation.navigate('Home');
+        }, 1000);
+      }else{
+        formData.append('needUpdate','1');
+        await saveVoterData(formData);
+        setTimeout(() => {
+          setLoading(false);
+          Snackbar.show({
+            text: "Voter data is saved locally, please sync you app when you are online.",
+            duration: Snackbar.LENGTH_LONG,
+            backgroundColor: '#c97616',
+          });
+          navigation.navigate('Home');
+        }, 1000);
+      }  
+    }else{
       formData.append('needUpdate','1');
       await saveVoterData(formData);
       setTimeout(() => {
@@ -914,7 +938,8 @@ const UpdateVoterScreen = ({
         });
         navigation.navigate('Home');
       }, 1000);
-    }
+    }  
+    
   };
 
   return (

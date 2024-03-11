@@ -11,7 +11,6 @@ export const postRequest = async(url:any,formData:any) =>{
         }).then((response) => response.json()).then(async(response) => {
           return response !=null && response  
         })
-        console.warn('response1--->',response,url)
         return response !=null && response
         
     }catch(error){

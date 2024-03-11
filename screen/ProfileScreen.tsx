@@ -21,6 +21,7 @@ import Loader from '../components/Loader';
 import Snackbar from 'react-native-snackbar';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ProfileScreen = ({navigation}: {navigation: any}) => {
   const {data} = useSelector((state: any) => state?.MasterData);
@@ -47,10 +48,17 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
   React.useEffect(() => {
     getUserSession();
     setStateList(formatState(data?.state))
-    setCityList(formatCity(data?.city,userData?.state))
   }, []);
 
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getUserSession()
+    });
+    return unsubscribe;
+  }, [navigation]);
+
 const setFormaData = (session:any) =>{
+  setCityList(formatCity(data?.city,session?.state))
   setFName(session?.f_name)
   setLName(session?.l_name)
   setAge(session?.age)
@@ -145,7 +153,6 @@ const setFormaData = (session:any) =>{
     try {
       const session: any = await retrieveUserSession();
       if (session !== undefined) {
-        console.warn('session--->',session)
         await setUserData(session);
         await setFormaData(session)
       }

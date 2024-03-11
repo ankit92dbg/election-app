@@ -14,9 +14,17 @@ import Card from '../components/Card';
 import Badge from '../components/Badge';
 import HyperLink from '../components/HyperLink';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {IMAGE_BASE_URL} from '../config';
+import {retrieveUserSession} from '../utils';
+import {getAllBM} from '../redux/action/BMData';
+import Loader from '../components/Loader';
+import NetInfo from '@react-native-community/netinfo';
 
 const BMList = ({navigation}: {navigation: any}) => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(false);
+  const [isConnected, setIsConnected] = React.useState<any>(true);
   // const DATA = [
   //   {
   //       key: 1,
@@ -180,10 +188,46 @@ const BMList = ({navigation}: {navigation: any}) => {
   //     },
   // ];
   const {data} = useSelector((state: any) => state?.BMData);
-  // console.warn('data--->',data)
-  const Item = ({item} : any) => (
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getUserSession();
+      getNetInfo();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const getNetInfo = async () => {
+    const connection = await NetInfo.fetch().then(state => {
+      return state.isConnected;
+    });
+    setIsConnected(connection);
+    return connection;
+  };
+
+  async function getUserSession() {
+    try {
+      setLoading(true);
+      const session: any = await retrieveUserSession();
+      if (session !== undefined) {
+        let leader_id = '';
+        if (session?.user_type == 1) {
+          leader_id = session?.id;
+        }
+        if (session?.user_type == 2) {
+          leader_id = session?.leader_id;
+        }
+        await dispatch(await getAllBM({leader_id: leader_id}));
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      }
+    } catch (error) {
+      // There was an error on the native side
+    }
+  }
+  const Item = ({item}: any) => (
     <ScrollView>
-      <View style={{display: 'flex', flexDirection: 'row',paddingTop:10,}}>
+      <View style={{display: 'flex', flexDirection: 'row', paddingTop: 10}}>
         <View style={{flex: 1}}>
           <View style={{display: 'flex', flexDirection: 'row'}}>
             <View style={{flex: 1, marginLeft: 5}}>
@@ -207,6 +251,24 @@ const BMList = ({navigation}: {navigation: any}) => {
               flexDirection: 'row',
               marginTop: 12,
             }}>
+            <View style={{flex: 1.5}}>
+              {item?.profile_image ? (
+                <Image
+                  style={{width: 55, height: 55, borderRadius: 55}} // required Dimensions and styling of Image
+                  source={{
+                    uri:
+                      item?.profile_image?.substring(0, 4) == 'file'
+                        ? item?.home_banner
+                        : IMAGE_BASE_URL + item?.profile_image,
+                  }} // enter your avatar image path
+                />
+              ) : (
+                <Image
+                  style={{width: 55, height: 55}} // required Dimensions and styling of Image
+                  source={require('../assets/images/user.png')} // enter your avatar image path
+                />
+              )}
+            </View>
             <View style={{flex: 2.5}}>
               <Text
                 style={{
@@ -221,7 +283,7 @@ const BMList = ({navigation}: {navigation: any}) => {
             <View style={{flex: 4}}>
               <TouchableOpacity
                 style={{marginTop: 2}}
-                onPress={() => navigation.navigate('UpdateBM',{item:item})}>
+                onPress={() => navigation.navigate('UpdateBM', {item: item})}>
                 <Icon name="pencil" color={'#424242'} size={16} />
               </TouchableOpacity>
             </View>
@@ -244,7 +306,7 @@ const BMList = ({navigation}: {navigation: any}) => {
                       fontWeight: '600',
                       color: '#424242',
                     }}>
-                     {item?.email}
+                    {item?.email}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -294,52 +356,82 @@ const BMList = ({navigation}: {navigation: any}) => {
           </View>
         </View>
       </View>
-      <View style={{flex: 1, height: 1,marginTop:10,marginBottom:10, backgroundColor: '#a8a7a7'}} />
+      <View
+        style={{
+          flex: 1,
+          height: 1,
+          marginTop: 10,
+          marginBottom: 10,
+          backgroundColor: '#a8a7a7',
+        }}
+      />
     </ScrollView>
   );
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.innerContainer}>
-        <View style={styles.parent}>
-          <View style={styles.child}>
-            <View style={{marginTop: 30, paddingLeft: 15}}>
-              <Text style={{color: '#FFFFFF'}}>{`Home > BM List`}</Text>
-            </View>
-          </View>
+    <>
+      {loading ? (
+        <Loader text="Loading data..." loading={loading} />
+      ) : isConnected == false ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Image
+            style={{width: 100, height: 100}} // required Dimensions and styling of Image
+            source={require('../assets/images/no-internet.png')} // enter your avatar image path
+          />
+          <Text style={{color: '#8f8d8d'}}>
+            No internet connection, please try again later.
+          </Text>
         </View>
-      </View>
-      <View
-        style={{
-          top: '10%',
-          width: '100%',
-          height: '89%',
-          position: 'absolute',
-          zIndex: 9999,
-          paddingLeft: 15,
-          paddingRight: 15,
-          flex: 1,
-        }}>
-        <Animated.View
-          entering={FadeInDown.delay(200).duration(1000).springify()}>
-          <Card style={styles.card}>
-            <View style={{marginTop: 22}}>
-              <Text style={{fontSize: 16, fontWeight: '600', color: '#4e4f4f'}}>
-                BM List
-              </Text>
-              <View>
-                <View style={{marginTop: 20,height:'95%'}}>
-                  <FlatList
-                    data={data}
-                    renderItem={({item}) => <Item item={item} />}
-                    keyExtractor={(item:any) => item.key}
-                  />
+      ) : (
+        <View style={styles.mainContainer}>
+          <View style={styles.innerContainer}>
+            <View style={styles.parent}>
+              <View style={styles.child}>
+                <View style={{marginTop: 30, paddingLeft: 15}}>
+                  <Text style={{color: '#FFFFFF'}}>{`Home > BM List`}</Text>
                 </View>
               </View>
             </View>
-          </Card>
-        </Animated.View>
-      </View>
-    </View>
+          </View>
+          <View
+            style={{
+              top: '10%',
+              width: '100%',
+              height: '89%',
+              position: 'absolute',
+              zIndex: 9999,
+              paddingLeft: 15,
+              paddingRight: 15,
+              flex: 1,
+            }}>
+            <Animated.View
+              entering={FadeInDown.delay(200).duration(1000).springify()}>
+              <Card style={styles.card}>
+                <View style={{marginTop: 22}}>
+                  <Text
+                    style={{fontSize: 16, fontWeight: '600', color: '#4e4f4f'}}>
+                    BM List
+                  </Text>
+                  <View>
+                    <View style={{marginTop: 20, height: '95%'}}>
+                      <FlatList
+                        data={data}
+                        renderItem={({item}) => <Item item={item} />}
+                        keyExtractor={(item: any) => item.key}
+                      />
+                    </View>
+                  </View>
+                </View>
+              </Card>
+            </Animated.View>
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 

@@ -283,7 +283,6 @@ export const updateItems = async (db: SQLiteDatabase, formData: any) => {
     candidate_name='${data?.CANDIDATE_NAME}',
     needUpdate='${data?.needUpdate}'
     WHERE id=${data?.voter_id}`
-    console.warn('query--->',query)
     await db.executeSql(query);
   }catch(error:any){
     console.warn('err-->',error)
@@ -420,6 +419,21 @@ export const getTotalSearch = async (
       `SELECT * FROM ${tableName} WHERE ${WHERE} ORDER BY id DESC`,
     );
     return Math.ceil(Number(results[0]?.rows?.length) / 50);
+  } catch (error) {
+    console.error(error);
+    throw Error('Failed to get todoItems !!!');
+  }
+};
+
+export const getTotalVoters = async (
+  db: SQLiteDatabase,
+) => {
+  try {
+    let results = [];
+    results = await db.executeSql(
+      `SELECT * FROM ${tableName} ORDER BY id DESC`,
+    );
+    return Math.ceil(Number(results[0]?.rows?.length));
   } catch (error) {
     console.error(error);
     throw Error('Failed to get todoItems !!!');
@@ -2652,6 +2666,43 @@ export const getSLNOINPART = async (
       `SELECT DISTINCT CAST(SLNOINPART AS INT) AS SLNOINPART FROM voters_data WHERE ${WHERE} ORDER BY SECTION_NO ASC`,
     );
 
+    results.forEach((result: any) => {
+      for (let index = 0; index < result.rows.length; index++) {
+        todoItems.push(result.rows.item(index));
+      }
+    });
+    return todoItems;
+  } catch (error) {
+    console.error(error);
+    throw Error('Failed to get todoItems !!!');
+  }
+};
+
+export const getUnsyncData = async (db:any) => {
+  try {
+    
+    let WHERE = ``;
+    WHERE += `needUpdate=1`;
+    let results = [];
+    results = await db.executeSql(
+      `SELECT * FROM ${tableName} WHERE ${WHERE} ORDER BY id DESC`,
+    );
+    return Number(results[0]?.rows?.length);
+  } catch (error) {
+    console.error(error);
+    throw Error('Failed to get todoItems !!!');
+  }
+};
+
+export const getUnsyncDataForUpdate = async (db:any) => {
+  try {
+    const todoItems: ToDoVoterItem[] = [];
+    let WHERE = ``;
+    WHERE += `needUpdate=1`;
+    let results = [];
+    results = await db.executeSql(
+      `SELECT * FROM ${tableName} WHERE ${WHERE} ORDER BY id DESC`,
+    );
     results.forEach((result: any) => {
       for (let index = 0; index < result.rows.length; index++) {
         todoItems.push(result.rows.item(index));
